@@ -72,6 +72,8 @@ export default function PenggunaTables() {
     closeDeleteModal();
   };
 
+
+
   return (
     <>
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -132,10 +134,10 @@ export default function PenggunaTables() {
                     <div className="flex items-center gap-2">
                       {/* Edit */}
                       <div
-                        className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
+                        className="p-2 rounded-full bg-orange-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
                         onClick={() => handleEditClick(user)}
                       >
-                        <Edit className="w-4 h-4 text-blue-500 dark:text-blue-300" />
+                        <Edit className="w-4 h-4 text-orange-500 dark:text-orange-300" />
                       </div>
                       {/* Delete */}
                       <div
@@ -188,65 +190,95 @@ export default function PenggunaTables() {
                 </div>
                 
                 {/* Baris 3: Peran (Dropdown) */}
-                <div>
+                <div className="relative">
                   <Label>Peran</Label>
-                  <select className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
                     <option value="">Semua Peran</option>
                     <option>Admin LPMPP</option>
                     <option>Auditor LPM</option>
                     <option>Koprodi</option>
                     <option>Tim Penjaminan Mutu Prodi</option>
                   </select>
+                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
                 </div>
                 
                 {/* Baris 4: Status (Dropdown) */}
-                <div>
-                  <Label>Status</Label>
-                  <select className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                <div className="relative">
+                  <Label>Status Pengguna</Label>
+                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
                     <option value="">Pilih Status</option>
                     <option>Aktif</option>
                     <option>Nonaktif</option>
                   </select>
+                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+                </div>
+
+            </div>
+              <div className="flex items-center justify-between px-2 mt-6">
+                {/* Tombol Hapus di kiri */}
+                <Button
+                  size="sm"
+                  className="bg-red-600 text-white hover:bg-red-700"
+                  onClick={() => {
+                    openDeleteModal(); // buka modal
+                  }}
+                >
+                  Hapus
+                </Button>
+
+                {/* Tombol Batal dan Simpan di kanan */}
+                <div className="flex items-center gap-3">
+                  <Button size="sm" variant="outline" onClick={closeEditModal}>
+                    Batal
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-orange-500 text-white hover:bg-orange-700"
+                    onClick={handleSaveChanges}
+                  >
+                    Simpan
+                  </Button>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeEditModal}>
-                Batal
-              </Button>
-              <Button size="sm" onClick={handleSaveChanges}>
-                Simpan Perubahan
-              </Button>
-            </div>
+
           </form>
         </div>
       </Modal>
 
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={isDeleteOpen} onClose={closeDeleteModal} className="max-w-[500px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
-          <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Hapus Pengguna
-            </h4>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Apakah Anda yakin ingin menghapus pengguna {selectedUser?.name}?
-            </p>
-          </div>
-          <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-            <Button size="sm" variant="outline" onClick={closeDeleteModal}>
-              Batal
-            </Button>
-<Button
-  size="sm"
-  className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
-  onClick={handleConfirmDelete}
->
-  Hapus
-</Button>
-          </div>
-        </div>
-      </Modal>
+<Modal isOpen={isDeleteOpen} onClose={closeDeleteModal} className="max-w-[500px] m-4">
+  <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
+    <div className="px-2 pr-14">
+      <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+        Hapus Pengguna
+      </h4>
+      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+        Apakah Anda yakin ingin menghapus pengguna {selectedUser?.name}?
+      </p>
+    </div>
+    <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+      <Button size="sm" variant="outline" onClick={closeDeleteModal}>
+        Batal
+      </Button>
+      <Button
+        size="sm"
+        className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+        onClick={handleConfirmDelete}
+      >
+        Hapus
+      </Button>
+    </div>
+  </div>
+</Modal>
     </>
   );
 }

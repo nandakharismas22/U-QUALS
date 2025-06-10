@@ -84,7 +84,10 @@ export default function BasicTableOne() {
                 isHeader
                 className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
               >
-                Status
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Status
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
               </TableCell>
               <TableCell
                 isHeader
