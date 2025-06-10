@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import Home from "./pages/Dashboard/Home";
+// import Home from "./pages/Dashboard/Home";
 import TablesPengguna from "./pages/PlotingUser";
 import TablesPeriode from "./pages/Periode";
 import TabelsAuditor from "./pages/PlotingAuditor";
@@ -32,9 +32,12 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
+        Redirect root path to /signin
+        <Route index path="/" element={<Navigate to="/signin" replace />} />
+
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<Blank />} />
+            <Route path="/" element={<Blank />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />

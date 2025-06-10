@@ -3,13 +3,13 @@ import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
 import {
-  // BoxCubeIcon,
+  BoxCubeIcon,
   // CalenderIcon,
   ChevronDownIcon,
   // GridIcon,
   HorizontaLDots,
   // ListIcon,
-  // PageIcon,
+  PageIcon,
   // PieChartIcon,
   // PlugInIcon,
   // TableIcon,
@@ -17,7 +17,7 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 // import SidebarWidget from "./SidebarWidget";
-import { UserCog,FolderSearch,Calendar,LayoutGrid,CircleUser,FileChartColumn } from "lucide-react";
+import { UserCog,FolderSearch,Calendar,LayoutGrid,CircleUser,FileChartColumn,ClipboardList,FileCheck,BadgeCheck } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -49,21 +49,51 @@ const navItems: NavItem[] = [
     name: "Periode",
     path: "/periode",
   },
+
+   {
+    icon: <ClipboardList />,
+    name: "Jenis Audit",
+    path: "/blank",
+  },
+
      {
     icon: <UserCog />,
     name: "Plot Auditor",
     path: "/auditor",
   },
-    {
-    icon: <FileChartColumn />,
+
+  {
     name: "Standart",
-    path: "/standart",
+    icon: <FileCheck  />,
+    subItems: [
+      { name: "Sumber Standart", path: "/standart", pro: false },
+      { name: "Daftar Standart", path: "/blank", pro: false },
+    ],
   },
+
+
+  //   {
+  //   icon: <FileChartColumn />,
+  //   name: "Standart",
+  //   path: "/standart",
+  // },
     {
     icon: <FolderSearch />,
     name: "Monitoring",
     path: "/monitoring",
   },
+
+  {
+    name: "Akreditasi",
+    icon: <BadgeCheck />,
+    subItems: [
+      { name: "Lembaga Akreditasi", path: "/blank", pro: false },
+      { name: "Akreditasi Institusi", path: "/error-404", pro: false },
+      { name: "Akreditasi Prodi", path: "/blank", pro: false },
+      { name: "Akreditasi Lab", path: "/lank", pro: false },
+    ],
+  },
+
     {
     icon: <CircleUser />,
     name: "Pengguna",
@@ -82,14 +112,7 @@ const navItems: NavItem[] = [
   //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
   // },
   
-  // {
-  //   name: "Pages",
-  //   icon: <PageIcon />,
-  //   subItems: [
-  //     { name: "Blank Page", path: "/blank", pro: false },
-  //     { name: "404 Error", path: "/error-404", pro: false },
-  //   ],
-  // },
+
 ];
 
 const othersItems: NavItem[] = [
@@ -101,18 +124,19 @@ const othersItems: NavItem[] = [
   //     { name: "Bar Chart", path: "/bar-chart", pro: false },
   //   ],
   // },
-  // {
-  //   icon: <BoxCubeIcon />,
-  //   name: "UI Elements",
-  //   subItems: [
-  //     { name: "Alerts", path: "/alerts", pro: false },
-  //     { name: "Avatar", path: "/avatars", pro: false },
-  //     { name: "Badge", path: "/badge", pro: false },
-  //     { name: "Buttons", path: "/buttons", pro: false },
-  //     { name: "Images", path: "/images", pro: false },
-  //     { name: "Videos", path: "/videos", pro: false },
-  //   ],
-  // },
+  {
+    icon: <BoxCubeIcon />,
+    name: "UI Elements",
+    subItems: [
+      { name: "Alerts", path: "/alerts", pro: false },
+      { name: "Avatar", path: "/avatars", pro: false },
+      { name: "Badge", path: "/badge", pro: false },
+      { name: "Buttons", path: "/buttons", pro: false },
+      { name: "Images", path: "/images", pro: false },
+      { name: "Videos", path: "/videos", pro: false },
+      { name: "Dropdown", path: "/videos", pro: false },
+    ],
+  },
   // {
   //   icon: <PlugInIcon />,
   //   name: "Authentication",
