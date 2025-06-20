@@ -1,9 +1,12 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";  
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link } from "react-router";
 
 export default function UserDropdown() {
+  const [namaPegawai, setNamaPegawai] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   function toggleDropdown() {

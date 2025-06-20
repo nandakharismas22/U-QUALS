@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-// import Home from "./pages/Dashboard/Home";
+import Home from "./pages/Dashboard/Home";
 import TablesPengguna from "./pages/PlotingUser";
 import TablesPeriode from "./pages/Periode";
 import TabelsAuditor from "./pages/PlotingAuditor";
@@ -38,6 +38,7 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route path="/" element={<Blank />} />
+            <Route path="/home" element={<Home />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />

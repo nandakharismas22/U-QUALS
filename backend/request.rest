@@ -1,0 +1,38 @@
+# Get All Pegawai
+GET http://localhost:5000/pegawais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo0LCJuYW1hX3BlZ2F3YWkiOiJLYW5pYSIsImVtYWlsIjoia2FuaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5mb3JtYXRpa2EiLCJzdGF0dXMiOiJBa3RpZiIsImlhdCI6MTc1MDMyMTU4MSwiZXhwIjoxNzUwMzIxNjAxfQ.HitVSHf8mTB05OWR1KNiugnDmIPyFvl8DRRnyce8qrk
+
+### Get Pegawai by ID
+GET http://localhost:5000/pegawais/5
+
+###
+# Registrasi Pegawai
+POST http://localhost:5000/pegawais
+Content-Type: application/json
+
+{
+    "nama_pegawai": "Hilwa",
+    "email": "hilwa@gmail.com",
+    "password": "123",
+    "confPassword": "123",
+    "prodi": "Teknik Industri",
+    "status": "Aktif"
+}
+
+###
+# Login
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "kania@gmail.com",
+    "password": "123"
+}
+
+###
+# Token Baru
+GET http://localhost:5000/token
+
+### 
+# Logout
+DELETE http://localhost:5000/logout
