@@ -8,11 +8,46 @@ import { Modal } from "../components/ui/modal";
 import Button from "../components/ui/button/Button";
 import Input from "../components/form/input/InputField";
 import Label from "../components/form/Label";
-// import { useState } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from "../components/auth/AuthContext";
+import axios from "axios";
 
+interface Pegawai {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  role: "Admin PLMPP";
+  prodi: string;
+  terakhir_login: string;
+  status: "Aktif" | "Nonaktif";
+}
 
 export default function TablesPengguna() {
   const { isOpen, openModal, closeModal } = useModal();
+  const [tableData, setTableData] = React.useState<Pegawai[]>([]);
+  const { token } = useAuth();
+  const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
+
+  React.useEffect(() => {
+    const fetchPegawai = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/pegawais", {
+          headers: {
+            Authorization: `Bearer ${token}`, // ambil dari context
+          },
+          withCredentials: true,
+        });
+  
+        // Data dari database langsung dipakai tanpa map
+        setTableData(response.data);
+      } catch (error) {
+        console.error("Gagal fetch data pegawai:", error);
+      }
+    };
+  
+    fetchPegawai();
+  }, [token]);
+
 
   const handleSave = () => {
     // Handle save logic here
@@ -43,7 +78,7 @@ export default function TablesPengguna() {
   return (
     <>
       <PageMeta
-        title="React.js Basic Tables Dashboard | TailAdmin - Next.js Admin Dashboard Template"
+        title="U-Quals - Pengguna"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
       <PageBreadcrumb pageTitle="Pengguna" />
@@ -53,7 +88,7 @@ export default function TablesPengguna() {
           title={
             <div className="flex items-center justify-between w-full">
               <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Pengguna : 2
+                Semua Pengguna :  {tableData.length}
               </span>
               <button
                 onClick={openModal}

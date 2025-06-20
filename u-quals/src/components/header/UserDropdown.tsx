@@ -1,13 +1,69 @@
 import React, { useState, useEffect } from "react";
+import {useNavigate} from "react-router-dom"
 import axios from "axios";
 import jwt_decode from "jwt-decode";  
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link } from "react-router";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../components/auth/AuthContext";
+
+interface MyToken {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  status: string;
+  exp: number;
+}
 
 export default function UserDropdown() {
-  const [namaPegawai, setNamaPegawai] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const { token, setToken, pegawai, setPegawai } = useAuth();
+  const navigate = useNavigate();  
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/token", {
+          withCredentials: true,
+        });
+        const newToken = res.data.accessToken;
+        setToken(newToken);
+
+        const decoded = jwtDecode<MyToken>(newToken);
+        setPegawai({
+          id_pegawai: decoded.id_pegawai,
+          nama_pegawai: decoded.nama_pegawai,
+          email: decoded.email,
+          status: decoded.status,
+        });
+      } catch (error) {
+        navigate("/signin");
+      }
+    };
+
+    if (!token) {
+      refreshToken();
+    }
+  }, [token, setToken, setPegawai, navigate]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete("http://localhost:5000/logout", {
+        withCredentials: true,
+      });
+
+      // Hapus token dari localStorage atau context
+      localStorage.removeItem("token");
+      // Redirect ke halaman login
+      navigate("/signin");
+      setToken("");
+      setPegawai(null);
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
+  };
+
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -26,7 +82,7 @@ export default function UserDropdown() {
           <img src="/images/user/owner.jpg" alt="User" />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Romdhony</span>
+        <span className="block mr-1 font-medium text-theme-sm"> {pegawai?.nama_pegawai ?? "Memuat..."}</span>
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -54,7 +110,7 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Romdhony Amrizkiy
+            {pegawai?.nama_pegawai ?? "Memuat..."}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             Admin LPMPP
@@ -140,6 +196,7 @@ export default function UserDropdown() {
         </ul>
         <Link
           to="/signin"
+          onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >
           <svg

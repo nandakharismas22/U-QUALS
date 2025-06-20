@@ -9,55 +9,50 @@ import axios from 'axios';
 import { jwtDecode } from "jwt-decode"
 import { useNavigate } from 'react-router-dom';
 import PageMeta from "../../components/common/PageMeta";
+import { useAuth } from "../../components/auth/AuthContext";
+
+interface MyToken {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  exp: number;
+}
 
 const axiosJWT = axios.create();
 
 export default function Home() {
-  const [token, setToken] = useState("");
-  const [expire, setExpire] = useState(0);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [token, setToken] = useState('');
+    const [expire, setExpire] = useState('');
+    const [pegawais, setPegawais] = useState([]);
+    const navigate = useNavigate();
 
-  interface MyToken {
-    id_pegawai: number;
-    nama_pegawai: string;
-    email: string;
-    exp: number;
-  }
+    useEffect(() => {
+      const refreshToken = async () => {
+        try {
+          const res = await axios.get("http://localhost:5000/token", {
+            withCredentials: true,
+          });
+  
+          const newToken = res.data.accessToken;
+          setToken(newToken);
+  
+          const decoded = jwtDecode<MyToken>(newToken);
+          console.log("Id Pegawai:", decoded.id_pegawai);
+          console.log("Pegawai login:", decoded.nama_pegawai);
+          console.log("Email:", decoded.email);
+          console.log("exp:", decoded.exp);
+        } catch (error) {
+          navigate("/signin"); // Redirect ke login jika gagal
+        }
+      };
+  
+      if (!token) {
+        refreshToken(); // ambil token jika belum ada
+      }
+    }, [token, setToken, navigate]);
 
-  useEffect(() => {
-    refreshToken();
-  }, []);
-
-  const refreshToken = async () => {
-    const res = await axios.get("http://localhost:5000/token", { withCredentials: true });
-    setToken(res.data.accessToken);
-    const decoded = jwtDecode<MyToken>(res.data.accessToken);
-    setExpire(decoded.exp);
-    setEmail(decoded.email);
-    setName(decoded.nama_pegawai);
-  };
-
-  axiosJWT.interceptors.request.use(async (config) => {
-    const now = new Date();
-    if (expire * 1000 < now.getTime()) {
-      const res = await axios.get("http://localhost:5000/token", { withCredentials: true });
-      config.headers.Authorization = `Bearer ${res.data.accessToken}`;
-      setToken(res.data.accessToken);
-      const decoded = jwtDecode<MyToken>(res.data.accessToken);
-      setExpire(decoded.exp);
-      setEmail(decoded.email);
-      setName(decoded.nama_pegawai);
-    }
-    return config;
-  });
-
-  const getPegawai = async () => {
-    const response = await axiosJWT.get("http://localhost:5000/pegawai", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    console.log(response.data);
-  };
   return (
     <>
       <PageMeta

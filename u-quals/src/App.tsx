@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router";
+import {AuthProvider} from "./components/auth/AuthContext";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
@@ -24,11 +25,10 @@ import TabelsAuditor from "./pages/PlotingAuditor";
 import TabelsStandart from "./pages/SandartSet";
 import TabelsMonitoring from "./pages/MonitoringSet";
 
-
-
 export default function App() {
   return (
     <>
+      <AuthProvider>
       <Router>
         <ScrollToTop />
         <Routes>
@@ -77,6 +77,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
+      </AuthProvider>
     </>
   );
 }

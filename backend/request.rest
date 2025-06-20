@@ -20,6 +20,37 @@ Content-Type: application/json
 }
 
 ###
+# Create Pegawai
+POST http://localhost:5000/pegawais
+Content-Type: application/json
+
+{
+    "nama_pegawai": "Hilwa",
+    "email": "hilwa@gmail.com",
+    "password": "123",
+    "confPassword": "123",
+    "prodi": "Teknik Industri",
+    "status": "Aktif"
+}
+
+###
+# Update Pegawai
+PATCH http://localhost:5000/pegawais/2
+Content-Type: application/json
+
+{
+    "nama_pegawai": "Nanda",
+    "email": "nanda2@gmail.com",
+    "password": "123",
+    "prodi": "Sistem Informasi",
+    "status": "Aktif"
+}
+
+###
+# Delete Pegawai
+DELETE http://localhost:5000/pegawais/3
+
+###
 # Login
 POST http://localhost:5000/login
 Content-Type: application/json

@@ -77,6 +77,79 @@ export const Register = async (req, res) => {
     }
 }
 
+export const createPegawai = async(req, res) => {
+    const {nama_pegawai, email, password, prodi, status} = req.body;
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+    try {
+        await Pegawais.create({
+            nama_pegawai: nama_pegawai,
+            email: email,
+            password: hashPassword,
+            prodi: prodi,
+            status: status,
+        });
+        res.status(200).json({msg: "Pegawai Berhasil Ditambahkan!"});
+    } catch (error) {
+        res.status(400).json({msg: error.message});
+    }
+}
+
+export const updatePegawai = async(req, res) => {
+    const pegawai = await Pegawais.findOne({
+        where: {
+            id_pegawai: req.params.id_pegawai
+        }
+    });
+
+    if (!pegawai) return res.status(404).json({ msg: "Pegawai Tidak Ditemukan!" });
+
+    const { nama_pegawai, email, password, prodi, status } = req.body;
+
+    let hashPassword = pegawai.password; // default: tidak ubah password
+    if (password && password !== "") {
+        const salt = await bcrypt.genSalt();
+        hashPassword = await bcrypt.hash(password, salt);
+    }
+
+    try {
+        await Pegawais.update({
+            nama_pegawai,
+            email,
+            password: hashPassword,
+            prodi,
+            status
+        }, {
+            where: {
+                id_pegawai: pegawai.id_pegawai
+            }
+        });
+
+        res.status(200).json({ msg: "Pegawai Berhasil Diubah!" });
+    } catch (error) {
+        res.status(400).json({ msg: error.message });
+    }
+}
+
+export const deletePegawai = async(req, res) => {
+    const pegawai = await Pegawais.findOne({
+        where: {
+            id_pegawai: req.params.id_pegawai
+        }
+    });
+    if(!pegawai) return res.status(404).json({msg: "Pegawai Tidak Ditemukan!"});
+    try {
+        await Pegawais.destroy({
+            where: {
+                id_pegawai: pegawai.id_pegawai
+            }
+        });
+        res.status(200).json({msg: "Pegawai Berhasil Dihapus!"});
+    } catch (error) {
+        res.status(400).json({msg: error.message});
+    }
+}
+
 export const Login = async (req, res) => {
     try {
         const pegawai = await Pegawais.findAll({
@@ -131,21 +204,24 @@ export const Login = async (req, res) => {
     }
 };
 
-export const Logout = async(req, res) => {
+export const Logout = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
-        if(!refreshToken) return res.sendStatus(204);
-        const pegawai = await Pegawais.findAll({
-            where:{
-                refresh_token: refreshToken
-            }
-        });
-        if(!pegawai[0]) return res.sendStatus(204);
-        const id_pegawai = pegawai[0].id_pegawai;
-        await Pegawais.update({refresh_token: null}, {
-            where: {
-                id_pegawai: id_pegawai
-            }
-        });
-        res.clearCookie('refreshToken');
-        return res.sendStatus(200);
-}
+    if (!refreshToken) return res.sendStatus(204);
+  
+    const pegawai = await Pegawais.findAll({
+      where: {
+        refresh_token: refreshToken
+      }
+    });
+  
+    if (!pegawai[0]) return res.sendStatus(204);
+  
+    await Pegawais.update({ refresh_token: null }, {
+      where: {
+        id_pegawai: pegawai[0].id_pegawai
+      }
+    });
+  
+    res.clearCookie('refreshToken');
+    return res.sendStatus(200);
+  };
