@@ -10,30 +10,54 @@ import { jwtDecode } from "jwt-decode"
 import { useNavigate } from 'react-router-dom';
 import PageMeta from "../../components/common/PageMeta";
 
+const axiosJWT = axios.create();
+
 export default function Home() {
-  const [namaPegawai, setNamaPegawai] = useState('');
-  const [token, setToken] = useState('');
-  const navigate = useNavigate();
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState(0);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+
+  interface MyToken {
+    id_pegawai: number;
+    nama_pegawai: string;
+    email: string;
+    exp: number;
+  }
 
   useEffect(() => {
     refreshToken();
   }, []);
 
   const refreshToken = async () => {
-    try {
-        const response = await axios.get('http://localhost:5000/token');
-        setToken(response.data.accessToken);
-        const decoded = jwtDecode(response.data.accessToken);
-        console.log(decoded);
-        // setNamaPegawai(decoded.nama_pegawai);
-        // setEmail(decoded.email);
-        // setExpire(decoded.exp);
-      } catch (error) {
-          navigate('/signin'); 
-      }
+    const res = await axios.get("http://localhost:5000/token", { withCredentials: true });
+    setToken(res.data.accessToken);
+    const decoded = jwtDecode<MyToken>(res.data.accessToken);
+    setExpire(decoded.exp);
+    setEmail(decoded.email);
+    setName(decoded.nama_pegawai);
   };
 
+  axiosJWT.interceptors.request.use(async (config) => {
+    const now = new Date();
+    if (expire * 1000 < now.getTime()) {
+      const res = await axios.get("http://localhost:5000/token", { withCredentials: true });
+      config.headers.Authorization = `Bearer ${res.data.accessToken}`;
+      setToken(res.data.accessToken);
+      const decoded = jwtDecode<MyToken>(res.data.accessToken);
+      setExpire(decoded.exp);
+      setEmail(decoded.email);
+      setName(decoded.nama_pegawai);
+    }
+    return config;
+  });
 
+  const getPegawai = async () => {
+    const response = await axiosJWT.get("http://localhost:5000/pegawai", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log(response.data);
+  };
   return (
     <>
       <PageMeta
