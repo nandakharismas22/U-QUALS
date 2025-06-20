@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
   {
     icon: <LayoutGrid />,
     name: "Dashboard",
-    path: "/blank",
+    path: "/home",
     // subItems: [{ name: "Blank Page", path: "/blank", pro: false },]
     // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
@@ -124,19 +124,19 @@ const othersItems: NavItem[] = [
   //     { name: "Bar Chart", path: "/bar-chart", pro: false },
   //   ],
   // },
-  {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
-      { name: "Dropdown", path: "/videos", pro: false },
-    ],
-  },
+  // {
+  //   icon: <BoxCubeIcon />,
+  //   name: "UI Elements",
+  //   subItems: [
+  //     { name: "Alerts", path: "/alerts", pro: false },
+  //     { name: "Avatar", path: "/avatars", pro: false },
+  //     { name: "Badge", path: "/badge", pro: false },
+  //     { name: "Buttons", path: "/buttons", pro: false },
+  //     { name: "Images", path: "/images", pro: false },
+  //     { name: "Videos", path: "/videos", pro: false },
+  //     { name: "Dropdown", path: "/videos", pro: false },
+  //   ],
+  // },
   // {
   //   icon: <PlugInIcon />,
   //   name: "Authentication",
@@ -414,7 +414,7 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                  ""
                 ) : (
                   <HorizontaLDots />
                 )}
