@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios, { AxiosError } from "axios";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
+import { useAuth } from '../auth/AuthContext';
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
@@ -13,45 +14,27 @@ export default function SignInForm() {
   const [error, setErrorMessage] = useState("");
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
-  // const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setErrorMessage("");
-  //   try {
-  //     await axios.post("http://localhost:5000/login", {
-  //       email,
-  //       password,
-  //     });
-  //     navigate("/home");
-  //   } catch (err) {
-  //     const error = err as AxiosError<{ msg: string }>;
-  //     if (error.response) {
-  //       setMsg(error.response?.data?.msg || "Terjadi kesalahan");
-  //     }
-  //   }
-  // };
-
-  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage("");
-
     try {
-        const response = await axios.post('http://localhost:5000/login', {
-            email: email,
-            password: password,
-        });
+      const res = await axios.post('http://localhost:5000/login', {
+        email,
+        password
+      }, {
+        withCredentials: true
+      });
 
-        // Arahkan ke halaman dashboard
-        navigate("/home");
+      setToken(res.data.accessToken); // simpan ke context
+      navigate('/home');
     } catch (err) {
-          const error = err as AxiosError<{ msg: string }>;
+      const error = err as AxiosError<{ msg: string }>;
           if (error.response) {
             setMsg(error.response?.data?.msg || "Terjadi kesalahan");
           }
-    }    
-      console.log("Email:", email);
-      console.log("Password:", password);
-  };
+    }
+  }
 
   return (
     <div className="flex flex-col flex-1">
