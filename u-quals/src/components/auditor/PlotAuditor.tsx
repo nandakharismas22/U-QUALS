@@ -5,248 +5,276 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
-import { ArrowUpDown, Circle, Edit, Trash2 } from "lucide-react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
-import React from "react";
+import { ArrowUpDown, Edit } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface User {
   id: number;
-  name: string;
-  email: string;
-  role: string;
+  periode: string;
   prodi: string;
-  lastLogin: string;
-  status: "Aktif" | "Nonaktif";
+  auditor1: string;
+  auditor2: string;
 }
+
+// Sample auditor options
+const auditorOptions = [
+  "Dianne Russell",
+  "Annette Black",
+  "Nanda Kharisma",
+  "Talia Apiarnti",
+  "John Doe"
+];
 
 const tableData: User[] = [
   {
     id: 1,
-    name: "Nanda Safitri",
-    email: "nanda@example.com",
-    role: "Tim Penjaminan Mutu Prodi",
-    prodi: "Sistem Informasi",
-    lastLogin: "12 Mei 2025",
-    status: "Aktif",
+    periode: "Periode 2024/2025",
+    prodi: "S1 Sistem Informasi",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
   },
   {
     id: 2,
-    name: "Talia Aprianti",
-    email: "safitri@example.com",
-    role: "Dosen",
-    prodi: "Teknik Informatika",
-    lastLogin: "10 Mei 2025",
-    status: "Nonaktif",
+    periode: "Periode 2024/2025",
+    prodi: "S1 Informatika",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
+  },
+  {
+    id: 3,
+    periode: "Periode 2024/2025",
+    prodi: "S1 Sains Data",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
+  },
+  {
+    id: 4,
+    periode: "Periode 2024/2025",
+    prodi: "S1 Teknik Industri",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
+  },
+  {
+    id: 5,
+    periode: "Periode 2024/2025",
+    prodi: "S1 Teknik Kimia",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
+  },
+  {
+    id: 6,
+    periode: "Periode 2024/2025",
+    prodi: "S1 Teknik Mesin",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
+  },
+  {
+    id: 7,
+    periode: "Periode 2024/2025",
+    prodi: "S1 Teknik Elektro",
+    auditor1: "Dianne Russell",
+    auditor2: "Annette Black",
   },
 ];
 
 export default function AuditorTables() {
-  const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
-  const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
-  const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>(tableData);
+  const [editing, setEditing] = useState<{id: number | null, field: string | null}>({id: null, field: null});
+  const [inputValue, setInputValue] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState<string[]>(auditorOptions);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleEditClick = (user: User) => {
-    setSelectedUser(user);
-    openEditModal();
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        if (editing.id) {
+          handleSave(editing.id);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [editing, inputValue]);
+
+  const handleEditStart = (id: number, field: string, currentValue: string) => {
+    setEditing({id, field});
+    setInputValue(currentValue);
+    setFilteredOptions(auditorOptions.filter(option => 
+      option.toLowerCase().includes(currentValue.toLowerCase())
+    ));
+    
+    // Focus input after a small delay to ensure it's rendered
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
-  const handleDeleteClick = (user: User) => {
-    setSelectedUser(user);
-    openDeleteModal();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setFilteredOptions(auditorOptions.filter(option => 
+      option.toLowerCase().includes(value.toLowerCase())
+    ));
   };
 
-  const handleSaveChanges = () => {
-    // Handle save logic here
-    console.log("Saving changes for:", selectedUser);
-    closeEditModal();
+  const handleSave = (id: number) => {
+    if (editing.field) {
+      setUsers(users.map(user => {
+        if (user.id === id) {
+          return {
+            ...user,
+            [editing.field as keyof User]: inputValue
+          };
+        }
+        return user;
+      }));
+    }
+    setEditing({id: null, field: null});
   };
 
-  const handleConfirmDelete = () => {
-    // Handle delete logic here
-    console.log("Deleting user:", selectedUser);
-    closeDeleteModal();
+  const handleKeyDown = (e: React.KeyboardEvent, id: number) => {
+    if (e.key === 'Enter') {
+      handleSave(id);
+    }
+  };
+
+  const handleOptionSelect = (option: string, id: number) => {
+    setInputValue(option);
+    setUsers(users.map(user => {
+      if (user.id === id && editing.field) {
+        return {
+          ...user,
+          [editing.field]: option
+        };
+      }
+      return user;
+    }));
+    setEditing({id: null, field: null});
   };
 
   return (
-    <>
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-        <div className="max-w-full overflow-x-auto">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-              <TableRow>
-                {["No", "Nama", "Email", "Peran", "Prodi", "Terakhir Login", "Status", "Aksi"].map((header, index) => (
-                  <TableCell
-                    key={index}
-                    isHeader
-                    className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
-                  >
-                    <div className="flex items-center gap-1 cursor-pointer">
-                      {header}
-                      {["Nama", "Email", "Peran", "Prodi", "Terakhir Login"].includes(header) && (
-                        <ArrowUpDown className="w-3 h-3" />
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="max-w-full overflow-x-auto">
+        <Table className="min-w-full">
+          {/* Table Header */}
+          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+            <TableRow className="hover:bg-transparent">
+              {["No", "Periode", "Prodi", "Auditor 1", "Auditor 2"].map((header, index) => (
+                <TableCell
+                  key={index}
+                  isHeader
+                  className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
+                >
+                  <div className="flex items-center gap-1 cursor-pointer">
+                    {header}
+                    {["Periode", "Prodi", "Auditor 1", "Auditor 2"].includes(header) && (
+                      <ArrowUpDown className="w-3 h-3" />
+                    )}
+                  </div>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          {/* Table Body */}
+          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+            {users.map((user, index) => (
+              <TableRow key={user.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+                <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {user.periode}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {user.prodi}
+                </TableCell>
+                
+                {/* Auditor 1 Cell */}
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {editing.id === user.id && editing.field === 'auditor1' ? (
+                    <div className="relative" ref={dropdownRef}>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => handleKeyDown(e, user.id)}
+                        className="dark:bg-dark-900 h-8 w-full rounded-lg border border-gray-200 bg-transparent py-1 pl-3 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
+                        autoFocus
+                      />
+                      {filteredOptions.length > 0 && (
+                        <div className="absolute z-10 mt-1 bg-white border border-gray-300 rounded shadow-lg xl:w-[230px] overflow-auto max-h-60">
+                          {filteredOptions.map((option, i) => (
+                            <div
+                              key={i}
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => handleOptionSelect(option, user.id)}
+                            >
+                              {option}
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
-                  </TableCell>
-                ))}
+                  ) : (
+                    <div 
+                      className="flex items-center justify-between cursor-pointer group"
+                      onClick={() => handleEditStart(user.id, 'auditor1', user.auditor1)}
+                    >
+                      {user.auditor1}
+                      <Edit className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 text-gray-400" />
+                    </div>
+                  )}
+                </TableCell>
+                
+                {/* Auditor 2 Cell */}
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                {editing.id === user.id && editing.field === 'auditor2' ? (
+                  <div className="relative" ref={dropdownRef}>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      onKeyDown={(e) => handleKeyDown(e, user.id)}
+                      className="dark:bg-dark-900 h-8 w-full rounded-lg border border-gray-200 bg-transparent py-1 pl-3 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
+                      autoFocus
+                    />
+                    {filteredOptions.length > 0 && (
+                      <div className="absolute z-10 mt-1 bg-white border border-gray-300 rounded shadow-lg xl:w-[230px] overflow-auto max-h-60">
+                        {filteredOptions.map((option, i) => (
+                          <div
+                            key={i}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleOptionSelect(option, user.id)}
+                          >
+                            {option}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div 
+                    className="flex items-center justify-between cursor-pointer group"
+                    onClick={() => handleEditStart(user.id, 'auditor2', user.auditor1)}
+                  >
+                    {user.auditor1}
+                    <Edit className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 text-gray-400" />
+                  </div>
+                )}
+              </TableCell>
               </TableRow>
-            </TableHeader>
-
-            {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.name}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.email}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.role}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.prodi}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {user.lastLogin}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <Circle
-                        className={`w-3 h-3 ${user.status === "Aktif" ? "text-green-500" : "text-gray-400"}`}
-                        fill={user.status === "Aktif" ? "currentColor" : "none"}
-                      />
-                      {user.status}
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      {/* Edit */}
-                      <div
-                        className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
-                        onClick={() => handleEditClick(user)}
-                      >
-                        <Edit className="w-4 h-4 text-blue-500 dark:text-blue-300" />
-                      </div>
-                      {/* Delete */}
-                      <div
-                        className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 cursor-pointer"
-                        onClick={() => handleDeleteClick(user)}
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500 dark:text-red-300" />
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </div>
-
-      {/* Edit User Modal */}
-      <Modal isOpen={isEditOpen} onClose={closeEditModal} className="max-w-[700px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
-          <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Edit Pengguna
-            </h4>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update user details to keep information up-to-date.
-            </p>
-          </div>
-          <form className="flex flex-col">
-            <div className="px-2 overflow-y-auto custom-scrollbar">
-              <div className="grid grid-cols-1 gap-y-5">
-                 {/* Baris 1: Nama */}
-                <div>
-                  <Label>Nama</Label>
-                  <Input 
-                    type="text" 
-                    placeholder="Masukkan nama lengkap" 
-                    className="w-full"
-                  />
-                </div>
-                
-                {/* Baris 2: Email */}
-                <div>
-                  <Label>Email</Label>
-                  <Input 
-                    type="email" 
-                    placeholder="Masukkan email" 
-                    className="w-full"
-                  />
-                </div>
-                
-                {/* Baris 3: Peran (Dropdown) */}
-                <div>
-                  <Label>Peran</Label>
-                  <select className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-                    <option value="">Semua Peran</option>
-                    <option>Admin LPMPP</option>
-                    <option>Auditor LPM</option>
-                    <option>Koprodi</option>
-                    <option>Tim Penjaminan Mutu Prodi</option>
-                  </select>
-                </div>
-                
-                {/* Baris 4: Status (Dropdown) */}
-                <div>
-                  <Label>Status</Label>
-                  <select className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-                    <option value="">Pilih Status</option>
-                    <option>Aktif</option>
-                    <option>Nonaktif</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeEditModal}>
-                Batal
-              </Button>
-              <Button size="sm" onClick={handleSaveChanges}>
-                Simpan Perubahan
-              </Button>
-            </div>
-          </form>
-        </div>
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
-      <Modal isOpen={isDeleteOpen} onClose={closeDeleteModal} className="max-w-[500px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
-          <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Hapus Pengguna
-            </h4>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Apakah Anda yakin ingin menghapus pengguna {selectedUser?.name}?
-            </p>
-          </div>
-          <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-            <Button size="sm" variant="outline" onClick={closeDeleteModal}>
-              Batal
-            </Button>
-<Button
-  size="sm"
-  className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
-  onClick={handleConfirmDelete}
->
-  Hapus
-</Button>
-          </div>
-        </div>
-      </Modal>
-    </>
+    </div>
   );
 }

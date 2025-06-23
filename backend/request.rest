@@ -25,11 +25,11 @@ POST http://localhost:5000/pegawais
 Content-Type: application/json
 
 {
-    "nama_pegawai": "Hilwa",
-    "email": "hilwa@gmail.com",
+    "nama_pegawai": "Linda",
+    "email": "linda@gmail.com",
     "password": "123",
     "confPassword": "123",
-    "prodi": "Teknik Industri",
+    "prodi": "Sistem Informasi",
     "status": "Aktif"
 }
 
