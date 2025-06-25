@@ -1,16 +1,21 @@
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import ComponentCard from "../components/common/ComponentCard";
-import PageMeta from "../components/common/PageMeta";
-import BasicTableOne from "../components/pengguna/PlotUser";
+import PageBreadcrumb from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageBreadCrumb";
+import ComponentCard from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/ComponentCard";
+import PageMeta from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageMeta";
+import BasicTableOne from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/standart/listdaftar/DaftarStandart"
+import { useModal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/hooks/useModal"; 
+import { Modal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/modal"
 import { Plus } from "lucide-react";
-import { useModal } from "../hooks/useModal";
-import { Modal } from "../components/ui/modal";
-import Button from "../components/ui/button/Button";
-import Input from "../components/form/input/InputField";
-import Label from "../components/form/Label";
+import Button from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/button/Button";
+import Input from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/input/InputField";
+import Label from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/Label";
 import React, { useState } from 'react';
-import { useAuth } from "../components/auth/AuthContext";
-import axios from "axios";
+import { useAuth } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/auth/AuthContext";
+
+
+
+
+
+
 
 interface Pegawai {
   id_pegawai: number;
@@ -22,57 +27,17 @@ interface Pegawai {
   status: "Aktif" | "Nonaktif";
 }
 
-export default function TablesPengguna() {
-  const { isOpen, openModal, closeModal } = useModal();
+export default function TabelsDaftarStandar() {
+const { isOpen, openModal, closeModal } = useModal();
   const [tableData, setTableData] = React.useState<Pegawai[]>([]);
   const { token } = useAuth();
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
 
-  React.useEffect(() => {
-    const fetchPegawai = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/pegawais", {
-          headers: {
-            Authorization: `Bearer ${token}`, // ambil dari context
-          },
-          withCredentials: true,
-        });
-  
-        // Data dari database langsung dipakai tanpa map
-        setTableData(response.data);
-      } catch (error) {
-        console.error("Gagal fetch data pegawai:", error);
-      }
-    };
-  
-    fetchPegawai();
-  }, [token]);
-
-
-  const handleSave = () => {
+    const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
-
-// export default function TablesPengguna() {
-//   const { isOpen, openModal, closeModal } = useModal();
-//   const [filter, setFilter] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
-  
-//   const handleSave = () => {
-//     // Handle save logic here
-//     console.log("Saving changes...");
-//     closeModal();
-//   };
-
-// const handleFilterChange = () => { // Tambahkan parameter event
-//   setFilter(.target.value); // Update state dengan nilai yang dipilih
-// };
-
-// const handleSearchChange = () => { // Tambahkan parameter event
-//   setSearchQuery(); // Update state dengan nilai input
-// };
 
 
   return (
@@ -81,7 +46,7 @@ export default function TablesPengguna() {
         title="U-Quals - Pengguna"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
-      <PageBreadcrumb pageTitle="Pengguna" />
+      <PageBreadcrumb pageTitle="Daftar Standar" />
       
       <div className="space-y-6">
         <ComponentCard
@@ -218,7 +183,7 @@ export default function TablesPengguna() {
                   <Label>Nama</Label>
                   <Input 
                     type="text" 
-                    placeholder="Cari nama" 
+                    placeholder="Masukkan nama lengkap" 
                     className="w-full"
                   />
                 </div>

@@ -22,7 +22,8 @@ import Home from "./pages/Dashboard/Home";
 import TablesPengguna from "./pages/PlotingUser";
 import TablesPeriode from "./pages/Periode";
 import TabelsAuditor from "./pages/PlotingAuditor";
-import TabelsStandart from "./pages/SandartSet";
+import TabelsStandart from "./pages/Standar/SumberStandar";
+import TabelsDaftarStandar from "./pages/Standar/DaftarStandar";
 import TabelsMonitoring from "./pages/MonitoringSet";
 
 export default function App() {
@@ -47,8 +48,13 @@ export default function App() {
             <Route path="/periode" element={<TablesPeriode />} />
             <Route path="/pengguna" element={<TablesPengguna />} />
             <Route path="/auditor" element={<TabelsAuditor />} />
-            <Route path="/standart" element={<TabelsStandart />} />
+
             <Route path="/monitoring" element={<TabelsMonitoring />} />
+           
+            {/* Satandart */}
+            <Route path="/standart" element={<TabelsStandart />} />
+            <Route path="/listdaftar" element={<TabelsDaftarStandar />} />
+
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />

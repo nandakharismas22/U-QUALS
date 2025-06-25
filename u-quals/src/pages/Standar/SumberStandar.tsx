@@ -1,16 +1,18 @@
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import ComponentCard from "../components/common/ComponentCard";
-import PageMeta from "../components/common/PageMeta";
-import BasicTableOne from "../components/pengguna/PlotUser";
+import PageBreadcrumb from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageBreadCrumb";
+import ComponentCard from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/ComponentCard";
+import PageMeta from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageMeta";
+import BasicTableOne from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/standart/sumber/SumberStandart"
+import { useModal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/hooks/useModal"; 
+import { Modal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/modal"
 import { Plus } from "lucide-react";
-import { useModal } from "../hooks/useModal";
-import { Modal } from "../components/ui/modal";
-import Button from "../components/ui/button/Button";
-import Input from "../components/form/input/InputField";
-import Label from "../components/form/Label";
+import Button from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/button/Button";
+import Input from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/input/InputField";
+import Label from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/Label";
 import React, { useState } from 'react';
-import { useAuth } from "../components/auth/AuthContext";
-import axios from "axios";
+import { useAuth } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/auth/AuthContext";
+
+
+
 
 interface Pegawai {
   id_pegawai: number;
@@ -22,57 +24,17 @@ interface Pegawai {
   status: "Aktif" | "Nonaktif";
 }
 
-export default function TablesPengguna() {
-  const { isOpen, openModal, closeModal } = useModal();
+export default function TabelsStandar() {
+const { isOpen, openModal, closeModal } = useModal();
   const [tableData, setTableData] = React.useState<Pegawai[]>([]);
   const { token } = useAuth();
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
 
-  React.useEffect(() => {
-    const fetchPegawai = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/pegawais", {
-          headers: {
-            Authorization: `Bearer ${token}`, // ambil dari context
-          },
-          withCredentials: true,
-        });
-  
-        // Data dari database langsung dipakai tanpa map
-        setTableData(response.data);
-      } catch (error) {
-        console.error("Gagal fetch data pegawai:", error);
-      }
-    };
-  
-    fetchPegawai();
-  }, [token]);
-
-
-  const handleSave = () => {
+    const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
-
-// export default function TablesPengguna() {
-//   const { isOpen, openModal, closeModal } = useModal();
-//   const [filter, setFilter] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
-  
-//   const handleSave = () => {
-//     // Handle save logic here
-//     console.log("Saving changes...");
-//     closeModal();
-//   };
-
-// const handleFilterChange = () => { // Tambahkan parameter event
-//   setFilter(.target.value); // Update state dengan nilai yang dipilih
-// };
-
-// const handleSearchChange = () => { // Tambahkan parameter event
-//   setSearchQuery(); // Update state dengan nilai input
-// };
 
 
   return (
@@ -81,21 +43,21 @@ export default function TablesPengguna() {
         title="U-Quals - Pengguna"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
-      <PageBreadcrumb pageTitle="Pengguna" />
+      <PageBreadcrumb pageTitle="Daftar Standar" />
       
       <div className="space-y-6">
         <ComponentCard
           title={
             <div className="flex items-center justify-between w-full">
               <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Pengguna :  {tableData.length}
+                Semua Sumber Standar :  {tableData.length}
               </span>
               <button
                 onClick={openModal}
-                className="ml-auto left-182 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
+                className="ml-auto left-160 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                Tambah Pengguna
+                Tambah Sumber Standar
               </button>
             </div> 
             
@@ -128,7 +90,7 @@ export default function TablesPengguna() {
                   </button>
                   <input
                     type="text"
-                    placeholder=" Cari Pengguna"
+                    placeholder=" Cari disini"
                     className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px]"
                   />
                 </div>
@@ -139,11 +101,11 @@ export default function TablesPengguna() {
                 <select
                   className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
                 >
-                  <option>Semua Peran</option>
-                  <option>Admin LPMPP</option>
-                  <option>Auditor LPM</option>
-                  <option>Koprodi</option>
-                  <option>Tim Penjaminan Mutu Prodi</option>
+                  <option>Semua standar mutu</option>
+                  <option>Standar 1</option>
+                  <option>Standar 2</option>
+                  <option>Standar 3</option>
+                  <option>Standar 4</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -218,7 +180,7 @@ export default function TablesPengguna() {
                   <Label>Nama</Label>
                   <Input 
                     type="text" 
-                    placeholder="Cari nama" 
+                    placeholder="Masukkan nama lengkap" 
                     className="w-full"
                   />
                 </div>
