@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
+import Roles from "../models/RoleModel.js";
+import RolePegawai from "../models/RolePegawaiModel.js";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -95,41 +97,73 @@ export const createPegawai = async(req, res) => {
     }
 }
 
-export const updatePegawai = async(req, res) => {
-    const pegawai = await Pegawais.findOne({
-        where: {
-            id_pegawai: req.params.id_pegawai
-        }
+export const updatePegawai = async (req, res) => {
+  const pegawai = await Pegawais.findOne({
+    where: { id_pegawai: req.params.id_pegawai }
+  });
+
+  if (!pegawai) return res.status(404).json({ msg: "Pegawai Tidak Ditemukan!" });
+
+  const { nama_pegawai, email, password, prodi, status, role } = req.body;
+
+  let hashPassword = pegawai.password;
+  if (password && password !== "") {
+    const salt = await bcrypt.genSalt();
+    hashPassword = await bcrypt.hash(password, salt);
+  }
+
+  try {
+    // Update data pegawai
+    await Pegawais.update({
+      nama_pegawai,
+      email,
+      password: hashPassword,
+      prodi,
+      status
+    }, {
+      where: { id_pegawai: req.params.id_pegawai }
     });
 
-    if (!pegawai) return res.status(404).json({ msg: "Pegawai Tidak Ditemukan!" });
+    // 🔥 Update ke tabel role_pegawai
+    if (role) {
+      // Cari id_role berdasarkan nama_role
+      const foundRole = await Roles.findOne({
+        where: { nama_role: role }
+      });
 
-    const { nama_pegawai, email, password, prodi, status } = req.body;
+      if (!foundRole) {
+        return res.status(404).json({ msg: "Role tidak ditemukan!" });
+      }
 
-    let hashPassword = pegawai.password; // default: tidak ubah password
-    if (password && password !== "") {
-        const salt = await bcrypt.genSalt();
-        hashPassword = await bcrypt.hash(password, salt);
-    }
+      // Cek apakah sudah ada entri di tabel role_pegawai
+      const existingRel = await RolePegawai.findOne({
+        where: { id_pegawai: req.params.id_pegawai }
+      });
 
-    try {
-        await Pegawais.update({
-            nama_pegawai,
-            email,
-            password: hashPassword,
-            prodi,
-            status
+      if (existingRel) {
+        // Jika sudah ada, update
+        await RolePegawai.update({
+          id_role: foundRole.id_role
         }, {
-            where: {
-                id_pegawai: pegawai.id_pegawai
-            }
+          where: { id_pegawai: req.params.id_pegawai }
         });
-
-        res.status(200).json({ msg: "Pegawai Berhasil Diubah!" });
-    } catch (error) {
-        res.status(400).json({ msg: error.message });
+      } else {
+        // Jika belum ada, insert baru
+        await RolePegawai.create({
+          id_pegawai: req.params.id_pegawai,
+          id_role: foundRole.id_role
+        });
+      }
     }
-}
+
+    res.status(200).json({ msg: "Pegawai & Role Berhasil Diubah!" });
+
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
+  
 
 export const deletePegawai = async(req, res) => {
     const pegawai = await Pegawais.findOne({

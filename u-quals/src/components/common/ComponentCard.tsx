@@ -40,17 +40,17 @@
 import { ReactNode } from 'react';
 
 interface ComponentCardProps {
-  title: ReactNode;
+  // title: ReactNode;
   children: ReactNode;
   className?: string;
-  desc?: string;
+  // desc: string;
 }
 
 const ComponentCard = ({
-  title,
+  // title,
   children,
   className = "",
-  desc = "",
+  // desc = "",
 }: ComponentCardProps) => {
   return (
     <div
@@ -59,15 +59,17 @@ const ComponentCard = ({
       {/* Card Header */}
       <div className="px-6 py-5">
         <div className="flex justify-between items-center">
+            <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+            </h3>
           <div>
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-              {title}
+              {/* {title} */}
             </h3>
-            {desc && (
+            {/* {desc && (
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {desc}
               </p>
-            )}
+            )} */}
           </div>
         </div>
       </div>

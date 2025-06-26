@@ -21,19 +21,18 @@ export default function TabelsAuditor() {
   return (
     <>
       <PageMeta
-        title="React.js Basic Tables Dashboard | TailAdmin - Next.js Admin Dashboard Template"
+        title="U-Quals - Plotting Auditor"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
-      <PageBreadcrumb pageTitle="Pengguna" />
+      <PageBreadcrumb pageTitle="Auditor" />
       
       <div className="space-y-6">
-        <ComponentCard
-         title={
             <div className="flex items-center justify-between w-full">
-            </div> 
-            
-          }
-        >
+              <span className="text-base font-medium text-gray-800 dark:text-white/90">
+                  Semua Auditor : 5
+              </span>
+            </div>
+        <ComponentCard>
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 

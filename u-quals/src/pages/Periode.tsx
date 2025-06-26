@@ -15,30 +15,26 @@ export default function TablesPeriode() {
   return (
     <>
       <PageMeta
-        title="React.js Basic Tables Dashboard | TailAdmin - Next.js Admin Dashboard Template"
+        title="U-Quals - Periode"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
       <PageBreadcrumb pageTitle="Periode" />
       <div className="space-y-6">
-        <ComponentCard
-          title={
-            <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full">
               <span className="text-base font-medium text-gray-800 dark:text-white/90">
                 Semua Periode : 4
               </span>
               <button
                 onClick={handleTambahPeriode}
-                className="ml-auto left-192 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
+                className="ml-auto relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Tambah Periode
               </button>
-            </div>
-          }
-        >
+          </div>
+        <ComponentCard>
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
-              
 
               {/* Dropdown Semua Periode */}
               <div className="relative w-48">
