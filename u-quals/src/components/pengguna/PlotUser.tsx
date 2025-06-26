@@ -53,7 +53,7 @@ export default function PenggunaTables() {
   const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
   const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
-  // const [, setToken] = useState('');
+  const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
 
   const fetchPegawai = async () => {
     try {
@@ -67,22 +67,35 @@ export default function PenggunaTables() {
   };
 
   React.useEffect(() => {
-    const fetchPegawai = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/pegawais", {
-          headers: {
-            Authorization: `Bearer ${token}`, // ambil dari context
-          },
+        // Ambil data pegawai
+        const pegawaiRes = await axios.get("http://localhost:5000/pegawais", {
           withCredentials: true,
         });
-  
-        // Data dari database langsung dipakai tanpa map
-        setTableData(response.data);
+
+        const mappedPegawai = pegawaiRes.data.map((item: any) => ({
+          id_pegawai: item.id_pegawai,
+          nama_pegawai: item.nama_pegawai,
+          email: item.email,
+          role: item.role || "Belum ditentukan", // dari hasil mapping controller
+          prodi: item.prodi,
+          terakhir_login: item.terakhir_login,
+          status: item.status
+        }));        
+        setTableData(mappedPegawai);
+
+        // Ambil data role
+        const roleRes = await axios.get("http://localhost:5000/roles", {
+          withCredentials: true,
+        });
+        setRoles(roleRes.data);
       } catch (error) {
-        console.error("Gagal fetch data pegawai:", error);
+        console.error("Gagal fetch data:", error);
       }
-    };  
-    fetchPegawai();    
+    };
+
+    fetchData();
   }, [token]);
 
   const handleEditClick = (pegawai: Pegawai) => {
@@ -96,13 +109,14 @@ export default function PenggunaTables() {
         withCredentials: true,
       });
   
-      // Setelah berhasil hapus, perbarui data di tabel
+      // Hapus dari state frontend
       setTableData(prev => prev.filter(p => p.id_pegawai !== id));
+      console.log("Pegawai berhasil dihapus!");
     } catch (error) {
       console.error("Gagal menghapus pegawai:", error);
     }
   };
-
+  
   const handleSaveChanges = async () => {
     if (!selectedPegawai) return;
   
@@ -115,6 +129,7 @@ export default function PenggunaTables() {
           password: "",
           prodi: selectedPegawai.prodi,
           status: selectedPegawai.status,
+          role: selectedPegawai.role,
         },
         {
           withCredentials: true,
@@ -122,18 +137,18 @@ export default function PenggunaTables() {
       );
   
       console.log("Pegawai berhasil diupdate!");
-      fetchPegawai(); // untuk refresh data
+      fetchPegawai(); 
       closeEditModal(); 
     } catch (error: any) {
       console.error("Gagal update pegawai:", error.response?.data || error.message);
     }
-  };
-  
+  };  
 
   const handleConfirmDelete = () => {
-    // Handle delete logic here
-    console.log("Deleting pegawai:", selectedPegawai);
-    closeDeleteModal();
+    if (selectedPegawai?.id_pegawai) {
+      handleDeleteClick(selectedPegawai.id_pegawai);  
+      closeDeleteModal(); 
+    }
   };
 
   return (
@@ -204,7 +219,10 @@ export default function PenggunaTables() {
                       {/* Delete */}
                       <div
                         className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 cursor-pointer"
-                        onClick={() => handleDeleteClick(pegawai.id_pegawai)}
+                        onClick={() => {
+                          setSelectedPegawai(pegawai); 
+                          openDeleteModal();
+                        }}
                       >
                         <Trash2 className="w-4 h-4 text-red-500 dark:text-red-300" />
                       </div>
@@ -269,11 +287,12 @@ export default function PenggunaTables() {
                       setSelectedPegawai({ ...selectedPegawai!, role: e.target.value as Pegawai["role"] })
                     }
                   >
-                    <option value="">Semua Peran</option>
-                    <option>Admin LPMPP</option>
-                    <option>Auditor LPM</option>
-                    <option>Koprodi</option>
-                    <option>Tim Penjaminan Mutu Prodi</option>
+                    <option value="">Pilih Peran</option>
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.nama_role}>
+                        {role.nama_role}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

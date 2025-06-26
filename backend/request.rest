@@ -1,9 +1,32 @@
 # Get All Pegawai
 GET http://localhost:5000/pegawais
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo0LCJuYW1hX3BlZ2F3YWkiOiJLYW5pYSIsImVtYWlsIjoia2FuaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5mb3JtYXRpa2EiLCJzdGF0dXMiOiJBa3RpZiIsImlhdCI6MTc1MDMyMTU4MSwiZXhwIjoxNzUwMzIxNjAxfQ.HitVSHf8mTB05OWR1KNiugnDmIPyFvl8DRRnyce8qrk
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo0LCJuYW1hX3BlZ2F3YWkiOiJLYW5pYSIsImVtYWlsIjoia2FuaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5mb3JtYXRpa2EiLCJzdGF0dXMiOiJBa3RpZiIsImlhdCI6MTc1MDMyMTU4MSwiZXhwIjoxNzUwMzIxNjAxfQ.HitVSHf8mTB05OWR1KNiugnDmIPyFvl8DRRnyce8qrk
 
 ### Get Pegawai by ID
 GET http://localhost:5000/pegawais/5
+
+### Get All Role
+GET http://localhost:5000/roles
+
+### Get Role by ID
+GET http://localhost:5000/roles/1
+
+### Get All Periode
+GET http://localhost:5000/periode
+
+###
+# Create Periode
+POST http://localhost:5000/pegawais
+Content-Type: application/json
+
+{
+    "nama_pegawai": "Linda",
+    "email": "linda@gmail.com",
+    "password": "123",
+    "confPassword": "123",
+    "prodi": "Sistem Informasi",
+    "status": "Aktif"
+}
 
 ###
 # Registrasi Pegawai
@@ -35,20 +58,21 @@ Content-Type: application/json
 
 ###
 # Update Pegawai
-PATCH http://localhost:5000/pegawais/2
+PATCH http://localhost:5000/pegawais/6
 Content-Type: application/json
 
 {
-    "nama_pegawai": "Nanda",
-    "email": "nanda2@gmail.com",
+    "nama_pegawai": "Linda",
+    "email": "linda@gmail.com",
     "password": "123",
     "prodi": "Sistem Informasi",
-    "status": "Aktif"
+    "status": "Aktif",
+    "role": "Auditor"
 }
 
 ###
 # Delete Pegawai
-DELETE http://localhost:5000/pegawais/3
+DELETE http://localhost:5000/pegawais/4
 
 ###
 # Login

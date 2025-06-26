@@ -32,9 +32,9 @@ export default function TablesPengguna() {
     const fetchPegawai = async () => {
       try {
         const response = await axios.get("http://localhost:5000/pegawais", {
-          headers: {
-            Authorization: `Bearer ${token}`, // ambil dari context
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`, // ambil dari context
+          // },
           withCredentials: true,
         });
   
@@ -84,23 +84,19 @@ export default function TablesPengguna() {
       <PageBreadcrumb pageTitle="Pengguna" />
       
       <div className="space-y-6">
-        <ComponentCard
-          title={
-            <div className="flex items-center justify-between w-full">
-              <span className="text-base font-medium text-gray-800 dark:text-white/90">
+          <div className="flex items-center justify-between w-full">
+            <span className="text-base font-medium text-gray-800 dark:text-white/90">
                 Semua Pengguna :  {tableData.length}
-              </span>
-              <button
+            </span>
+            <button
                 onClick={openModal}
-                className="ml-auto left-182 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
+                className="ml-auto relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Tambah Pengguna
-              </button>
-            </div> 
-            
-          }
-        >
+            </button>
+          </div> 
+        <ComponentCard>
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 
