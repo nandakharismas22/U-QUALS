@@ -4,14 +4,15 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} 
+
+from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
 
 import { ArrowUpDown, Circle, FileText, Calendar,  Edit, Trash2 } from "lucide-react";
 
 interface Project {
   id: number;
   periode: string;
-  jenis_audit: string;
   startDate: string;
   endDate: string;
   status: "Aktif" | "Selesai";
@@ -22,7 +23,6 @@ const tableData: Project[] = [
   {
     id: 1,
     periode: "Periode 2024/2025",
-    jenis_audit: "Audit Tahunan",
     startDate: "25 Februari 2025",
     endDate: "22 Maret 2025",
     status: "Aktif",
@@ -30,7 +30,6 @@ const tableData: Project[] = [
   {
     id: 2,
     periode: "Periode 2023/2024",
-    jenis_audit: "Audit TW1",
     startDate: "15 Januari 2024",
     endDate: "10 Februari 2024",
     status: "Selesai",
@@ -38,7 +37,6 @@ const tableData: Project[] = [
   {
     id: 3,
     periode: "Periode 2024/2025",
-    jenis_audit: "Audit Tahunan",
     startDate: "10 Maret 2025",
     endDate: "5 April 2025",
     status: "Selesai",
@@ -46,7 +44,6 @@ const tableData: Project[] = [
   {
     id: 4,
     periode: "Periode 2022/2023",
-    jenis_audit: "Audit Tahunan",
     startDate: "1 Desember 2022",
     endDate: "20 Januari 2023",
     status: "Selesai",
@@ -74,14 +71,6 @@ export default function BasicTableOne() {
                 <div className="flex items-center gap-1 cursor-pointer">
                   Periode
                   <ArrowUpDown className="w-3 h-3" />
-                </div>
-              </TableCell>
-              <TableCell
-                isHeader
-                className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
-              >
-                <div className="flex items-center gap-1 cursor-pointer">
-                  Jenis Audit
                 </div>
               </TableCell>
               <TableCell
@@ -122,11 +111,6 @@ export default function BasicTableOne() {
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gray-400" />
                     {project.periode}
-                  </div>
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <div className="flex items-center gap-2">
-                    {project.jenis_audit}
                   </div>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

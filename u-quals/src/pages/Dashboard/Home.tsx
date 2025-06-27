@@ -9,7 +9,10 @@ import axios from 'axios';
 import { jwtDecode } from "jwt-decode"
 import { useNavigate } from 'react-router-dom';
 import PageMeta from "../../components/common/PageMeta";
+import ViewMatrics from "../../components/dashboard/ViewMatrik";
+import Rekapitulasi from "../../components/dashboard/Rekapitulasi";
 import { useAuth } from "../../components/auth/AuthContext";
+import RekapitulasiMatrics from '../../components/dashboard/Rekapitulasi';
 
 interface MyToken {
   id_pegawai: number;
@@ -59,41 +62,27 @@ export default function Home() {
         title="U-Quals - Dashboard"
         description=""
       />
-      <div className="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12">
-        <div className="mx-auto w-full max-w-[630px] text-center">
-          <h3 className="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
-            Card Title Here
-          </h3>
-
-          <p className="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
-            Start putting content on grids or panels, you can also use different
-            combinations of grids.Please check out the dashboard and other pages
-          </p>
-        </div>
-      </div>
-      {/* <div className="grid grid-cols-12 gap-4 md:gap-6"> */}
-        {/* <div className="col-span-12 space-y-6 xl:col-span-7">
-          <EcommerceMetrics />
-
-          <MonthlySalesChart />
+      <div className="w-full gap-4 md:gap-6">
+        <div className="col-span-12 space-y-6 w-full">
+          <ViewMatrics />
         </div>
 
         <div className="col-span-12 xl:col-span-5">
-          <MonthlyTarget />
+          <Rekapitulasi />
         </div>
-
+{/* 
         <div className="col-span-12">
           <StatisticsChart />
-        </div>
-
-        <div className="col-span-12 xl:col-span-5">
-          <DemographicCard />
-        </div>
-
-        <div className="col-span-12 xl:col-span-7">
-          <RecentOrders />
         </div> */}
-      {/* </div> */}
+
+        {/* <div className="col-span-12 xl:col-span-5">
+          <DemographicCard />
+        </div> */}
+
+        {/* <div className="col-span-12 xl:col-span-7">
+          <RecentOrders /> */}
+        {/* </div> */}
+            </div>
     </>
   );
 }

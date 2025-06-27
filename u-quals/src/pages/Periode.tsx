@@ -1,5 +1,6 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import ComponentCard from "../components/common/ComponentCard";
+import PaginationWithText from "../components/ui/pagination/page";
 import PageMeta from "../components/common/PageMeta";
 import BasicTableOne from "../components/periode/SemuaPeriode";
 import { Plus } from "lucide-react";
@@ -78,7 +79,11 @@ export default function TablesPeriode() {
           </div>
           
           <BasicTableOne />
-
+          <PaginationWithText
+            totalPages={10}
+            initialPage={1}
+            onPageChange={(page) => console.log("Pindah ke halaman:", page)}
+          />
         </ComponentCard>
       </div>
     </>

@@ -2,6 +2,7 @@ import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import ComponentCard from "../components/common/ComponentCard";
 import PageMeta from "../components/common/PageMeta";
 import BasicTableOne from "../components/pengguna/PlotUser";
+import PaginationWithText from "../components/ui/pagination/page";
 import { Plus } from "lucide-react";
 import { useModal } from "../hooks/useModal";
 import { Modal } from "../components/ui/modal";
@@ -133,7 +134,7 @@ export default function TablesPengguna() {
               {/* Dropdown Peran */}
               <div className="relative">
                 <select
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-500  focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-brand-500  dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
                 >
                   <option>Semua Peran</option>
                   <option>Admin LPMPP</option>
@@ -174,6 +175,11 @@ export default function TablesPengguna() {
           </div>
           
           <BasicTableOne />
+                    <PaginationWithText
+            totalPages={10}
+            initialPage={1}
+            onPageChange={(page) => console.log("Pindah ke halaman:", page)}
+          />
         </ComponentCard>
       </div>
 
