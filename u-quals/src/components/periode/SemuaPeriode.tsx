@@ -23,6 +23,59 @@ interface Periode {
   status: "Aktif" | "Selesai";
 }
 
+export default function PeriodeTable() {
+  const [tableData, setTableData] = React.useState<Periode[]>([]);
+  const { token } = useAuth();
+  const [selectedPeriode, setSelectedPeriode] = React.useState<Periode | null>(null);
+  const [jenis_audit, setJenisAudit] = React.useState<{ id_jenis_audit: number; nama_jenis: string }[]>([]);
+
+  const fetchPeriode = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/periode", {
+        withCredentials: true,
+      });
+      setTableData(response.data);
+    } catch (error) {
+      console.error("Gagal fetch data periode:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Ambil semua jenis audit
+        const jenisRes = await axios.get("http://localhost:5000/jenis-audit", {
+          withCredentials: true,
+        });
+        const jenisList = jenisRes.data;
+        setJenisAudit(jenisList);
+  
+        // Ambil semua periode
+        const periodeRes = await axios.get("http://localhost:5000/periode", {
+          withCredentials: true,
+        });
+  
+        const mappedPeriode = periodeRes.data.map((item: any) => {
+          const jenis = jenisList.find((j: any) => j.id_jenis_audit === item.id_jenis_audit);
+          return {
+            id_periode: item.id_periode,
+            periode: item.periode,
+            tgl_mulai: dayjs(item.tgl_mulai).format("D MMMM YYYY"), // contoh: 19 Juni 2025
+            tgl_selesai: dayjs(item.tgl_selesai).format("D MMMM YYYY"),
+            status: item.status,
+            nama_jenis: jenis ? jenis.nama_jenis : "Belum Ditentukan",
+          };
+        });
+  
+        setTableData(mappedPeriode);
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      }
+    };
+  
+    fetchData();
+  }, [token]);
+
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
