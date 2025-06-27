@@ -84,7 +84,8 @@ export default function TablesPengguna() {
       <PageBreadcrumb pageTitle="Pengguna" />
       
       <div className="space-y-6">
-          <div className="flex items-center justify-between w-full">
+        <ComponentCard
+          title = { <div className="flex items-center justify-between w-full">
             <span className="text-base font-medium text-gray-800 dark:text-white/90">
                 Semua Pengguna :  {tableData.length}
             </span>
@@ -96,7 +97,7 @@ export default function TablesPengguna() {
                 Tambah Pengguna
             </button>
           </div> 
-        <ComponentCard>
+          } >
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 
@@ -149,8 +150,6 @@ export default function TablesPengguna() {
               </div>
             </div>
 
-
-
             {/* Dropdown Max Data */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">Menampilkan</span>
@@ -202,7 +201,7 @@ export default function TablesPengguna() {
                     <option>Koprodi</option>
                     <option>Tim Penjaminan Mutu Prodi</option>
                   </select>
-                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                  <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>

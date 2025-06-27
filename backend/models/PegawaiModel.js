@@ -59,7 +59,7 @@ const Pegawais = db.define('pegawai', {
     }, {
       freezeTableName: true,
       tableName: 'pegawai',
-      timestamps: true,
+      timestamps: false,
       createdAt: 'created_at',
       updatedAt: 'modified_at'
     }); 

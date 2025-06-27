@@ -20,7 +20,7 @@ interface Pegawai {
   id_pegawai: number;
   nama_pegawai: string;
   email: string;
-  role: "Admin PLMPP";
+  role: string;        
   prodi: string;
   terakhir_login: string;
   status: "Aktif" | "Nonaktif";
@@ -78,11 +78,12 @@ export default function PenggunaTables() {
           id_pegawai: item.id_pegawai,
           nama_pegawai: item.nama_pegawai,
           email: item.email,
-          role: item.role || "Belum ditentukan", // dari hasil mapping controller
+          role: item.role?.id_role || "Belum ditentukan",  
           prodi: item.prodi,
           terakhir_login: item.terakhir_login,
           status: item.status
-        }));        
+        }));    
+          
         setTableData(mappedPegawai);
 
         // Ambil data role
@@ -129,11 +130,9 @@ export default function PenggunaTables() {
           password: "",
           prodi: selectedPegawai.prodi,
           status: selectedPegawai.status,
-          role: selectedPegawai.role,
+          id_role: selectedPegawai.role, 
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
   
       console.log("Pegawai berhasil diupdate!");
@@ -284,6 +283,24 @@ export default function PenggunaTables() {
                     className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 py-2.5 pl-4 pr-10 text-sm text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90"
                     value={selectedPegawai?.role || ""}
                     onChange={(e) =>
+                      setSelectedPegawai({
+                        ...selectedPegawai!,
+                        role: e.target.value, // id, bukan nama
+                      })
+                    }
+                  >
+                    <option value="">Pilih Peran</option>
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.nama_role}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* <select
+                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 py-2.5 pl-4 pr-10 text-sm text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90"
+                    value={selectedPegawai?.role || ""}
+                    onChange={(e) =>
                       setSelectedPegawai({ ...selectedPegawai!, role: e.target.value as Pegawai["role"] })
                     }
                   >
@@ -293,7 +310,7 @@ export default function PenggunaTables() {
                         {role.nama_role}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </div>
 
                 {/* Status */}

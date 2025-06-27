@@ -34,7 +34,7 @@ const Roles = db.define('roles', {
     }, {
       freezeTableName: true,
       tableName: 'role',
-      timestamps: true,
+      timestamps: false,
       createdAt: 'created_at',
       updatedAt: 'modified_at'
     }); 
