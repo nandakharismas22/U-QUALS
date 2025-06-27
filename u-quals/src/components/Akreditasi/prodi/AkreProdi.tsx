@@ -4,36 +4,76 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
-
+} from "../../../components/ui/table/index";
 import { ArrowUpDown, Edit, Trash2 } from "lucide-react";
 
-interface Standard {
+interface ProdiAkre{
   id: number;
-  number: string;
-  year: string;
-  description: string;
+  fakultas: string;
+  prodi: string;
+  level: string;
+  lembaga: string;
+  nilai: string;
+  mulai: string;
+  berakhir: string;
 }
 
-const tableData: Standard[] = [
+const tableData: ProdiAkre[] = [
   {
     id: 1,
-    number: "(nama sumber standar)",
-    year: "2022",
-    description: "deskripsi",
+    fakultas: "Ilmu Komputer",
+    prodi: "Informatika", 
+    level: "S1",         
+    lembaga: "BAN-PT",
+    nilai: "B/Baik Sekali",
+    mulai: "23 Mei 2025",
+    berakhir: "27 Juni 2025",
   },
+
   {
     id: 2,
-    number: "(nama sumber standar)",
-    year: "2021",
-    description: "deskripsi",
+    fakultas: "Ilmu Komputer",
+    prodi: "Sistem Informasi", 
+    level: "S1",          
+    lembaga: "BAN-PT",
+    nilai: "A/Unggul",
+    mulai: "23 Mei 2025",
+    berakhir: "27 Juni 2025",
   },
+
   {
     id: 3,
-    number: "(nama sumber standar)",
-    year: "2020",
-    description: "deskripsi",
+    fakultas: "Ilmu Komputer",
+    prodi: "Sistem Informasi", 
+    level: "S1",          
+    lembaga: "BAN-PT",
+    nilai: "A/Unggul",
+    mulai: "23 Mei 2025",
+    berakhir: "27 Juni 2025",
   },
+
+  {
+    id: 4,
+    fakultas: "Teknik",
+    prodi: "Teknik Kimia", 
+    level: "S1",          
+    lembaga: "BAN-PT",
+    nilai: "B/Baik Sekali",
+    mulai: "23 Mei 2025",
+    berakhir: "27 Juni 2025",
+  },
+  
+  {
+    id: 5,
+    fakultas: "Teknik",
+    prodi: "Teknik Industri", 
+    level: "S1",          
+    lembaga: "BAN-PT",
+    nilai: "B/Baik Sekali",
+    mulai: "23 Mei 2025",
+    berakhir: "27 Juni 2025",
+  },
+
 ];
 
 export default function BasicTableOne() {
@@ -48,24 +88,48 @@ export default function BasicTableOne() {
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Sumber Standar
+                  Fakultas
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Tahun
+                  Prodi
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Deskripsi
+                  Level
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
-                File
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Lembaga
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Nilai
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Mulai
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Berakhir
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                Sertifikat
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 Aksi
@@ -80,13 +144,25 @@ export default function BasicTableOne() {
                   {index + 1}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.number}
+                  {item.fakultas}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.year}
+                  {item.prodi}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.description}
+                  {item.level}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.lembaga}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.nilai}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.mulai}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.berakhir}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <span className="text-blue-600 hover:underline cursor-pointer">Lihat</span>
