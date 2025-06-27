@@ -67,7 +67,7 @@ const navItems: NavItem[] = [
     icon: <FileCheck  />,
     subItems: [
       { name: "Sumber Standart", path: "/standart", pro: false },
-      { name: "Daftar Standart", path: "/blank", pro: false },
+      { name: "Daftar Standart", path: "/listdaftar", pro: false },
     ],
   },
 
@@ -117,13 +117,14 @@ const navItems: NavItem[] = [
 
 const othersItems: NavItem[] = [
   // {
-  //   icon: <PieChartIcon />,
+  //   icon: <PageIcon />,
   //   name: "Charts",
   //   subItems: [
   //     { name: "Line Chart", path: "/line-chart", pro: false },
   //     { name: "Bar Chart", path: "/bar-chart", pro: false },
   //   ],
   // },
+
   // {
   //   icon: <BoxCubeIcon />,
   //   name: "UI Elements",

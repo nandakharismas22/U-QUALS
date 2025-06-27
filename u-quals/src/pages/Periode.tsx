@@ -1,5 +1,6 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import ComponentCard from "../components/common/ComponentCard";
+import PaginationWithText from "../components/ui/pagination/page";
 import PageMeta from "../components/common/PageMeta";
 import PeriodeTable from "../components/periode/SemuaPeriode";
 import { Plus } from "lucide-react";
@@ -127,9 +128,6 @@ export default function TablesPeriode() {
 
             </div>
           </div>
-          
-          <PeriodeTable />
-
         </ComponentCard>
       </div>
     </>

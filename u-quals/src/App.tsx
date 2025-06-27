@@ -19,10 +19,12 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import ViewMetrics from "./pages/DashboardView/DashHome";
 import TablesPengguna from "./pages/PlotingUser";
 import TablesPeriode from "./pages/Periode";
 import TabelsAuditor from "./pages/PlotingAuditor";
-import TabelsStandart from "./pages/SandartSet";
+import TabelsStandart from "./pages/Standar/SumberStandar";
+import TabelsDaftarStandar from "./pages/Standar/DaftarStandar";
 import TabelsMonitoring from "./pages/MonitoringSet";
 
 export default function App() {
@@ -37,7 +39,8 @@ export default function App() {
 
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route path="/" element={<Blank />} />
+            {/* <Route path="/" element={<Blank />} /> */}
+            {/* <Route path="/dashboard" element={<ViewMetrics />} /> */}
             <Route path="/home" element={<Home />} />
 
             {/* Others Page */}
@@ -47,8 +50,13 @@ export default function App() {
             <Route path="/periode" element={<TablesPeriode />} />
             <Route path="/pengguna" element={<TablesPengguna />} />
             <Route path="/auditor" element={<TabelsAuditor />} />
-            <Route path="/standart" element={<TabelsStandart />} />
+
             <Route path="/monitoring" element={<TabelsMonitoring />} />
+           
+            {/* Satandart */}
+            <Route path="/standart" element={<TabelsStandart />} />
+            <Route path="/listdaftar" element={<TabelsDaftarStandar />} />
+
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
