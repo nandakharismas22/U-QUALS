@@ -48,7 +48,7 @@ const Periode = db.define("periode", {
 }, {
     freezeTableName: true,         
     tableName: "periode_audit",  
-    timestamps: true,
+    timestamps: false,
     createdAt: 'created_at',
     updatedAt: 'modified_at'
 });

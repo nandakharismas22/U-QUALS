@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Table,
   TableBody,
@@ -7,53 +8,21 @@ import {
 } from "../ui/table";
 
 import { ArrowUpDown, Circle, FileText, Calendar,  Edit, Trash2 } from "lucide-react";
+import { useAuth } from "../auth/AuthContext";
+import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/id"; 
+dayjs.locale("id");
 
-interface Project {
-  id: number;
+interface Periode {
+  id_periode: number;
+  nama_jenis: string;
   periode: string;
-  jenis_audit: string;
-  startDate: string;
-  endDate: string;
+  tgl_mulai: string;
+  tgl_selesai: string;
   status: "Aktif" | "Selesai";
 }
 
-// Define the table data
-const tableData: Project[] = [
-  {
-    id: 1,
-    periode: "Periode 2024/2025",
-    jenis_audit: "Audit Tahunan",
-    startDate: "25 Februari 2025",
-    endDate: "22 Maret 2025",
-    status: "Aktif",
-  },
-  {
-    id: 2,
-    periode: "Periode 2023/2024",
-    jenis_audit: "Audit TW1",
-    startDate: "15 Januari 2024",
-    endDate: "10 Februari 2024",
-    status: "Selesai",
-  },
-  {
-    id: 3,
-    periode: "Periode 2024/2025",
-    jenis_audit: "Audit Tahunan",
-    startDate: "10 Maret 2025",
-    endDate: "5 April 2025",
-    status: "Selesai",
-  },
-  {
-    id: 4,
-    periode: "Periode 2022/2023",
-    jenis_audit: "Audit Tahunan",
-    startDate: "1 Desember 2022",
-    endDate: "20 Januari 2023",
-    status: "Selesai",
-  },
-];
-
-export default function BasicTableOne() {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -61,7 +30,7 @@ export default function BasicTableOne() {
           {/* Table Header */}
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell
+              <TableCell                
                 isHeader
                 className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
               >
@@ -113,32 +82,32 @@ export default function BasicTableOne() {
 
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {tableData.map((project, index) => (
-              <TableRow key={project.id}>
+            {tableData.map((periode, index) => (
+              <TableRow key={periode.id_periode}>
                 <TableCell className="px-5 py-4 sm:px-6 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {index + 1}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gray-400" />
-                    {project.periode}
+                    {periode.periode}
                   </div>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
-                    {project.jenis_audit}
+                    Audit {periode.nama_jenis}
                   </div>
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {project.startDate} - {project.endDate}
+                  {periode.tgl_mulai} - {periode.tgl_selesai}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     <Circle 
-                      className={`w-3 h-3 ${project.status === "Aktif" ? "text-green-500" : "text-gray-400"}`} 
-                      fill={project.status === "Aktif" ? "currentColor" : "none"}
+                      className={`w-3 h-3 ${periode.status === "Aktif" ? "text-green-500" : "text-gray-400"}`} 
+                      fill={periode.status === "Aktif" ? "currentColor" : "none"}
                     />
-                    {project.status}
+                    {periode.status}
                   </div>
                 </TableCell>
                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

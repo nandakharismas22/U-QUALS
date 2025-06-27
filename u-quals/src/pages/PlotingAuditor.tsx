@@ -27,12 +27,13 @@ export default function TabelsAuditor() {
       <PageBreadcrumb pageTitle="Auditor" />
       
       <div className="space-y-6">
-            <div className="flex items-center justify-between w-full">
+      <ComponentCard
+            title = { <div className="flex items-center justify-between w-full">
               <span className="text-base font-medium text-gray-800 dark:text-white/90">
                   Semua Auditor : 5
               </span>
             </div>
-        <ComponentCard>
+            } >
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 

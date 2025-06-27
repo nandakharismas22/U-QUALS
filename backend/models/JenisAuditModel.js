@@ -3,42 +3,38 @@ import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const RolePegawai = db.define('role_pegawai', {
-  id_role_pegawai: {
+const JenisAudit = db.define("jenis_audit", {
+  id_jenis_audit: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
-  id_pegawai: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  id_role: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+  nama_jenis: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
   },
   created_by: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
   created_at: {
     type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW
+    defaultValue: Sequelize.NOW,
   },
   modified_by: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
   modified_at: {
     type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW
+    allowNull: true,
   }
 }, {
   freezeTableName: true,  
-  tableName: 'role_pegawai',
-  timestamps: false,
+  tableName: 'jenis_audit',
+  timestamps: true,   
   createdAt: 'created_at',
   updatedAt: 'modified_at'
 });
 
-export default RolePegawai;
+export default JenisAudit;

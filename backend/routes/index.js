@@ -8,6 +8,12 @@ import {
     updatePeriode,
     deletePeriode,
   } from "../controller/PeriodeController.js";
+import {
+    getJenisAudit,
+    createJenisAudit,
+    updateJenisAudit,
+    deleteJenisAudit
+  } from "../controller/JenisAuditController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controller/RefreshToken.js";
 
@@ -36,5 +42,11 @@ router.get("/periode/:id_periode", getPeriodeById);
 router.post("/periode", createPeriode);
 router.patch("/periode/:id_periode", updatePeriode);
 router.delete("/periode/:id_periode", deletePeriode);
+
+// Jenis Audit
+router.get("/jenis-audit", getJenisAudit);
+router.post("/jenis-audit", createJenisAudit);
+router.patch("/jenis-audit/:id_jenis_audit", updateJenisAudit);
+router.delete("/jenis-audit/:id_jenis_audit", deleteJenisAudit);
 
 export default router;
