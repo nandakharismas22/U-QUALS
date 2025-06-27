@@ -1,12 +1,6 @@
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BoxIconLine,
-  GroupIcon,
-} from "../../icons";
-import { UserCircle } from "lucide-react";
+
 import { UsersIcon, AcademicCapIcon, BuildingLibraryIcon } from '@heroicons/react/24/solid'
-import Badge from "../ui/badge/Badge";
+
 
 
 
@@ -22,7 +16,7 @@ export default function ViewMatrics() {
       </p>
     </div>
 
-    <div className="flex gap-4 w-full">
+    <div className="flex flex-wrap gap-4 w-full">
       {[
         { label: "Fakultas", value: 7, icon: <BuildingLibraryIcon className="size-7" /> },
         { label: "Prodi", value: 25, icon: <AcademicCapIcon className="size-7" /> },

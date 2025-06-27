@@ -6,7 +6,7 @@ import {
   TableRow,
 } 
 
-from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
+from "../../../components/ui/table/index";
 
 import { ArrowUpDown, Circle, FileText, Calendar,  Edit, Trash2 } from "lucide-react";
 

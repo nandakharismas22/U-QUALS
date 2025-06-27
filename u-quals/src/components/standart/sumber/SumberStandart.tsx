@@ -4,8 +4,7 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
-
+} from "../../../components/ui/table/index";
 import { ArrowUpDown, Edit, Trash2 } from "lucide-react";
 
 interface Standard {

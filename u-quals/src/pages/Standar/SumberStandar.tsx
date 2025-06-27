@@ -1,16 +1,15 @@
-import PageBreadcrumb from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageBreadCrumb";
-import ComponentCard from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/ComponentCard";
-import PageMeta from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/common/PageMeta";
-import BasicTableOne from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/standart/sumber/SumberStandart"
-import { useModal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/hooks/useModal"; 
-import { Modal } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/modal"
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import ComponentCard from "../../components/common/ComponentCard";
+import PageMeta from "../../components/common/PageMeta";
+import BasicTableOne from "../../components/standart/sumber/SumberStandart"
+import { useModal } from "../../hooks/useModal"; 
+import { Modal } from "../../components/ui/modal"
 import { Plus } from "lucide-react";
-import Button from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/button/Button";
-import Input from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/input/InputField";
-import Label from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/form/Label";
+import Button from "../../components/ui/button/Button";
+import Input from "../../components/form/input/InputField";
+import Label from "../../components/form/Label";
 import React, { useState } from 'react';
-import { useAuth } from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/auth/AuthContext";
-
+import { useAuth } from "../../components/auth/AuthContext";
 
 
 
