@@ -10,7 +10,7 @@ import Input from "../../components/form/input/InputField";
 import Label from "../../components/form/Label";
 import React, { useState } from 'react';
 import { useAuth } from "../../components/auth/AuthContext";
-
+import PaginationWithText from "../../components/ui/pagination/page";
 
 
 interface Pegawai {
@@ -135,6 +135,11 @@ const { isOpen, openModal, closeModal } = useModal();
           </div>
           
           <BasicTableOne />
+          <PaginationWithText
+            totalPages={10}
+            initialPage={1}
+            onPageChange={(page) => console.log("Pindah ke halaman:", page)}
+          />
         </ComponentCard>
       </div>
 
