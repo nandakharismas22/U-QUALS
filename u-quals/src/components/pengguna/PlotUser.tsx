@@ -78,11 +78,11 @@ export default function PenggunaTables() {
           id_pegawai: item.id_pegawai,
           nama_pegawai: item.nama_pegawai,
           email: item.email,
-          role: item.role?.id_role || "Belum ditentukan",  
+          role: item.roles?.map((r: any) => r.role?.nama_role).join(", ") || "Belum ditentukan",
           prodi: item.prodi,
           terakhir_login: item.terakhir_login,
           status: item.status
-        }));    
+        })); 
           
         setTableData(mappedPegawai);
 
@@ -280,7 +280,7 @@ export default function PenggunaTables() {
                 <div className="relative">
                   <Label>Peran</Label>
                   <select
-                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 py-2.5 pl-4 pr-10 text-sm text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90"
+                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
                     value={selectedPegawai?.role || ""}
                     onChange={(e) =>
                       setSelectedPegawai({
@@ -296,28 +296,18 @@ export default function PenggunaTables() {
                       </option>
                     ))}
                   </select>
-
-                  {/* <select
-                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 py-2.5 pl-4 pr-10 text-sm text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90"
-                    value={selectedPegawai?.role || ""}
-                    onChange={(e) =>
-                      setSelectedPegawai({ ...selectedPegawai!, role: e.target.value as Pegawai["role"] })
-                    }
-                  >
-                    <option value="">Pilih Peran</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.nama_role}>
-                        {role.nama_role}
-                      </option>
-                    ))}
-                  </select> */}
+                    <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                 </div>
 
                 {/* Status */}
                 <div className="relative">
                   <Label>Status Pengguna</Label>
                   <select
-                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 py-2.5 pl-4 pr-10 text-sm text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90"
+                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
                     value={selectedPegawai?.status || ""}
                     onChange={(e) =>
                       setSelectedPegawai({ ...selectedPegawai!, status: e.target.value as Pegawai["status"] })
@@ -327,6 +317,11 @@ export default function PenggunaTables() {
                     <option>Aktif</option>
                     <option>Nonaktif</option>
                   </select>
+                  <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                 </div>
               </div>
             </div>

@@ -16,7 +16,11 @@ console.log(sekarang);
 export const getPegawais = async (req, res) => {
     try {
         const pegawais = await Pegawais.findAll({
-            attributes: ['nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status']
+          attributes: ['id_pegawai', 'nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status'],
+          // include: [{
+          //   model: RolePegawai,
+          //   include: [Roles]
+          // }]
         });
 
         const formattedPegawais = pegawais.map(p => {
@@ -38,7 +42,7 @@ export const getPegawais = async (req, res) => {
 export const getPegawaiById = async(req, res) => {
     try {
         const pegawai = await Pegawais.findOne({
-            attributes: ['nama_pegawai', 'email', 'terakhir_login', 'status'],
+            attributes: ['id_pegawai', 'nama_pegawai', 'email', 'terakhir_login', 'status'],
             where: {
                 id_pegawai: req.params.id_pegawai
             }
@@ -113,7 +117,6 @@ export const updatePegawai = async (req, res) => {
   }
 
   try {
-    // Update data pegawai
     await Pegawais.update({
       nama_pegawai,
       email,
@@ -124,9 +127,7 @@ export const updatePegawai = async (req, res) => {
       where: { id_pegawai: req.params.id_pegawai }
     });
 
-    // 🔥 Update ke tabel role_pegawai
     if (role) {
-      // Cari id_role berdasarkan nama_role
       const foundRole = await Roles.findOne({
         where: { nama_role: role }
       });
@@ -135,7 +136,6 @@ export const updatePegawai = async (req, res) => {
         return res.status(404).json({ msg: "Role tidak ditemukan!" });
       }
 
-      // Cek apakah sudah ada entri di tabel role_pegawai
       const existingRel = await RolePegawai.findOne({
         where: { id_pegawai: req.params.id_pegawai }
       });
@@ -183,6 +183,25 @@ export const deletePegawai = async(req, res) => {
         res.status(400).json({msg: error.message});
     }
 }
+
+export const createRolePegawai = async (req, res) => {
+  const { id_pegawai, id_role } = req.body;
+
+  try {
+    const existing = await RolePegawai.findOne({
+      where: { id_pegawai, id_role },
+    });
+
+    if (existing) {
+      return res.status(400).json({ msg: "Role sudah ada untuk pegawai ini" });
+    }
+
+    await RolePegawai.create({ id_pegawai, id_role });
+    res.status(201).json({ msg: "Role berhasil ditambahkan ke pegawai" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
 
 export const Login = async (req, res) => {
     try {

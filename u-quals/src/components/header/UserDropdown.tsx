@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom"
 import axios from "axios";
-import jwt_decode from "jwt-decode";  
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link } from "react-router";
@@ -82,7 +81,15 @@ export default function UserDropdown() {
           <img src="/images/user/owner.jpg" alt="User" />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm"> {pegawai?.nama_pegawai ?? "Memuat..."}</span>
+        <div className="flex flex-col">
+          <span className="block mr-1 font-medium text-theme-sm">
+            {pegawai?.nama_pegawai ?? "Memuat..."}
+          </span>
+          <span className="text-theme-xs text-gray-500 dark:text-gray-400">
+            Admin LPMPP
+          </span>
+        </div>
+        
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""

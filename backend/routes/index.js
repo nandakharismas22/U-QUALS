@@ -1,5 +1,14 @@
 import express from "express";
-import { getPegawais, getPegawaiById, createPegawai, updatePegawai, deletePegawai, Register, Login, Logout } from "../controller/PegawaiController.js";
+import { 
+    getPegawais, 
+    getPegawaiById, 
+    createPegawai, 
+    updatePegawai, 
+    deletePegawai, 
+    createRolePegawai,
+    Register, 
+    Login, 
+    Logout } from "../controller/PegawaiController.js";
 import { getRoles, getRoleById } from "../controller/RoleController.js";
 import {
     getPeriode,
@@ -28,6 +37,7 @@ router.delete('/logout', Logout);
 // Pegawai
 router.get('/pegawais', getPegawais);
 router.post('/pegawais', createPegawai);
+router.post('/role-pegawai', createRolePegawai);
 router.get('/pegawais/:id_pegawai', getPegawaiById);
 router.patch("/pegawais/:id_pegawai", updatePegawai);
 router.delete('/pegawais/:id_pegawai', deletePegawai);
