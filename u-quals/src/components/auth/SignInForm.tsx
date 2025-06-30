@@ -7,26 +7,44 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
 
+interface Pegawai {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  role: string;        
+  prodi: string;
+  terakhir_login: string;
+  status: "Aktif" | "Nonaktif";
+}
+
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [tableData, setTableData] = React.useState<Pegawai[]>([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrorMessage] = useState("");
+  const [pegawais, setPegawais] = useState<Pegawai[]>([]);
   const [msg, setMsg] = useState("");
+  const { token } = useAuth();
   const navigate = useNavigate();
   const { setToken } = useAuth();
+  const [selectedRole, setSelectedRole] = useState("");
+  const [availableRoles, setAvailableRoles] = useState<{ id: number; nama_role: string }[]>([]); 
+  // Removed unused roles state
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/login', {
         email,
-        password
+        password,
+        selectedRole, 
       }, {
         withCredentials: true
       });
 
       setToken(res.data.accessToken); // simpan ke context
+      // Removed setAvailableRoles(res.data) here because login response likely does not contain roles
       navigate('/home');
     } catch (err) {
       const error = err as AxiosError<{ msg: string }>;
@@ -35,6 +53,20 @@ export default function SignInForm() {
           }
     }
   }
+
+  React.useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/roles", {
+          withCredentials: true,
+        });
+        setAvailableRoles(res.data);
+      } catch (error) {
+        console.error("Gagal ambil role:", error);
+      }
+    };
+    fetchRoles();
+  }, [token]);
 
   return (
     <div className="flex flex-col flex-1">
@@ -81,9 +113,27 @@ export default function SignInForm() {
                       )}
                     </span>
                   </div>
-                  <p className="text-error-500 mt-4 text-center">{msg}</p>
+         
                 </div>
-                
+                <div>
+                  <Label>
+                    Masuk Sebagai <span className="text-error-500">*</span>{" "}
+                 </Label>
+                <select
+                  className="w-full mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  required
+                >
+                  <option value="">Pilih Peran</option>
+                    {availableRoles.map((role) => (
+                      <option key={role.id} value={role.nama_role}>
+                        {role.nama_role}
+                      </option>
+                    ))}
+                </select>
+                </div>
+                <p className="text-error-500 mt-4 text-center">{msg}</p>
                 <div>
                 <Button className="w-full" size="sm">
                   Sign in

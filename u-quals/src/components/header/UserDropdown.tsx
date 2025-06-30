@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom"
 import axios from "axios";
-import jwt_decode from "jwt-decode";  
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { Link } from "react-router";
-import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 import { useAuth } from "../../components/auth/AuthContext";
 
 interface MyToken {
@@ -20,6 +19,7 @@ export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { token, setToken, pegawai, setPegawai } = useAuth();
   const navigate = useNavigate();  
+  const [roles, setRoles] = useState<{ nama_role: string }[]>([]);
 
   useEffect(() => {
     const refreshToken = async () => {
@@ -29,23 +29,35 @@ export default function UserDropdown() {
         });
         const newToken = res.data.accessToken;
         setToken(newToken);
-
+  
         const decoded = jwtDecode<MyToken>(newToken);
+  
+        // Set pegawai context
         setPegawai({
           id_pegawai: decoded.id_pegawai,
           nama_pegawai: decoded.nama_pegawai,
           email: decoded.email,
           status: decoded.status,
         });
+  
+        // Fetch role berdasarkan id_pegawai
+        if (decoded?.id_pegawai) {
+          const roleRes = await axios.get(`http://localhost:5000/role-pegawai/${decoded.id_pegawai}`, {
+            withCredentials: true,
+          });
+          setRoles(roleRes.data); // jika pakai context atau local state
+        }
+  
       } catch (error) {
         navigate("/signin");
       }
     };
-
+  
     if (!token) {
       refreshToken();
     }
   }, [token, setToken, setPegawai, navigate]);
+  
 
   const handleLogout = async () => {
     try {
@@ -82,7 +94,15 @@ export default function UserDropdown() {
           <img src="/images/user/owner.jpg" alt="User" />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm"> {pegawai?.nama_pegawai ?? "Memuat..."}</span>
+        <div className="flex flex-col">
+          <span className="block mr-1 font-medium text-theme-sm">
+            {pegawai?.nama_pegawai ?? "Memuat..."}
+          </span>
+          <span className="text-theme-xs text-gray-500 dark:text-gray-400">
+            {roles[0]?.nama_role ?? "Tidak Ada Role"}
+          </span>
+        </div>
+        
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -113,7 +133,7 @@ export default function UserDropdown() {
             {pegawai?.nama_pegawai ?? "Memuat..."}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            Admin LPMPP
+            {roles[0]?.nama_role ?? "Tidak Ada Role"}
           </span>
         </div>
 

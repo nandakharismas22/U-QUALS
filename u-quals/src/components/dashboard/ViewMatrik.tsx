@@ -1,28 +1,77 @@
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BoxIconLine,
-  GroupIcon,
-} from "../../icons";
-import { UserCircle } from "lucide-react";
+
 import { UsersIcon, AcademicCapIcon, BuildingLibraryIcon } from '@heroicons/react/24/solid'
-import Badge from "../ui/badge/Badge";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode"
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
-
+interface MyToken {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  exp: number;
+  status: string;
+}
 
 export default function ViewMatrics() {
-     return (
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const { token, setToken, pegawai, setPegawai } = useAuth();
+  const [expire, setExpire] = useState('');
+  const [pegawais, setPegawais] = useState([]);
+  const navigate = useNavigate();
+  const [roles, setRoles] = useState<{ nama_role: string }[]>([]);
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/token", {
+          withCredentials: true,
+        });
+        const newToken = res.data.accessToken;
+        setToken(newToken);
+  
+        const decoded = jwtDecode<MyToken>(newToken);
+  
+        // Set pegawai context
+        setPegawai({
+          id_pegawai: decoded.id_pegawai,
+          nama_pegawai: decoded.nama_pegawai,
+          email: decoded.email,
+          status: decoded.status,
+        });
+  
+        // Fetch role berdasarkan id_pegawai
+        if (decoded?.id_pegawai) {
+          const roleRes = await axios.get(`http://localhost:5000/role-pegawai/${decoded.id_pegawai}`, {
+            withCredentials: true,
+          });
+          setRoles(roleRes.data); // jika pakai context atau local state
+        }
+  
+      } catch (error) {
+        navigate("/signin");
+      }
+    };
+  
+    if (!token) {
+      refreshToken();
+    }
+  }, [token, setToken, setPegawai, navigate]);
+
+  return (
   <>
     <div className="w-full">
       <h1 className="text-xl font-bold text-brand-500 dark:text-white/90 mb-4">
         Selamat Datang di U-Quals
       </h1>
       <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Halo, Ryan Taylor! Saat ini Anda login sebagai Admin LPMPP
+        Halo,  {pegawai?.nama_pegawai ?? "Memuat..."}! Saat ini Anda login sebagai {roles[0]?.nama_role ?? "Tidak Ada Role"}
       </p>
     </div>
 
-    <div className="flex gap-4 w-full">
+    <div className="flex flex-wrap gap-4 w-full">
       {[
         { label: "Fakultas", value: 7, icon: <BuildingLibraryIcon className="size-7" /> },
         { label: "Prodi", value: 25, icon: <AcademicCapIcon className="size-7" /> },

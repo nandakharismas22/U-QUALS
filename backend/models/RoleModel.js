@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
+import Pegawais from "./PegawaiModel.js";
+import RolePegawai from "./RolePegawaiModel.js";
 
 const {DataTypes} = Sequelize;
   
@@ -37,6 +39,9 @@ const Roles = db.define('roles', {
       timestamps: false,
       createdAt: 'created_at',
       updatedAt: 'modified_at'
-    }); 
+    });     
+
+    Pegawais.hasMany(RolePegawai, { foreignKey: 'id_pegawai', as: 'RolePegawais' });
+    Roles.hasMany(RolePegawai, { foreignKey: "id_role" });
 
 export default Roles;

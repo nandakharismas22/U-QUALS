@@ -126,8 +126,15 @@ export default function TablesPeriode() {
             </div>
 
 
-            </div>
+             </div>
           </div>
+          
+          <PeriodeTable />
+          <PaginationWithText
+            totalPages={10}
+            initialPage={1}
+            onPageChange={(page) => console.log("Pindah ke halaman:", page)}
+          />
         </ComponentCard>
       </div>
     </>

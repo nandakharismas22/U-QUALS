@@ -17,7 +17,7 @@ interface Pegawai {
   id_pegawai: number;
   nama_pegawai: string;
   email: string;
-  role: "Admin PLMPP";
+  role: string;        
   prodi: string;
   terakhir_login: string;
   status: "Aktif" | "Nonaktif";
@@ -27,45 +27,71 @@ export default function TablesPengguna() {
   const { isOpen, openModal, closeModal } = useModal();
   const [tableData, setTableData] = React.useState<Pegawai[]>([]);
   const { token } = useAuth();
+  const [status, setStatus] = useState("");
+  const [nama_pegawai, setNamaPegawai] = useState('');
+  const [email, setEmail] = useState('');
+  const [expire, setExpire] = useState('');
+  const [pegawais, setPegawais] = useState<Pegawai[]>([]);
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
+  const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
   React.useEffect(() => {
-    const fetchPegawai = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/pegawais", {
-          // headers: {
-          //   Authorization: `Bearer ${token}`, // ambil dari context
-          // },
+        // Ambil data pegawai
+        const pegawaiRes = await axios.get("http://localhost:5000/pegawais", {
           withCredentials: true,
         });
-  
-        // Data dari database langsung dipakai tanpa map
-        setTableData(response.data);
+
+        const mappedPegawai = pegawaiRes.data.map((item: any) => ({
+          id_pegawai: item.id_pegawai,
+          nama_pegawai: item.nama_pegawai,
+          email: item.email,
+          role: item.role?.id_role || "Belum ditentukan",  
+          prodi: item.prodi,
+          terakhir_login: item.terakhir_login,
+          status: item.status
+        }));
+        
+        setTableData(mappedPegawai);
+        setPegawais(mappedPegawai);
+        console.log("📦 Data pegawais:", mappedPegawai);
+        console.log(pegawais);
+        console.log(pegawaiRes.data);
+
+        // Ambil data role
+        const roleRes = await axios.get("http://localhost:5000/roles", {
+          withCredentials: true,
+        });
+        setRoles(roleRes.data);
       } catch (error) {
-        console.error("Gagal fetch data pegawai:", error);
+        console.error("Gagal fetch data:", error);
       }
     };
-  
-    fetchPegawai();
+
+    fetchData();
   }, [token]);
 
+  const handleSave = async () => {
+    if (!selectedPegawai || !selectedRoleId) {
+      alert("Pegawai dan Role harus dipilih!");
+      return;
+    }
+  
+    await axios.post("http://localhost:5000/role-pegawai", {
+      id_pegawai: selectedPegawai.id_pegawai,
+      id_role: selectedRoleId,
+    });
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
+    console.log("selectedPegawai", selectedPegawai);
+  console.log("selectedRoleId", selectedRoleId);
+  
+    alert("Role berhasil ditambahkan!");
     closeModal();
   };
-
-// export default function TablesPengguna() {
-//   const { isOpen, openModal, closeModal } = useModal();
-//   const [filter, setFilter] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
   
-//   const handleSave = () => {
-//     // Handle save logic here
-//     console.log("Saving changes...");
-//     closeModal();
-//   };
+  
 
 // const handleFilterChange = () => { // Tambahkan parameter event
 //   setFilter(.target.value); // Update state dengan nilai yang dipilih
@@ -80,7 +106,7 @@ export default function TablesPengguna() {
     <>
       <PageMeta
         title="U-Quals - Pengguna"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        description=""
       />
       <PageBreadcrumb pageTitle="Pengguna" />
       
@@ -134,20 +160,28 @@ export default function TablesPengguna() {
 
               {/* Dropdown Peran */}
               <div className="relative">
-                <select
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-500  focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-brand-500  dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
-                >
-                  <option>Semua Peran</option>
-                  <option>Admin LPMPP</option>
-                  <option>Auditor LPM</option>
-                  <option>Koprodi</option>
-                  <option>Tim Penjaminan Mutu Prodi</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
+                <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                      value={selectedPegawai?.role || ""}
+                      onChange={(e) =>
+                        selectedPegawai &&
+                        setSelectedPegawai({
+                          ...selectedPegawai,
+                          role: e.target.value, // id, bukan nama
+                        })
+                      }
+                    >
+                      <option value="">Pilih Peran</option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {role.nama_role}
+                        </option>
+                      ))}
+                    </select>      
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
+                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
               </div>
             </div>
 
@@ -174,7 +208,7 @@ export default function TablesPengguna() {
           </div>
           
           <BasicTableOne />
-                    <PaginationWithText
+            <PaginationWithText
             totalPages={10}
             initialPage={1}
             onPageChange={(page) => console.log("Pindah ke halaman:", page)}
@@ -187,10 +221,10 @@ export default function TablesPengguna() {
         <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Tambah Pengguna Baru
+              Tambah Pengguna
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Masukkan detail pengguna baru.
+              Masukkan detail pengguna 
             </p>
           </div>
           <form className="flex flex-col">
@@ -200,53 +234,76 @@ export default function TablesPengguna() {
                 {/* Baris 3: Peran (Dropdown) */}
                 <div className="relative">
                   <Label>Peran</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Semua Peran</option>
-                    <option>Admin LPMPP</option>
-                    <option>Auditor LPM</option>
-                    <option>Koprodi</option>
-                    <option>Tim Penjaminan Mutu Prodi</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
+                    <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                      value={selectedRoleId !== null ? String(selectedRoleId) : ""}
+                      onChange={(e) => setSelectedRoleId(Number(e.target.value))}
+                    >
+                      <option value="">Pilih Peran</option>
+                      {roles.map((role) => (
+                      <option key={role.id} value={String(role.id)}>
+                        {role.nama_role}
+                      </option>
+                    ))}
+                    </select>           
+                    <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                 </div>
                 
                 {/* Baris 1: Nama */}
-                <div>
+                <div className="relative">
                   <Label>Nama</Label>
-                  <Input 
-                    type="text" 
-                    placeholder="Cari nama" 
-                    className="w-full"
-                  />
+                    <select
+                      className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                      value={selectedPegawai?.id_pegawai ? String(selectedPegawai.id_pegawai) : ""}
+                      onChange={(e) => {
+                        const id = parseInt(e.target.value);
+                        const found = pegawais.find((p) => p.id_pegawai === id);
+                          setSelectedPegawai(found || null);
+                          setEmail(found?.email || "");
+                          setStatus(found?.status || "");
+                        }}
+                    >
+                      <option value="">Pilih Nama</option>
+                      {pegawais
+                        .filter((pegawai) => pegawai.status === "Aktif")
+                        .map(p => (
+                          <option key={p.id_pegawai} value={p.id_pegawai}>
+                            {p.nama_pegawai}
+                          </option>
+                        ))}
+                    </select>   
+                    <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
+                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>                  
                 </div>
                 
                 {/* Baris 2: Email */}
                 <div>
                   <Label>Email</Label>
-                  <Input 
-                    type="email" 
-                    placeholder="Masukkan email" 
-                    className="w-full"
+                  <Input
+                    type="email"
+                    value={email}
+                    placeholder="Email Pengguna"
+                    className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
+                    readOnly={true}                    
                   />
                 </div>
                 
                {/* Baris 4: Status (Dropdown) */}
                 <div className="relative">
                   <Label>Status Pengguna</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Status</option>
-                    <option>Aktif</option>
-                    <option>Nonaktif</option>
-                  </select>
-                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
+                  <Input
+                    type="status"
+                    value={status}
+                    placeholder="Status Pengguna"
+                    className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
+                    readOnly={true}                    
+                  />
                 </div>
  
               </div>
