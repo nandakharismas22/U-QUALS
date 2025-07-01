@@ -26,26 +26,16 @@ interface Pegawai {
   status: "Aktif" | "Nonaktif";
 }
 
-// const tableData: User[] = [
-//   {
-//     id: 1,
-//     name: "Nanda Safitri",
-//     email: "nanda@example.com",
-//     role: "Tim Penjaminan Mutu Prodi",
-//     prodi: "Sistem Informasi",
-//     lastLogin: "12 Mei 2025",
-//     status: "Aktif",
-//   },
-//   {
-//     id: 2,
-//     name: "Talia Aprianti",
-//     email: "safitri@example.com",
-//     role: "Dosen",
-//     prodi: "Teknik Informatika",
-//     lastLogin: "10 Mei 2025",
-//     status: "Nonaktif",
-//   },
-// ];
+interface SelectedPegawai {
+  id_pegawai: number;
+  nama_pegawai: string;
+  email: string;
+  status: string;
+  prodi: string;
+  id_role_pegawai?: number;
+  id_role?: number;     
+}
+
 
 export default function PenggunaTables() {
   const [tableData, setTableData] = React.useState<Pegawai[]>([]);
@@ -54,53 +44,104 @@ export default function PenggunaTables() {
   const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
   const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
+  const [pegawaiList, setPegawaiList] = React.useState<any[]>([]);
+  const [listRole, setListRole] = useState([]);
+
+  // const fetchPegawai = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:5000/pegawais", {
+  //       withCredentials: true,
+  //     });
+  
+  //     const mappedPegawai = response.data.map((item: any) => ({
+  //       id_pegawai: item.id_pegawai,
+  //       nama_pegawai: item.nama_pegawai,
+  //       email: item.email,
+  //       prodi: item.prodi,
+  //       status: item.status,
+  //       terakhir_login: item.terakhir_login,
+  //       role: item.role || "Belum ditentukan", // string nama role
+  //       id_role: item.role_pegawais?.[0]?.id_role || "", // id_role pertama jika ada
+  //     }));
+  
+  //     setTableData(mappedPegawai);
+  //   } catch (error) {
+  //     console.error("Gagal fetch data pegawai:", error);
+  //   }
+  // };
 
   const fetchPegawai = async () => {
     try {
       const response = await axios.get("http://localhost:5000/pegawais", {
         withCredentials: true,
       });
-      setTableData(response.data);
+  
+      const mappedPegawai = response.data.flatMap((item: any) => {
+        if (item.role_pegawais?.length > 0) {
+          return item.role_pegawais.map((rp: any) => ({
+            id_pegawai: item.id_pegawai,
+            nama_pegawai: item.nama_pegawai,
+            email: item.email,
+            prodi: item.prodi,
+            status: item.status,
+            terakhir_login: item.terakhir_login,
+            role: rp.role?.nama_role || "Belum ditentukan",
+            id_role: rp.id_role,
+            id_role_pegawai: rp.id_role_pegawai,
+          }));
+        } else {
+          return [{
+            id_pegawai: item.id_pegawai,
+            nama_pegawai: item.nama_pegawai,
+            email: item.email,
+            prodi: item.prodi,
+            status: item.status,
+            terakhir_login: item.terakhir_login,
+            role: "Belum ditentukan",
+            id_role: null,
+            id_role_pegawai: null,
+          }];
+        }
+      });
+  
+      setTableData(mappedPegawai);
+      console.log("Hasil mappedPegawai:", mappedPegawai);
     } catch (error) {
       console.error("Gagal fetch data pegawai:", error);
     }
   };
+  
+  
+
+  React.useEffect(() => {
+    fetchPegawai();
+  }, [token]);
+  
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ambil data pegawai
-        const pegawaiRes = await axios.get("http://localhost:5000/pegawais", {
           withCredentials: true,
         });
-
-        const mappedPegawai = pegawaiRes.data.map((item: any) => ({
-          id_pegawai: item.id_pegawai,
-          nama_pegawai: item.nama_pegawai,
-          email: item.email,
-          role: item.roles?.map((r: any) => r.role?.nama_role).join(", ") || "Belum ditentukan",
-          prodi: item.prodi,
-          terakhir_login: item.terakhir_login,
-          status: item.status
-        })); 
-          
-        setTableData(mappedPegawai);
-
-        // Ambil data role
-        const roleRes = await axios.get("http://localhost:5000/roles", {
-          withCredentials: true,
-        });
-        setRoles(roleRes.data);
+        setPegawaiList(res.data);
       } catch (error) {
-        console.error("Gagal fetch data:", error);
+        console.error("Gagal fetch pegawai:", error);
       }
     };
-
+  
     fetchData();
   }, [token]);
 
-  const handleEditClick = (pegawai: Pegawai) => {
-    setSelectedPegawai(pegawai);
+  const handleEditClick = (item) => {
+    setSelectedPegawai({
+      id_pegawai: item.id_pegawai,
+      nama_pegawai: item.nama_pegawai,
+      email: item.email,
+      status: item.status,
+      prodi: item.prodi,
+      id_role: item.id_role, // role yang dipilih
+      id_role_pegawai: item.id_role_pegawai // <--- pastikan ini ada!
+    });
     openEditModal();
   };
 
@@ -110,9 +151,10 @@ export default function PenggunaTables() {
         withCredentials: true,
       });
   
-      // Hapus dari state frontend
-      setTableData(prev => prev.filter(p => p.id_pegawai !== id));
+      await fetchPegawai();
+  
       console.log("Pegawai berhasil dihapus!");
+      closeDeleteModal(); 
     } catch (error) {
       console.error("Gagal menghapus pegawai:", error);
     }
@@ -127,13 +169,14 @@ export default function PenggunaTables() {
         {
           nama_pegawai: selectedPegawai.nama_pegawai,
           email: selectedPegawai.email,
-          password: "",
           prodi: selectedPegawai.prodi,
           status: selectedPegawai.status,
-          id_role: selectedPegawai.role, 
+          id_role: selectedPegawai.id_role, // role baru
+          id_role_pegawai: selectedPegawai.id_role_pegawai, // relasi yang mau diubah
         },
         { withCredentials: true }
       );
+      
   
       console.log("Pegawai berhasil diupdate!");
       fetchPegawai(); 
@@ -141,7 +184,22 @@ export default function PenggunaTables() {
     } catch (error: any) {
       console.error("Gagal update pegawai:", error.response?.data || error.message);
     }
-  };  
+  };
+
+  const fetchRoles = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/roles", {
+        withCredentials: true,
+      });
+      setListRole(res.data);
+    } catch (err) {
+      console.error("Gagal mengambil data role", err);
+    }
+  };
+  
+  React.useEffect(() => {
+    if (isEditOpen) fetchRoles(); // hanya fetch saat modal dibuka
+  }, [isEditOpen]);
 
   const handleConfirmDelete = () => {
     if (selectedPegawai?.id_pegawai) {
@@ -177,33 +235,33 @@ export default function PenggunaTables() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((pegawai, index) => (
-                <TableRow key={pegawai.id_pegawai}>
+              {pegawaiList.map((item, index) => (
+                <TableRow key={`${item.id_pegawai}-${item.id_role_pegawai ?? "Belum ditentukan"}`}>
                   <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {index + 1}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {pegawai.nama_pegawai}
+                    {item.nama_pegawai}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {pegawai.email}
+                    {item.email}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {pegawai.role}
+                    {item.role}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {pegawai.prodi}
+                    {item.prodi}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {pegawai.terakhir_login}
+                    {item.terakhir_login}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="flex items-center gap-2">
                       <Circle
-                        className={`w-3 h-3 ${pegawai.status === "Aktif" ? "text-green-500" : "text-gray-400"}`}
-                        fill={pegawai.status === "Aktif" ? "currentColor" : "none"}
+                        className={`w-3 h-3 ${item.status === "Aktif" ? "text-green-500" : "text-gray-400"}`}
+                        fill={item.status === "Aktif" ? "currentColor" : "none"}
                       />
-                      {pegawai.status}
+                      {item.status}
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -211,7 +269,7 @@ export default function PenggunaTables() {
                       {/* Edit */}
                       <div
                         className="p-2 rounded-full bg-orange-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
-                        onClick={() => handleEditClick(pegawai)}
+                        onClick={() => handleEditClick(item)}
                       >
                         <Edit className="w-4 h-4 text-orange-500 dark:text-orange-300" />
                       </div>
@@ -219,7 +277,7 @@ export default function PenggunaTables() {
                       <div
                         className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 cursor-pointer"
                         onClick={() => {
-                          setSelectedPegawai(pegawai); 
+                          setSelectedPegawai(item); 
                           openDeleteModal();
                         }}
                       >
@@ -281,20 +339,13 @@ export default function PenggunaTables() {
                   <Label>Peran</Label>
                   <select
                     className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                    value={selectedPegawai?.role || ""}
-                    onChange={(e) =>
-                      setSelectedPegawai({
-                        ...selectedPegawai!,
-                        role: e.target.value, // id, bukan nama
-                      })
-                    }
                   >
                     <option value="">Pilih Peran</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.nama_role}
-                      </option>
-                    ))}
+                    {listRole.map((role: any) => (
+                        <option key={role.id_role} value={role.id_role}>
+                          {role.nama_role}
+                        </option>
+                      ))}
                   </select>
                     <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

@@ -31,7 +31,6 @@ export default function TablesPengguna() {
   const [nama_pegawai, setNamaPegawai] = useState('');
   const [email, setEmail] = useState('');
   const [expire, setExpire] = useState('');
-  const [pegawais, setPegawais] = useState([]);
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
   const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
@@ -163,8 +162,6 @@ export default function TablesPengguna() {
                 <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
                       value={selectedPegawai?.role || ""}
                       onChange={(e) =>
-                        setSelectedPegawai({
-                          ...selectedPegawai!,
                           role: e.target.value, // id, bukan nama
                         })
                       }
@@ -287,7 +284,6 @@ export default function TablesPengguna() {
                   <Input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email Pengguna"
                     className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
                     readOnly={true}                    
@@ -300,7 +296,6 @@ export default function TablesPengguna() {
                   <Input
                     type="status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
                     placeholder="Status Pengguna"
                     className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
                     readOnly={true}                    

@@ -23,6 +23,7 @@ import {
     updateJenisAudit,
     deleteJenisAudit
   } from "../controller/JenisAuditController.js";
+import { getRolePegawai, getRoleByPegawai, updateRolePegawai } from '../controller/RolePegawaiController.js';
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controller/RefreshToken.js";
 
@@ -39,7 +40,7 @@ router.get('/pegawais', getPegawais);
 router.post('/pegawais', createPegawai);
 router.post('/role-pegawai', createRolePegawai);
 router.get('/pegawais/:id_pegawai', getPegawaiById);
-router.patch("/pegawais/:id_pegawai", updatePegawai);
+router.patch("/pegawais/:id", updatePegawai);
 router.delete('/pegawais/:id_pegawai', deletePegawai);
 
 // Role
@@ -58,5 +59,10 @@ router.get("/jenis-audit", getJenisAudit);
 router.post("/jenis-audit", createJenisAudit);
 router.patch("/jenis-audit/:id_jenis_audit", updateJenisAudit);
 router.delete("/jenis-audit/:id_jenis_audit", deleteJenisAudit);
+
+// Role Pegawai 
+router.get('/role-pegawai', getRolePegawai);
+router.get('/role-pegawai/:id_pegawai', getRoleByPegawai);
+router.patch('/role-pegawai/:id_role_pegawai', updateRolePegawai);
 
 export default router;

@@ -11,8 +11,6 @@ import Label from "../../components/form/Label";
 import React, { useState } from 'react';
 import { useAuth } from "../../components/auth/AuthContext";
 
-
-
 interface Pegawai {
   id_pegawai: number;
   nama_pegawai: string;

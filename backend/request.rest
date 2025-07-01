@@ -1,9 +1,9 @@
-# Get All Pegawai
+### Get All Pegawai
 GET http://localhost:5000/pegawais
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo0LCJuYW1hX3BlZ2F3YWkiOiJLYW5pYSIsImVtYWlsIjoia2FuaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5mb3JtYXRpa2EiLCJzdGF0dXMiOiJBa3RpZiIsImlhdCI6MTc1MDMyMTU4MSwiZXhwIjoxNzUwMzIxNjAxfQ.HitVSHf8mTB05OWR1KNiugnDmIPyFvl8DRRnyce8qrk
 
 ### Get Pegawai by ID
-GET http://localhost:5000/pegawais/5
+GET http://localhost:5000/pegawais/6
 
 ### Get All Role
 GET http://localhost:5000/roles
@@ -16,6 +16,12 @@ GET http://localhost:5000/periode
 
 ### Get All Jenis Audit
 GET http://localhost:5000/jenis-audit
+
+### Get All Role Pegawai
+GET http://localhost:5000/role-pegawai
+
+### Get Role Pegawai By Id
+GET http://localhost:5000/role-pegawai/1
 
 ###
 # Create Jenis Audit
@@ -85,12 +91,10 @@ PATCH http://localhost:5000/pegawais/6
 Content-Type: application/json
 
 {
-    "nama_pegawai": "Linda",
-    "email": "linda@gmail.com",
-    "password": "123",
-    "prodi": "Sistem Informasi",
-    "status": "Aktif",
-    "role": "Auditor"
+  "nama_pegawai": "Linda",
+  "email": "linda2@gmail.com",
+  "prodi": "Teknik Kimia",
+  "status": "Aktif"
 }
 
 ###
@@ -103,8 +107,9 @@ POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "email": "kania@gmail.com",
-    "password": "123"
+  "email": "talia@gmail.com",
+  "password": "123",
+  "selectedRole": "Admin LPMPP"
 }
 
 ###

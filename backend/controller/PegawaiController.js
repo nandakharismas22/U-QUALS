@@ -14,30 +14,42 @@ const sekarang = dayjs().tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm");
 console.log(sekarang);
 
 export const getPegawais = async (req, res) => {
-    try {
-        const pegawais = await Pegawais.findAll({
-          attributes: ['id_pegawai', 'nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status'],
-          // include: [{
-          //   model: RolePegawai,
-          //   include: [Roles]
-          // }]
-        });
 
-        const formattedPegawais = pegawais.map(p => {
-            const plain = p.toJSON();
-            return {
-                ...plain,
-                terakhir_login: plain.terakhir_login
-                    ? dayjs(plain.terakhir_login).tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm")
-                    : null
-            };
-        });
+    const formatted = pegawais.flatMap(p => {
+      const plain = p.toJSON();
+      const baseData = {
+        id_pegawai: plain.id_pegawai,
+        nama_pegawai: plain.nama_pegawai,
+        email: plain.email,
+        prodi: plain.prodi,
+        status: plain.status,
+        terakhir_login: plain.terakhir_login
+          ? dayjs(plain.terakhir_login).format("YYYY-MM-DD HH:mm")
+          : null,
+      };
+    
+      if (plain.role_pegawais && plain.role_pegawais.length > 0) {
+        return plain.role_pegawais.map(rp => ({
+          ...baseData,
+          role: rp.role?.nama_role || "Belum ditentukan",
+          id_role_pegawai: rp.id_role_pegawai,
+          id_role: rp.id_role,
+        }));
+      } else {
+        return [{
+          ...baseData,
+          role: "Belum ditentukan",
+          id_role_pegawai: null,
+          id_role: null,
+        }];
+      }
+    });    
 
-        res.json(formattedPegawais);
-    } catch (error) {
-        console.log(error);
-    }
-}
+    res.json(formatted);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
 
 export const getPegawaiById = async(req, res) => {
     try {
@@ -102,68 +114,25 @@ export const createPegawai = async(req, res) => {
 }
 
 export const updatePegawai = async (req, res) => {
-  const pegawai = await Pegawais.findOne({
-    where: { id_pegawai: req.params.id_pegawai }
-  });
-
-  if (!pegawai) return res.status(404).json({ msg: "Pegawai Tidak Ditemukan!" });
-
-  const { nama_pegawai, email, password, prodi, status, role } = req.body;
-
-  let hashPassword = pegawai.password;
-  if (password && password !== "") {
-    const salt = await bcrypt.genSalt();
-    hashPassword = await bcrypt.hash(password, salt);
-  }
-
-  try {
-    await Pegawais.update({
-      nama_pegawai,
-      email,
-      password: hashPassword,
-      prodi,
-      status
-    }, {
-      where: { id_pegawai: req.params.id_pegawai }
-    });
-
-    if (role) {
-      const foundRole = await Roles.findOne({
-        where: { nama_role: role }
-      });
-
-      if (!foundRole) {
-        return res.status(404).json({ msg: "Role tidak ditemukan!" });
-      }
-
-      const existingRel = await RolePegawai.findOne({
-        where: { id_pegawai: req.params.id_pegawai }
-      });
-
-      if (existingRel) {
-        // Jika sudah ada, update
-        await RolePegawai.update({
-          id_role: foundRole.id_role
-        }, {
-          where: { id_pegawai: req.params.id_pegawai }
-        });
-      } else {
-        // Jika belum ada, insert baru
-        await RolePegawai.create({
-          id_pegawai: req.params.id_pegawai,
-          id_role: foundRole.id_role
-        });
-      }
+  const idPegawai = req.params.id;
+  const {
+    nama_pegawai,
+    email,
+    prodi,
+    status,
+    id_role,
+    id_role_pegawai, // <- relasi yang akan diubah
+  } = req.body;
+  
     }
 
-    res.status(200).json({ msg: "Pegawai & Role Berhasil Diubah!" });
-
+    res.json({ msg: "Pegawai berhasil diupdate" });
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    console.error("Gagal update pegawai:", error);
+    res.status(500).json({ msg: error.message });
   }
 };
 
-  
 
 export const deletePegawai = async(req, res) => {
     const pegawai = await Pegawais.findOne({
@@ -204,57 +173,87 @@ export const createRolePegawai = async (req, res) => {
 };
 
 export const Login = async (req, res) => {
-    try {
-        const pegawai = await Pegawais.findAll({
-            where: { email: req.body.email }
-        });
+  try {
+    const { email, password, selectedRole } = req.body;
 
-        if (!pegawai[0]) return res.status(404).json({ msg: "Email tidak ditemukan" });
+    const pegawai = await Pegawais.findOne({
+      where: { email },
+      include: [{
+        model: RolePegawai,
+        include: [Roles]
+      }]
+    });
 
-        const match = await bcrypt.compare(req.body.password, pegawai[0].password);
-        if (!match) return res.status(400).json({ msg: "Password salah" });
+    if (!pegawai) return res.status(404).json({ msg: "Email tidak ditemukan" });
 
-        const id_pegawai = pegawai[0].id_pegawai;
-        const nama_pegawai = pegawai[0].nama_pegawai;
-        const email = pegawai[0].email;
-        const prodi = pegawai[0].prodi;
-        const status = pegawai[0].status;
+    const match = await bcrypt.compare(password, pegawai.password);
+    if (!match) return res.status(400).json({ msg: "Password salah" });
 
-        // Format tanggal login
-        const nowFormatted = dayjs().format("YYYY-MM-DD HH:mm");
-
-        // Simpan waktu login ke DB
-        await Pegawais.update({
-            refresh_token: null,
-            terakhir_login: nowFormatted
-        }, {
-            where: { id_pegawai }
-        });
-
-        const accessToken = jwt.sign({ id_pegawai, nama_pegawai, email, prodi, status }, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "20s"
-        });
-
-        const refreshToken = jwt.sign({ id_pegawai, nama_pegawai, email, prodi, status }, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn: "1d"
-        });
-
-        await Pegawais.update({ refresh_token: refreshToken }, {
-            where: { id_pegawai }
-        });
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,       // true kalau pakai HTTPS
-            sameSite: 'Lax',     // atau 'Strict' jika perlu
-            maxAge: 24 * 60 * 60 * 1000 // 1 hari
-          });
-
-        res.json({ accessToken });
-
-    } catch (error) {
-        res.status(500).json({ msg: error.message });
+    const roles = pegawai.role_pegawais.map(rp => rp.role?.nama_role);
+    
+    if (!roles.includes(selectedRole)) {
+      return res.status(403).json({ msg: "Role tidak valid untuk pengguna ini." });
     }
+
+    const payload = {
+      id_pegawai: pegawai.id_pegawai,
+      nama_pegawai: pegawai.nama_pegawai,
+      email: pegawai.email,
+      prodi: pegawai.prodi,
+      status: pegawai.status,
+      role: selectedRole // hanya satu role aktif
+    };
+
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "20s"
+    });
+
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+      expiresIn: "1d"
+    });
+
+    const nowFormatted = dayjs().format("YYYY-MM-DD HH:mm");
+
+    await Pegawais.update({
+      refresh_token: refreshToken,
+      terakhir_login: nowFormatted
+    }, {
+      where: { id_pegawai: pegawai.id_pegawai }
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.json({ accessToken });
+
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getRolesByEmail = async (req, res) => {
+  const { email } = req.query;
+
+  try {
+    const pegawai = await Pegawais.findOne({
+      where: { email },
+      include: [{
+        model: RolePegawai,
+        include: [Roles]
+      }]
+    });
+
+    if (!pegawai) return res.status(404).json({ msg: "Email tidak ditemukan" });
+
+    const roles = pegawai.role_pegawais.map(rp => rp.role?.nama_role);
+    res.json({ roles });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 };
 
 export const Logout = async (req, res) => {

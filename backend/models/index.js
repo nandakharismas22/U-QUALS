@@ -2,7 +2,6 @@ import Pegawais from "./PegawaiModel.js";
 import Roles from "./RoleModel.js";
 import RolePegawai from "./RolePegawaiModel.js";
 
-// Definisikan semua relasi DI SINI
 Pegawais.hasMany(RolePegawai, { foreignKey: "id_pegawai" });
 Roles.hasMany(RolePegawai, { foreignKey: "id_role" });
 

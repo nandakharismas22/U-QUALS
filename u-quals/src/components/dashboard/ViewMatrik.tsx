@@ -31,7 +31,6 @@ export default function ViewMatrics() {
         const newToken = res.data.accessToken;
         setToken(newToken);
 
-        const decoded = jwtDecode<MyToken>(newToken);
         setPegawai({
           id_pegawai: decoded.id_pegawai,
           nama_pegawai: decoded.nama_pegawai,
@@ -55,7 +54,7 @@ export default function ViewMatrics() {
         Selamat Datang di U-Quals
       </h1>
       <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Halo,  {pegawai?.nama_pegawai ?? "Memuat..."}! Saat ini Anda login sebagai Admin LPMPP
+
       </p>
     </div>
 
