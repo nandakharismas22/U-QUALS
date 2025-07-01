@@ -121,7 +121,6 @@ export default function PenggunaTables() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/pegawais", {
           withCredentials: true,
         });
         setPegawaiList(res.data);
@@ -340,13 +339,6 @@ export default function PenggunaTables() {
                   <Label>Peran</Label>
                   <select
                     className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                    value={selectedPegawai?.id_role || ""}
-                      onChange={(e) =>
-                        setSelectedPegawai((prev) => ({
-                          ...prev!,
-                          id_role: Number(e.target.value),
-                        }))
-                      }
                   >
                     <option value="">Pilih Peran</option>
                     {listRole.map((role: any) => (

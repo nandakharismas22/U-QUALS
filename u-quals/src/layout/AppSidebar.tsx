@@ -66,7 +66,7 @@ const navItems: NavItem[] = [
     name: "Standart",
     icon: <FileCheck  />,
     subItems: [
-      { name: "Sumber Standart", path: "/standart", pro: false },
+      { name: "Sumber Standart", path: "/sumber", pro: false },
       { name: "Daftar Standart", path: "/listdaftar", pro: false },
     ],
   },
@@ -87,10 +87,10 @@ const navItems: NavItem[] = [
     name: "Akreditasi",
     icon: <BadgeCheck />,
     subItems: [
-      { name: "Lembaga Akreditasi", path: "/blank", pro: false },
-      { name: "Akreditasi Institusi", path: "/error-404", pro: false },
-      { name: "Akreditasi Prodi", path: "/blank", pro: false },
-      { name: "Akreditasi Lab", path: "/lank", pro: false },
+      { name: "Lembaga Akreditasi", path: "/lembaga", pro: false },
+      { name: "Akreditasi Institusi", path: "/institusi", pro: false },
+      { name: "Akreditasi Prodi", path: "/prodi", pro: false },
+      { name: "Akreditasi Lab", path: "/lab", pro: false },
     ],
   },
 

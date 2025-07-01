@@ -14,24 +14,6 @@ const sekarang = dayjs().tz("Asia/Jakarta").format("YYYY-MM-DD HH:mm");
 console.log(sekarang);
 
 export const getPegawais = async (req, res) => {
-  try {
-    const pegawais = await Pegawais.findAll({
-      attributes: ['id_pegawai', 'nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status'],
-      include: [
-        {
-          model: RolePegawai,
-          as: "role_pegawais",
-          include: [
-            {
-              model: Roles,
-              as: "role",
-              attributes: ["nama_role"],
-            },
-          ],
-        },
-      ],
-      order: [["id_pegawai", "ASC"]],
-    });
 
     const formatted = pegawais.flatMap(p => {
       const plain = p.toJSON();
@@ -141,20 +123,7 @@ export const updatePegawai = async (req, res) => {
     id_role,
     id_role_pegawai, // <- relasi yang akan diubah
   } = req.body;
-
-  try {
-    // Update data pegawai
-    await Pegawais.update(
-      { nama_pegawai, email, prodi, status },
-      { where: { id_pegawai: idPegawai } }
-    );
-
-    // Jika id_role dan id_role_pegawai diberikan, update role di tabel relasi
-    if (id_role && id_role_pegawai) {
-      await RolePegawai.update(
-        { id_role },
-        { where: { id_role_pegawai } }
-      );
+  
     }
 
     res.json({ msg: "Pegawai berhasil diupdate" });
