@@ -56,7 +56,7 @@ export default function UserDropdown() {
     if (!token) {
       refreshToken();
     }
-  }, [token, setToken, setPegawai, navigate]);
+  }, [token, setToken, setPegawai, navigate, pegawai]);
   
 
   const handleLogout = async () => {
@@ -99,7 +99,7 @@ export default function UserDropdown() {
             {pegawai?.nama_pegawai ?? "Memuat..."}
           </span>
           <span className="text-theme-xs text-gray-500 dark:text-gray-400">
-
+            {roles[0]?.nama_role ?? "Tidak Ada Role"}
           </span>
         </div>
         

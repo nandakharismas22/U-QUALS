@@ -6,6 +6,7 @@ import {
     updatePegawai, 
     deletePegawai, 
     createRolePegawai,
+    getPegawaiNama,
     Register, 
     Login, 
     Logout } from "../controller/PegawaiController.js";
@@ -23,7 +24,11 @@ import {
     updateJenisAudit,
     deleteJenisAudit
   } from "../controller/JenisAuditController.js";
-import { getRolePegawai, getRoleByPegawai, updateRolePegawai } from '../controller/RolePegawaiController.js';
+import { 
+    getRolePegawai, 
+    getRoleByPegawai, 
+    updateRolePegawai,
+    deleteRolePegawai  } from '../controller/RolePegawaiController.js';
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controller/RefreshToken.js";
 
@@ -37,6 +42,7 @@ router.delete('/logout', Logout);
 
 // Pegawai
 router.get('/pegawais', getPegawais);
+router.get('/pegawais-data', getPegawaiNama);
 router.post('/pegawais', createPegawai);
 router.post('/role-pegawai', createRolePegawai);
 router.get('/pegawais/:id_pegawai', getPegawaiById);
@@ -63,6 +69,7 @@ router.delete("/jenis-audit/:id_jenis_audit", deleteJenisAudit);
 // Role Pegawai 
 router.get('/role-pegawai', getRolePegawai);
 router.get('/role-pegawai/:id_pegawai', getRoleByPegawai);
-router.patch('/role-pegawai/:id_role_pegawai', updateRolePegawai);
+router.patch('/role-pegawai/:id', updateRolePegawai);
+router.delete("/role-pegawai/:id", deleteRolePegawai);
 
 export default router;

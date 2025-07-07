@@ -31,44 +31,47 @@ export default function TablesPengguna() {
   const [nama_pegawai, setNamaPegawai] = useState('');
   const [email, setEmail] = useState('');
   const [expire, setExpire] = useState('');
+  const [pegawais, setPegawais] = useState<Pegawai[]>([]);
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
   const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+  const [listRole, setListRole] = useState([]);
+  const [selectedRole, setSelectedRole] = useState("");
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ambil data pegawai
-        const pegawaiRes = await axios.get("http://localhost:5000/pegawais", {
+        // Ambil data pegawai dari endpoint khusus pegawais-nama
+        const pegawaiRes = await axios.get("http://localhost:5000/pegawais-data", {
           withCredentials: true,
         });
-
+  
         const mappedPegawai = pegawaiRes.data.map((item: any) => ({
           id_pegawai: item.id_pegawai,
           nama_pegawai: item.nama_pegawai,
           email: item.email,
-          role: item.role?.id_role || "Belum ditentukan",  
           prodi: item.prodi,
           terakhir_login: item.terakhir_login,
-          status: item.status
+          status: item.status,
+          id_role: null,
+          role: null,
+          id_role_pegawai: null,
         }));
-        
+  
         setTableData(mappedPegawai);
         setPegawais(mappedPegawai);
         console.log("📦 Data pegawais:", mappedPegawai);
-        console.log(pegawais);
-        console.log(pegawaiRes.data);
-
+  
         // Ambil data role
         const roleRes = await axios.get("http://localhost:5000/roles", {
           withCredentials: true,
         });
-        setRoles(roleRes.data);
+        setListRole(roleRes.data);
       } catch (error) {
         console.error("Gagal fetch data:", error);
       }
     };
-
+  
     fetchData();
   }, [token]);
 
@@ -78,17 +81,28 @@ export default function TablesPengguna() {
       return;
     }
   
-    await axios.post("http://localhost:5000/role-pegawai", {
-      id_pegawai: selectedPegawai.id_pegawai,
-      id_role: selectedRoleId,
-    });
-
-    console.log("selectedPegawai", selectedPegawai);
-  console.log("selectedRoleId", selectedRoleId);
+    try {
+      const res = await axios.post("http://localhost:5000/role-pegawai", {
+        id_pegawai: selectedPegawai.id_pegawai,
+        id_role: selectedRoleId,
+      }, {
+        withCredentials: true,
+      });
   
-    alert("Role berhasil ditambahkan!");
-    closeModal();
+      console.log("Berhasil menambahkan role pegawai:", res.data);
+      alert("Role berhasil ditambahkan!");
+  
+      closeModal();
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        alert("Role pegawai sudah ada.");
+      } else {
+        console.error("Gagal menambahkan role pegawai:", error);
+        alert("Terjadi kesalahan saat menambahkan role.");
+      }
+    }
   };
+  
   
   
 
@@ -162,6 +176,9 @@ export default function TablesPengguna() {
                 <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
                       value={selectedPegawai?.role || ""}
                       onChange={(e) =>
+                        selectedPegawai &&
+                        setSelectedPegawai({
+                          ...selectedPegawai,
                           role: e.target.value, // id, bukan nama
                         })
                       }
@@ -230,17 +247,22 @@ export default function TablesPengguna() {
                 {/* Baris 3: Peran (Dropdown) */}
                 <div className="relative">
                   <Label>Peran</Label>
-                    <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                    <select
+                      className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
                       value={selectedRoleId !== null ? String(selectedRoleId) : ""}
-                      onChange={(e) => setSelectedRoleId(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        console.log("Selected role from select:", value); // Tambahkan ini untuk debug
+                        setSelectedRoleId(value ? parseInt(value) : null);
+                      }}
                     >
                       <option value="">Pilih Peran</option>
-                      {roles.map((role) => (
-                      <option key={role.id} value={String(role.id)}>
-                        {role.nama_role}
-                      </option>
-                    ))}
-                    </select>           
+                      {listRole.map((role) => (
+                        <option key={role.id_role} value={role.id_role}>
+                          {role.nama_role}
+                        </option>
+                      ))}
+                    </select>                              
                     <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -251,26 +273,28 @@ export default function TablesPengguna() {
                 {/* Baris 1: Nama */}
                 <div className="relative">
                   <Label>Nama</Label>
-                    <select
-                      className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                      value={selectedPegawai?.id_pegawai ? String(selectedPegawai.id_pegawai) : ""}
-                      onChange={(e) => {
-                        const id = parseInt(e.target.value);
-                        const found = pegawais.find((p) => p.id_pegawai === id);
-                          setSelectedPegawai(found || null);
-                          setEmail(found?.email || "");
-                          setStatus(found?.status || "");
-                        }}
-                    >
-                      <option value="">Pilih Nama</option>
-                      {pegawais
-                        .filter((pegawai) => pegawai.status === "Aktif")
-                        .map(p => (
-                          <option key={p.id_pegawai} value={p.id_pegawai}>
-                            {p.nama_pegawai}
-                          </option>
-                        ))}
-                    </select>   
+                  <select
+                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                    value={selectedPegawai?.id_pegawai ? String(selectedPegawai.id_pegawai) : ""}
+                    onChange={(e) => {
+                      const id = parseInt(e.target.value);
+                      const found = pegawais.find((p) => p.id_pegawai === id);
+
+                      // Simpan data pegawai terpilih
+                      setSelectedPegawai(found || null);
+
+                      // Isi otomatis email & status
+                      setEmail(found?.email || "");
+                      setStatus(found?.status || "");
+                    }}
+                  >
+                    <option value="">Pilih Nama</option>
+                    {pegawais.map((p) => (
+                      <option key={p.id_pegawai} value={p.id_pegawai}>
+                        {p.nama_pegawai}
+                      </option>
+                    ))}
+                  </select>  
                     <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
