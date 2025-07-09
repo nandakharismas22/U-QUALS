@@ -1,4 +1,4 @@
-![logo-dark uquals](https://github.com/user-attachments/assets/461d7084-2e3b-49a3-957b-646fd45d9e1d)
+![logo-uquals](https://github.com/user-attachments/assets/3d8df636-fc77-4941-9b82-e9c3d3083c9f)
 
 ## Halaman
 
