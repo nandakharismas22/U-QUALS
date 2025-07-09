@@ -1,4 +1,4 @@
-![logo-uquals](https://github.com/user-attachments/assets/3d8df636-fc77-4941-9b82-e9c3d3083c9f)
+<img src="https://github.com/user-attachments/assets/3d8df636-fc77-4941-9b82-e9c3d3083c9f" alt="logo-uquals" width="200"/>
 
 ## Halaman
 
