@@ -2,8 +2,8 @@
 
 ## Halaman
 
-|                          |                               |
-:-------------------------:|:-------------------------:
+
+:-------------------------:
 ![Dashboard](https://github.com/user-attachments/assets/81107e19-f86d-48c1-8fdb-787d8e5c2cd2)
 
 ## Cara Running
