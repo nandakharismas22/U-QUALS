@@ -28,7 +28,9 @@ import {
     getRolePegawai, 
     getRoleByPegawai, 
     updateRolePegawai,
-    deleteRolePegawai  } from '../controller/RolePegawaiController.js';
+    deleteRolePegawai,
+    changeRolePegawai} from '../controller/RolePegawaiController.js';
+
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controller/RefreshToken.js";
 
@@ -71,5 +73,6 @@ router.get('/role-pegawai', getRolePegawai);
 router.get('/role-pegawai/:id_pegawai', getRoleByPegawai);
 router.patch('/role-pegawai/:id', updateRolePegawai);
 router.delete("/role-pegawai/:id", deleteRolePegawai);
+router.post("/change-role", verifyToken, changeRolePegawai);
 
 export default router;

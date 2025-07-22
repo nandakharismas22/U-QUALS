@@ -1,23 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
-
-// Assume these icons are imported from an icon library
+import { Link, useLocation } from "react-router-dom";
 import {
-  BoxCubeIcon,
-  // CalenderIcon,
   ChevronDownIcon,
-  // GridIcon,
   HorizontaLDots,
-  // ListIcon,
-  PageIcon,
-  // PieChartIcon,
-  // PlugInIcon,
-  // TableIcon,
-  // UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-// import SidebarWidget from "./SidebarWidget";
-import { UserCog,FolderSearch,Calendar,LayoutGrid,CircleUser,FileChartColumn,ClipboardList,FileCheck,BadgeCheck } from "lucide-react";
+import { UserCog, FolderSearch, Calendar, LayoutGrid, CircleUser, FileChartColumn, ClipboardList, FileCheck, BadgeCheck } from "lucide-react";
+import { useAuth } from "../components/auth/AuthContext";
 
 type NavItem = {
   name: string;
@@ -26,131 +15,115 @@ type NavItem = {
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
-const navItems: NavItem[] = [
-  {
-    icon: <LayoutGrid />,
-    name: "Dashboard",
-    path: "/home",
-    // subItems: [{ name: "Blank Page", path: "/blank", pro: false },]
-    // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  // {
-  //   icon: <CalenderIcon />,
-  //   name: "Calendar",
-  //   path: "/calendar",
-  // },
-  // {
-  //   icon: <UserCircleIcon />,
-  //   name: "User Profile",
-  //   path: "/profile",
-  // },
-   {
-    icon: <Calendar />,
-    name: "Periode",
-    path: "/periode",
-  },
-
-   {
-    icon: <ClipboardList />,
-    name: "Jenis Audit",
-    path: "/blank",
-  },
-
-     {
-    icon: <UserCog />,
-    name: "Plot Auditor",
-    path: "/auditor",
-  },
-
-  {
-    name: "Standart",
-    icon: <FileCheck  />,
-    subItems: [
-      { name: "Sumber Standart", path: "/sumber", pro: false },
-      { name: "Daftar Standart", path: "/listdaftar", pro: false },
-    ],
-  },
-
-
-  //   {
-  //   icon: <FileChartColumn />,
-  //   name: "Standart",
-  //   path: "/standart",
-  // },
-    {
-    icon: <FolderSearch />,
-    name: "Monitoring",
-    path: "/monitoring",
-  },
-
-  {
-    name: "Akreditasi",
-    icon: <BadgeCheck />,
-    subItems: [
-      { name: "Lembaga Akreditasi", path: "/lembaga", pro: false },
-      { name: "Akreditasi Institusi", path: "/institusi", pro: false },
-      { name: "Akreditasi Prodi", path: "/prodi", pro: false },
-      { name: "Akreditasi Lab", path: "/lab", pro: false },
-    ],
-  },
-
-    {
-    icon: <CircleUser />,
-    name: "Pengguna",
-    path: "/pengguna",
-  },
-
-
-  // {
-  //   name: "Forms",
-  //   icon: <ListIcon />,
-  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  // },
-  // {
-  //   name: "Tables",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  // },
-  
-
-];
-
-const othersItems: NavItem[] = [
-  // {
-  //   icon: <PageIcon />,
-  //   name: "Charts",
-  //   subItems: [
-  //     { name: "Line Chart", path: "/line-chart", pro: false },
-  //     { name: "Bar Chart", path: "/bar-chart", pro: false },
-  //   ],
-  // },
-
-  // {
-  //   icon: <BoxCubeIcon />,
-  //   name: "UI Elements",
-  //   subItems: [
-  //     { name: "Alerts", path: "/alerts", pro: false },
-  //     { name: "Avatar", path: "/avatars", pro: false },
-  //     { name: "Badge", path: "/badge", pro: false },
-  //     { name: "Buttons", path: "/buttons", pro: false },
-  //     { name: "Images", path: "/images", pro: false },
-  //     { name: "Videos", path: "/videos", pro: false },
-  //     { name: "Dropdown", path: "/videos", pro: false },
-  //   ],
-  // },
-  // {
-  //   icon: <PlugInIcon />,
-  //   name: "Authentication",
-  //   subItems: [
-  //     { name: "Sign In", path: "/signin", pro: false },
-  //     { name: "Sign Up", path: "/signup", pro: false },
-  //   ],
-  // },
-];
+const othersItems: NavItem[] = [];
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const { currentRole } = useAuth();
+
+  useEffect(() => {
+    console.log('Current Role Changed:', currentRole);
+  }, [currentRole]);
+
+  // Define all possible navigation items
+  const allNavItems: Record<string, NavItem[]> = {
+    "Admin LPMPP": [
+      {
+        icon: <LayoutGrid />,
+        name: "Dashboard",
+        path: "/home",
+      },
+      {
+        icon: <Calendar />,
+        name: "Periode",
+        path: "/periode",
+      },
+      {
+        icon: <ClipboardList />,
+        name: "Jenis Audit",
+        path: "/audit",
+      },
+      {
+        icon: <UserCog />,
+        name: "Plot Auditor",
+        path: "/auditor",
+      },
+      {
+        name: "Standart",
+        icon: <FileCheck />,
+        subItems: [
+          { name: "Sumber Standart", path: "/sumber" },
+          { name: "Daftar Standart", path: "/listdaftar" },
+        ],
+      },
+      {
+        icon: <FolderSearch />,
+        name: "Monitoring",
+        path: "/monitoring",
+      },
+      {
+        name: "Akreditasi",
+        icon: <BadgeCheck />,
+        subItems: [
+          { name: "Lembaga Akreditasi", path: "/lembaga" },
+          { name: "Akreditasi Institusi", path: "/institusi" },
+          { name: "Akreditasi Program Studi", path: "/prodi" },
+          { name: "Akreditasi Lab", path: "/lab" },
+        ],
+      },
+      {
+        icon: <CircleUser />,
+        name: "Pengguna",
+        path: "/pengguna",
+      }
+    ],
+    "Tim GKM": [
+      {
+        icon: <LayoutGrid />,
+        name: "Dashboard",
+        path: "/home",
+      },
+      {
+        name: "Akreditasi",
+        icon: <BadgeCheck />,
+        subItems: [
+          { name: "Lembaga Akreditasi", path: "/lembaga" },
+          { name: "Akreditasi Institusi", path: "/institusi" },
+          { name: "Akreditasi Prodi", path: "/prodi" },
+          { name: "Akreditasi Lab", path: "/lab" },
+        ],
+      }
+    ],
+    "Korprodi": [
+      {
+        icon: <LayoutGrid />,
+        name: "Dashboard",
+        path: "/home",
+      },
+      {
+        icon: <FolderSearch />,
+        name: "Asesmen Laporan",
+        path: "/monitoring",
+      },
+    ],
+    "Auditor": [
+      {
+        icon: <LayoutGrid />,
+        name: "Dashboard",
+        path: "/home",
+      },
+      {
+        icon: <FolderSearch />,
+        name: "Asesmen Laporan",
+        path: "/monitoring",
+      },
+    ]
+  };
+
+  // Get the appropriate navigation items based on the current role
+  const navItems = currentRole ? allNavItems[currentRole.nama_role] || [] : [];
+
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -161,7 +134,6 @@ const AppSidebar: React.FC = () => {
   );
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // const isActive = (path: string) => location.pathname === path;
   const isActive = useCallback(
     (path: string) => location.pathname === path,
     [location.pathname]
@@ -169,14 +141,20 @@ const AppSidebar: React.FC = () => {
 
   useEffect(() => {
     let submenuMatched = false;
-    ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
-      items.forEach((nav, index) => {
+    
+    // Define menu types with their corresponding items
+    const menuTypes = [
+      { type: "main" as const, items: navItems },
+      { type: "others" as const, items: othersItems }
+    ];
+  
+    menuTypes.forEach(({ type, items }) => {
+      items.forEach((nav: NavItem, index: number) => {
         if (nav.subItems) {
           nav.subItems.forEach((subItem) => {
-            if (isActive(subItem.path)) {
+            if (subItem.path && isActive(subItem.path)) {
               setOpenSubmenu({
-                type: menuType as "main" | "others",
+                type,
                 index,
               });
               submenuMatched = true;
@@ -185,12 +163,12 @@ const AppSidebar: React.FC = () => {
         }
       });
     });
-
+  
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
   }, [location, isActive]);
-
+  
   useEffect(() => {
     if (openSubmenu !== null) {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
@@ -399,7 +377,7 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  ""
                 ) : (
                   <HorizontaLDots className="size-6" />
                 )}

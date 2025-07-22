@@ -109,7 +109,7 @@ export const getPegawaiNama = async (req, res) => {
 export const getPegawaiById = async(req, res) => {
     try {
         const pegawai = await Pegawais.findOne({
-            attributes: ['id_pegawai', 'nama_pegawai', 'email', 'terakhir_login', 'status'],
+            attributes: ['id_pegawai', 'nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status'],
             where: {
                 id_pegawai: req.params.id_pegawai
             }
@@ -168,6 +168,7 @@ export const createPegawai = async(req, res) => {
     }
 }
 
+
 export const updatePegawai = async (req, res) => {
   const idPegawai = req.params.id;
   const {
@@ -176,7 +177,7 @@ export const updatePegawai = async (req, res) => {
     prodi,
     status,
     id_role,
-    id_role_pegawai, // <- relasi yang akan diubah
+    id_role_pegawai,
   } = req.body;
 
   try {
