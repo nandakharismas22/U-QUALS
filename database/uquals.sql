@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 07 Jul 2025 pada 07.14
+
+-- Waktu pembuatan: 22 Jul 2025 pada 11.08
+
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.0.30
 
@@ -196,9 +198,10 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `email`, `password`, `prodi`, `terakhir_login`, `status`, `refresh_token`, `created_by`, `created_at`, `modified_by`, `modified_at`) VALUES
-(1, 'Talia', 'talia@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-06-29 08:46:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjoxLCJuYW1hX3BlZ2F3YWkiOiJUYWxpYSIsImVtYWlsIjoidGFsaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5kdXN0cmkiLCJzdGF0dXMiOiJBa3RpZiIsInJvbGUiOiJBZG1pbiBMUE1QUCIsImlhdCI6MTc1MTE4Njc5MSwiZXhwIjoxNzUxMjczMTkxfQ.LYxokDuP0tOT30Trpp6EZHpmSgLuBaCB9e5zLfSO-Ng', NULL, '2025-06-16 00:41:05', NULL, '2025-07-06 14:27:17'),
-(2, 'Nanda', 'nanda2@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'SIstem Informasi', '2025-07-07 02:32:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjoyLCJuYW1hX3BlZ2F3YWkiOiJOYW5kYSIsImVtYWlsIjoibmFuZGEyQGdtYWlsLmNvbSIsInByb2RpIjoiU0lzdGVtIEluZm9ybWFzaSIsInN0YXR1cyI6IkFrdGlmIiwicm9sZSI6bnVsbCwiaWF0IjoxNzUxODU1NTQwLCJleHAiOjE3NTE5NDE5NDB9.kvImQ1ySrtzb7f1UnZ68kPY6Em3I84YxATxvh_ftfiY', NULL, '2025-07-01 01:55:14', NULL, '2025-07-07 02:32:20'),
-(6, 'Linda', 'linda2@gmail.com', '$2b$10$.0JWbxVnvuvbEcBYyQoECOTtEIPt8JPqKTe0fHVcDfEKaAEP/IfnG', 'Teknik Kimia', '2025-07-06 20:08:00', 'Aktif', NULL, NULL, '2025-06-20 05:31:40', NULL, '2025-07-07 02:31:39');
+(1, 'Talia Aprianti', 'talia2@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-07-21 00:20:00', 'Aktif', NULL, NULL, '2025-06-16 00:41:05', NULL, '2025-07-21 00:20:45'),
+(2, 'Nanda Kharisma', 'nandaaa@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-07-20 13:55:00', 'Aktif', NULL, NULL, '2025-07-01 01:55:14', NULL, '2025-07-20 14:06:50'),
+(6, 'Linda', 'linda@gmail.com', '$2b$10$.0JWbxVnvuvbEcBYyQoECOTtEIPt8JPqKTe0fHVcDfEKaAEP/IfnG', 'Teknik Kimia', '2025-07-22 02:44:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo2LCJuYW1hX3BlZ2F3YWkiOiJMaW5kYSIsImVtYWlsIjoibGluZGFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgS2ltaWEiLCJzdGF0dXMiOiJBa3RpZiIsInJvbGUiOm51bGwsImlhdCI6MTc1MzE1MjI2NSwiZXhwIjoxNzUzMjM4NjY1fQ.MVNorHlhZWzVuL15VOmwUUrwWBGWT2nJ65O77ePBatc', NULL, '2025-06-20 05:31:40', NULL, '2025-07-22 02:44:25');
+
 
 -- --------------------------------------------------------
 
@@ -316,8 +319,8 @@ CREATE TABLE `role_pegawai` (
 --
 
 INSERT INTO `role_pegawai` (`id_role_pegawai`, `id_pegawai`, `id_role`, `created_by`, `created_at`, `modified_by`, `modified_at`) VALUES
-(1, 1, 1, NULL, '2025-07-06 21:27:59', NULL, '2025-07-06 21:27:59'),
-(2, 6, 4, NULL, '2025-06-25 19:22:38', NULL, '2025-07-06 21:34:31'),
+(1, 1, 1, NULL, '2025-07-06 21:27:59', NULL, '2025-07-20 21:07:08'),
+(2, 6, 1, NULL, '2025-06-25 19:22:38', NULL, '2025-07-20 10:26:10'),
 (3, 2, 2, NULL, '2025-07-07 11:14:12', NULL, '2025-07-07 11:14:12'),
 (4, 2, 4, NULL, '2025-07-07 11:06:38', NULL, '2025-07-07 11:06:38');
 
@@ -589,7 +592,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT untuk tabel `role_pegawai`
 --
 ALTER TABLE `role_pegawai`
-  MODIFY `id_role_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_role_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `standar`
