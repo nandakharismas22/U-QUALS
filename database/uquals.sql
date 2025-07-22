@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+
 -- Waktu pembuatan: 22 Jul 2025 pada 11.08
+
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.0.30
 
@@ -199,6 +201,7 @@ INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `email`, `password`, `prodi
 (1, 'Talia Aprianti', 'talia2@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-07-21 00:20:00', 'Aktif', NULL, NULL, '2025-06-16 00:41:05', NULL, '2025-07-21 00:20:45'),
 (2, 'Nanda Kharisma', 'nandaaa@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-07-20 13:55:00', 'Aktif', NULL, NULL, '2025-07-01 01:55:14', NULL, '2025-07-20 14:06:50'),
 (6, 'Linda', 'linda@gmail.com', '$2b$10$.0JWbxVnvuvbEcBYyQoECOTtEIPt8JPqKTe0fHVcDfEKaAEP/IfnG', 'Teknik Kimia', '2025-07-22 02:44:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo2LCJuYW1hX3BlZ2F3YWkiOiJMaW5kYSIsImVtYWlsIjoibGluZGFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgS2ltaWEiLCJzdGF0dXMiOiJBa3RpZiIsInJvbGUiOm51bGwsImlhdCI6MTc1MzE1MjI2NSwiZXhwIjoxNzUzMjM4NjY1fQ.MVNorHlhZWzVuL15VOmwUUrwWBGWT2nJ65O77ePBatc', NULL, '2025-06-20 05:31:40', NULL, '2025-07-22 02:44:25');
+
 
 -- --------------------------------------------------------
 

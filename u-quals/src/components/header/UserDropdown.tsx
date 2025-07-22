@@ -114,6 +114,7 @@ export default function UserDropdown() {
     }
   }, [token, setToken, setPegawai, navigate, currentRole, setCurrentRole, setAvailableRoles]);
 
+
   const handleLogout = async () => {
     try {
       await axios.delete("http://localhost:5000/logout", {
@@ -153,6 +154,8 @@ export default function UserDropdown() {
             {pegawai?.nama_pegawai ?? "Memuat..."}
           </span>
           <span className="text-theme-xs text-gray-500 dark:text-gray-400">
+
+            {roles[0]?.nama_role ?? "Tidak Ada Role"}
           </span>
         </div>
         
