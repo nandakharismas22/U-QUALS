@@ -4,36 +4,43 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
-
+} from "../../../components/ui/table/index";
 import { ArrowUpDown, Edit, Trash2 } from "lucide-react";
 
-interface Standard {
+interface LabAkre {
   id: number;
-  number: string;
-  year: string;
-  description: string;
+  lab: string;
+  level: string;
+  lembaga: string;
+  mulai: string;
+  berakhir: string;
 }
 
-const tableData: Standard[] = [
-  {
+const tableData: LabAkre[] = [
+   {
     id: 1,
-    number: "(nama sumber standar)",
-    year: "2022",
-    description: "deskripsi",
+    lab: "Laboratorium Pengujian Terpadu",
+    level: "Nasional",
+    lembaga: "KAN",
+    mulai: "24 Mei 2025",
+    berakhir: "25 Mei 2025"
   },
-  {
-    id: 2,
-    number: "(nama sumber standar)",
-    year: "2021",
-    description: "deskripsi",
+   {
+    id: 1,
+    lab: "Laboratorium Pengujian Terpadu",
+    level: "Internasional",
+    lembaga: "KAN",
+    mulai: "24 Mei 2025",
+    berakhir: "25 Mei 2025"
   },
-  {
-    id: 3,
-    number: "(nama sumber standar)",
-    year: "2020",
-    description: "deskripsi",
-  },
+   {
+    id: 1,
+    lab: "Laboratorium Pengujian Terpadu",
+    level: "Nasional",
+    lembaga: "KAN",
+    mulai: "24 Mei 2025",
+    berakhir: "25 Mei 2025"
+  }
 ];
 
 export default function BasicTableOne() {
@@ -48,19 +55,31 @@ export default function BasicTableOne() {
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Sumber Standar
+                  Laboratorium
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Tahun
+                  Level
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Deskripsi
+                  Lembaga
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Mulai
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Lembaga
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
@@ -80,13 +99,19 @@ export default function BasicTableOne() {
                   {index + 1}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.number}
+                  {item.lab}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.year}
+                  {item.level}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.description}
+                  {item.lembaga}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.mulai}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.berakhir}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <span className="text-blue-600 hover:underline cursor-pointer">Lihat</span>

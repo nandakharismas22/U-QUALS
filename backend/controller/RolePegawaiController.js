@@ -65,6 +65,37 @@ export const getRoleByPegawai = async (req, res) => {
     }
   };
 
+  export const createRolePegawai = async (req, res) => {
+    const { id_pegawai, id_role } = req.body;
+  
+    if (!id_pegawai || !id_role) {
+      return res.status(400).json({ msg: "ID Pegawai dan ID Role wajib diisi" });
+    }
+  
+    try {
+      // Cek apakah kombinasi pegawai & role sudah ada
+      const existing = await RolePegawai.findOne({
+        where: { id_pegawai, id_role }
+      });
+  
+      if (existing) {
+        return res.status(409).json({ msg: "Role Pegawai sudah ada" });
+      }
+  
+      const newRole = await RolePegawai.create({
+        id_pegawai,
+        id_role
+      });
+  
+      res.status(201).json({
+        msg: "Role pegawai berhasil ditambahkan",
+        data: newRole
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: "Gagal menambahkan role pegawai", error: error.message });
+    }
+  };
 
   export const updateRolePegawai = async (req, res) => {
     const id = req.params.id; // id_role_pegawai
@@ -75,10 +106,68 @@ export const getRoleByPegawai = async (req, res) => {
         { id_role },
         { where: { id_role_pegawai: id } }
       );
-  
       res.json({ msg: "Role pegawai berhasil diupdate" });
     } catch (error) {
       res.status(500).json({ msg: error.message });
     }
-  };
+  };  
+
+  export const deleteRolePegawai = async (req, res) => {
+    const { id } = req.params; 
+    try {
+      const deleted = await RolePegawai.destroy({
+        where: { id_role_pegawai: id }
+      });
   
+      if (!deleted) {
+        return res.status(404).json({ msg: "Data role pegawai tidak ditemukan" });
+      }
+  
+      res.status(200).json({ msg: "Role pegawai berhasil dihapus" });
+    } catch (error) {
+      res.status(500).json({ msg: "Gagal menghapus role pegawai", error: error.message });
+    }
+  };
+
+  export const changeRolePegawai = async (req, res) => {
+    try {
+      const { role_id } = req.body;
+      const { id } = req.user; // ID dari middleware auth
+  
+      // 1. Verifikasi role milik user
+      const userRole = await UserRole.findOne({
+        where: {
+          user_id: id,
+          role_id
+        },
+        include: [Roles]
+      });
+  
+      if (!userRole) {
+        return res.status(403).json({ message: 'Forbidden - Role tidak valid' });
+      }
+  
+      // 2. Generate token baru
+      const newToken = jwt.sign({
+        ...req.user,
+        currentRole: {
+          id_role: userRole.Role.id,
+          nama_role: userRole.Role.name
+        }
+      }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+      // 3. Set cookie (jika menggunakan cookie)
+      res.cookie('token', newToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production'
+      });
+  
+      res.json({ 
+        accessToken: newToken,
+        role: userRole.Role.name
+      });
+    } catch (error) {
+      console.error('Change role error:', error);
+      res.status(500).json({ message: error.message });
+    }
+  };

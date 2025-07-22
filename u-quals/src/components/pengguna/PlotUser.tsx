@@ -15,6 +15,9 @@ import Label from "../form/Label";
 import React, {useState} from "react";
 import { useAuth } from "../../components/auth/AuthContext";
 import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/id"; 
+dayjs.locale("id");
 
 interface Pegawai {
   id_pegawai: number;
@@ -24,6 +27,7 @@ interface Pegawai {
   prodi: string;
   terakhir_login: string;
   status: "Aktif" | "Nonaktif";
+  id_role_pegawai?: number;
 }
 
 interface SelectedPegawai {
@@ -38,37 +42,16 @@ interface SelectedPegawai {
 
 
 export default function PenggunaTables() {
-  const [tableData, setTableData] = React.useState<Pegawai[]>([]);
+  const [tableData, setTableData] = React.useState<Pegawai[]>([]);  
   const { token } = useAuth();
   const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
   const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
-  const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
+  const [selectedPegawai, setSelectedPegawai] = React.useState<SelectedPegawai | null>(null);
   const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
   const [pegawaiList, setPegawaiList] = React.useState<any[]>([]);
-  const [listRole, setListRole] = useState([]);
+  const [listRole, setListRole] = useState<{id_role: number; nama_role: string}[]>([]);
+  const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
 
-  // const fetchPegawai = async () => {
-  //   try {
-  //     const response = await axios.get("http://localhost:5000/pegawais", {
-  //       withCredentials: true,
-  //     });
-  
-  //     const mappedPegawai = response.data.map((item: any) => ({
-  //       id_pegawai: item.id_pegawai,
-  //       nama_pegawai: item.nama_pegawai,
-  //       email: item.email,
-  //       prodi: item.prodi,
-  //       status: item.status,
-  //       terakhir_login: item.terakhir_login,
-  //       role: item.role || "Belum ditentukan", // string nama role
-  //       id_role: item.role_pegawais?.[0]?.id_role || "", // id_role pertama jika ada
-  //     }));
-  
-  //     setTableData(mappedPegawai);
-  //   } catch (error) {
-  //     console.error("Gagal fetch data pegawai:", error);
-  //   }
-  // };
 
   const fetchPegawai = async () => {
     try {
@@ -76,42 +59,25 @@ export default function PenggunaTables() {
         withCredentials: true,
       });
   
-      const mappedPegawai = response.data.flatMap((item: any) => {
-        if (item.role_pegawais?.length > 0) {
-          return item.role_pegawais.map((rp: any) => ({
-            id_pegawai: item.id_pegawai,
-            nama_pegawai: item.nama_pegawai,
-            email: item.email,
-            prodi: item.prodi,
-            status: item.status,
-            terakhir_login: item.terakhir_login,
-            role: rp.role?.nama_role || "Belum ditentukan",
-            id_role: rp.id_role,
-            id_role_pegawai: rp.id_role_pegawai,
-          }));
-        } else {
-          return [{
-            id_pegawai: item.id_pegawai,
-            nama_pegawai: item.nama_pegawai,
-            email: item.email,
-            prodi: item.prodi,
-            status: item.status,
-            terakhir_login: item.terakhir_login,
-            role: "Belum ditentukan",
-            id_role: null,
-            id_role_pegawai: null,
-          }];
-        }
-      });
+      const mappedPegawai = response.data.map((item: any) => ({
+        id_pegawai: item.id_pegawai,
+        nama_pegawai: item.nama_pegawai,
+        email: item.email,
+        prodi: item.prodi,
+        status: item.status,
+        terakhir_login: dayjs(item.terakhir_login).format("D MMMM YYYY | HH:mm"),
+        role: item.role || "Belum ditentukan", 
+        id_role: item.id_role, 
+        id_role_pegawai: item.id_role_pegawai,
+      })); 
+      
+      console.log("📦 Data :", mappedPegawai);
   
       setTableData(mappedPegawai);
-      console.log("Hasil mappedPegawai:", mappedPegawai);
     } catch (error) {
       console.error("Gagal fetch data pegawai:", error);
     }
   };
-  
-  
 
   React.useEffect(() => {
     fetchPegawai();
@@ -129,35 +95,39 @@ export default function PenggunaTables() {
         console.error("Gagal fetch pegawai:", error);
       }
     };
+    console.log("Selected Role ID:", selectedRoleId);
   
     fetchData();
-  }, [token]);
+  }, [token, selectedRoleId]);
 
-  const handleEditClick = (item) => {
+  const handleEditClick = (item: Pegawai & { id_role?: number; id_role_pegawai?: number }) => {
+    console.log("handleEditClick item.id_role:", item.id_role);
     setSelectedPegawai({
       id_pegawai: item.id_pegawai,
       nama_pegawai: item.nama_pegawai,
       email: item.email,
       status: item.status,
       prodi: item.prodi,
-      id_role: item.id_role, // role yang dipilih
-      id_role_pegawai: item.id_role_pegawai // <--- pastikan ini ada!
+      id_role: item.id_role,
+      id_role_pegawai: item.id_role_pegawai,
     });
+
+    const roleIdStr = item.id_role !== undefined && item.id_role !== null ? String(item.id_role) : "";
+    console.log("Setting selectedRoleId to:", roleIdStr);
+    setSelectedRoleId(roleIdStr); 
     openEditModal();
-  };
+  };  
 
   const handleDeleteClick = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:5000/pegawais/${id}`, {
+      await axios.delete(`http://localhost:5000/role-pegawai/${id}`, {
         withCredentials: true,
       });
   
-      await fetchPegawai();
-  
-      console.log("Pegawai berhasil dihapus!");
-      closeDeleteModal(); 
+      // Update state
+      setTableData(prev => prev.filter(p => p.id_role_pegawai !== id));
     } catch (error) {
-      console.error("Gagal menghapus pegawai:", error);
+      console.error("Gagal menghapus role pegawai:", error);
     }
   };
   
@@ -166,48 +136,50 @@ export default function PenggunaTables() {
   
     try {
       await axios.patch(
-        `http://localhost:5000/pegawais/${selectedPegawai.id_pegawai}`,
+        `http://localhost:5000/role-pegawai/${selectedPegawai.id_role_pegawai}`,
         {
-          nama_pegawai: selectedPegawai.nama_pegawai,
-          email: selectedPegawai.email,
-          prodi: selectedPegawai.prodi,
-          status: selectedPegawai.status,
-          id_role: selectedPegawai.id_role, // role baru
-          id_role_pegawai: selectedPegawai.id_role_pegawai, // relasi yang mau diubah
+          id_role: selectedPegawai.id_role, 
         },
         { withCredentials: true }
       );
-      
   
-      console.log("Pegawai berhasil diupdate!");
-      fetchPegawai(); 
+      console.log("Role pegawai berhasil diupdate!");
+      fetchPegawai(); // refresh tabel
       closeEditModal(); 
     } catch (error: any) {
-      console.error("Gagal update pegawai:", error.response?.data || error.message);
+      console.error("Gagal update role pegawai:", error.response?.data || error.message);
     }
-  };
+  };  
 
-  const fetchRoles = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/roles", {
-        withCredentials: true,
-      });
-      setListRole(res.data);
-    } catch (err) {
-      console.error("Gagal mengambil data role", err);
+const fetchRoles = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/roles", {
+      withCredentials: true,
+    });
+    console.log("Fetched roles:", res.data);
+    setListRole(res.data);
+  } catch (err) {
+    console.error("Gagal mengambil data role", err);
+  }
+};
+  
+React.useEffect(() => {
+  fetchRoles(); // preload roles on component mount
+}, []);
+
+React.useEffect(() => {
+  if (isEditOpen) fetchRoles(); 
+}, [isEditOpen]);
+
+  const handleConfirmDelete = () => { 
+    if (selectedPegawai?.id_role_pegawai !== undefined) {
+      handleDeleteClick(selectedPegawai.id_role_pegawai);  
+      closeDeleteModal();       
+    } else {
+      console.error("ID Role Pegawai tidak ditemukan");
     }
   };
   
-  React.useEffect(() => {
-    if (isEditOpen) fetchRoles(); // hanya fetch saat modal dibuka
-  }, [isEditOpen]);
-
-  const handleConfirmDelete = () => {
-    if (selectedPegawai?.id_pegawai) {
-      handleDeleteClick(selectedPegawai.id_pegawai);  
-      closeDeleteModal(); 
-    }
-  };
 
   return (
     <>
@@ -236,58 +208,58 @@ export default function PenggunaTables() {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {pegawaiList.map((item, index) => (
-                <TableRow key={`${item.id_pegawai}-${item.id_role_pegawai ?? "Belum ditentukan"}`}>
-                  <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {item.nama_pegawai}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {item.email}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {item.role}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {item.prodi}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {item.terakhir_login}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <Circle
-                        className={`w-3 h-3 ${item.status === "Aktif" ? "text-green-500" : "text-gray-400"}`}
-                        fill={item.status === "Aktif" ? "currentColor" : "none"}
-                      />
-                      {item.status}
+            {tableData.map((item: Pegawai & { id_role_pegawai?: number; id_role?: number }, index) => (
+              <TableRow key={item.id_role_pegawai ?? `pegawai-${item.id_pegawai}-${index}`}>
+                <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.nama_pegawai}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.email}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.role}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.prodi}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.terakhir_login}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Circle
+                      className={`w-3 h-3 ${item.status === "Aktif" ? "text-green-500" : "text-gray-400"}`}
+                      fill={item.status === "Aktif" ? "currentColor" : "none"}
+                    />
+                    {item.status}
+                  </div>
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    {/* Edit */}
+                    <div
+                      className="p-2 rounded-full bg-orange-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
+                      onClick={() => handleEditClick(item)}
+                    >
+                      <Edit className="w-4 h-4 text-orange-500 dark:text-orange-300" />
                     </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center gap-2">
-                      {/* Edit */}
-                      <div
-                        className="p-2 rounded-full bg-orange-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 cursor-pointer"
-                        onClick={() => handleEditClick(item)}
-                      >
-                        <Edit className="w-4 h-4 text-orange-500 dark:text-orange-300" />
-                      </div>
-                      {/* Delete */}
-                      <div
-                        className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 cursor-pointer"
-                        onClick={() => {
-                          setSelectedPegawai(item); 
-                          openDeleteModal();
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500 dark:text-red-300" />
-                      </div>
+                    {/* Delete */}
+                    <div
+                      className="p-2 rounded-full bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 cursor-pointer"
+                      onClick={() => {
+                        setSelectedPegawai(item); 
+                        openDeleteModal();
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4 text-red-500 dark:text-red-300" />
                     </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
             </TableBody>
           </Table>
         </div>
@@ -313,7 +285,8 @@ export default function PenggunaTables() {
                   <Input
                     type="text"
                     placeholder="Masukkan nama lengkap"
-                    className="w-full"
+                    className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
+                    readOnly={true}
                     value={selectedPegawai?.nama_pegawai || ""}
                     onChange={(e) =>
                       setSelectedPegawai({ ...selectedPegawai!, nama_pegawai: e.target.value })
@@ -327,7 +300,8 @@ export default function PenggunaTables() {
                   <Input
                     type="email"
                     placeholder="Masukkan email"
-                    className="w-full"
+                    className="w-full bg-gray-500 text-gray-500 cursor-not-allowed"
+                    readOnly={true}
                     value={selectedPegawai?.email || ""}
                     onChange={(e) =>
                       setSelectedPegawai({ ...selectedPegawai!, email: e.target.value })
@@ -338,18 +312,18 @@ export default function PenggunaTables() {
                 {/* Peran */}
                 <div className="relative">
                   <Label>Peran</Label>
-                  <select
-                    className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                    value={selectedPegawai?.id_role || ""}
-                      onChange={(e) =>
-                        setSelectedPegawai((prev) => ({
-                          ...prev!,
-                          id_role: Number(e.target.value),
-                        }))
-                      }
-                  >
+                    <select
+                      className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                      value={selectedRoleId !== null ? selectedRoleId : ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        console.log("Selected role from select:", value); // Tambahkan ini untuk debug
+                        setSelectedRoleId(value || null);
+                        setSelectedPegawai(prev => prev ? { ...prev, id_role: value ? parseInt(value) : undefined } : prev);
+                      }}
+                    >
                     <option value="">Pilih Peran</option>
-                    {listRole.map((role: any) => (
+                    {listRole.map((role) => (
                         <option key={role.id_role} value={role.id_role}>
                           {role.nama_role}
                         </option>
@@ -380,7 +354,7 @@ export default function PenggunaTables() {
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                       </svg>
-                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -21,6 +21,7 @@ export const getPegawais = async (req, res) => {
         {
           model: RolePegawai,
           as: "role_pegawais",
+          required: true, 
           include: [
             {
               model: Roles,
@@ -61,7 +62,10 @@ export const getPegawais = async (req, res) => {
           id_role: null,
         }];
       }
-    });    
+    });
+    
+    const filtered = formatted.filter(p => p.role !== "Belum ditentukan");
+    res.json(filtered);    
 
     res.json(formatted);
   } catch (error) {
@@ -69,10 +73,43 @@ export const getPegawais = async (req, res) => {
   }
 };
 
+export const getPegawaiNama = async (req, res) => {
+  try {
+    const pegawais = await Pegawais.findAll({
+      attributes: [
+        'id_pegawai',
+        'nama_pegawai',
+        'email',
+        'prodi',
+        'status',
+        'terakhir_login'
+      ],
+      order: [["id_pegawai", "ASC"]],
+    });
+
+    const formatted = pegawais.map(p => ({
+      id_pegawai: p.id_pegawai,
+      nama_pegawai: p.nama_pegawai,
+      email: p.email,
+      prodi: p.prodi,
+      status: p.status,
+      terakhir_login: p.terakhir_login
+        ? dayjs(p.terakhir_login).format("YYYY-MM-DD HH:mm")
+        : null,
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+
+
 export const getPegawaiById = async(req, res) => {
     try {
         const pegawai = await Pegawais.findOne({
-            attributes: ['id_pegawai', 'nama_pegawai', 'email', 'terakhir_login', 'status'],
+            attributes: ['id_pegawai', 'nama_pegawai', 'email', 'prodi', 'terakhir_login', 'status'],
             where: {
                 id_pegawai: req.params.id_pegawai
             }
@@ -139,7 +176,7 @@ export const updatePegawai = async (req, res) => {
     prodi,
     status,
     id_role,
-    id_role_pegawai, // <- relasi yang akan diubah
+    id_role_pegawai,
   } = req.body;
 
   try {
@@ -205,14 +242,10 @@ export const createRolePegawai = async (req, res) => {
 
 export const Login = async (req, res) => {
   try {
-    const { email, password, selectedRole } = req.body;
+    const { email, password } = req.body;
 
     const pegawai = await Pegawais.findOne({
-      where: { email },
-      include: [{
-        model: RolePegawai,
-        include: [Roles]
-      }]
+      where: { email }
     });
 
     if (!pegawai) return res.status(404).json({ msg: "Email tidak ditemukan" });
@@ -220,19 +253,14 @@ export const Login = async (req, res) => {
     const match = await bcrypt.compare(password, pegawai.password);
     if (!match) return res.status(400).json({ msg: "Password salah" });
 
-    const roles = pegawai.role_pegawais.map(rp => rp.role?.nama_role);
-    
-    if (!roles.includes(selectedRole)) {
-      return res.status(403).json({ msg: "Role tidak valid untuk pengguna ini." });
-    }
-
     const payload = {
       id_pegawai: pegawai.id_pegawai,
       nama_pegawai: pegawai.nama_pegawai,
       email: pegawai.email,
       prodi: pegawai.prodi,
       status: pegawai.status,
-      role: selectedRole // hanya satu role aktif
+      // Jika tetap ingin kirim role, bisa dikosongkan atau default
+      role: null
     };
 
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
@@ -265,6 +293,7 @@ export const Login = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
 
 export const getRolesByEmail = async (req, res) => {
   const { email } = req.query;

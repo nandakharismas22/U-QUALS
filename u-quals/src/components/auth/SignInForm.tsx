@@ -27,7 +27,7 @@ export default function SignInForm() {
   const [msg, setMsg] = useState("");
   const { token } = useAuth();
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, getPegawai } = useAuth();
   const [selectedRole, setSelectedRole] = useState("");
   const [availableRoles, setAvailableRoles] = useState<{ id: number; nama_role: string }[]>([]); 
   // Removed unused roles state
@@ -37,15 +37,14 @@ export default function SignInForm() {
     try {
       const res = await axios.post('http://localhost:5000/login', {
         email,
-        password,
-        selectedRole, 
+        password, 
       }, {
         withCredentials: true
       });
 
       setToken(res.data.accessToken); // simpan ke context
-      // Removed setAvailableRoles(res.data) here because login response likely does not contain roles
       navigate('/home');
+      window.location.reload(); 
     } catch (err) {
       const error = err as AxiosError<{ msg: string }>;
           if (error.response) {
@@ -112,26 +111,7 @@ export default function SignInForm() {
                         <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
                       )}
                     </span>
-                  </div>
-         
-                </div>
-                <div>
-                  <Label>
-                    Masuk Sebagai <span className="text-error-500">*</span>{" "}
-                 </Label>
-                <select
-                  className="w-full mt-2 border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  required
-                >
-                  <option value="">Pilih Peran</option>
-                    {availableRoles.map((role) => (
-                      <option key={role.id} value={role.nama_role}>
-                        {role.nama_role}
-                      </option>
-                    ))}
-                </select>
+                  </div>         
                 </div>
                 <p className="text-error-500 mt-4 text-center">{msg}</p>
                 <div>

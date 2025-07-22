@@ -4,35 +4,55 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "d:/KULIYAH NDU/PROJECT/u-quals/U-QUALS/u-quals/src/components/ui/table/index";
-
+} from "../../../components/ui/table/index";
 import { ArrowUpDown, Edit, Trash2 } from "lucide-react";
 
-interface Standard {
+interface LembagaAkre{
   id: number;
-  number: string;
-  year: string;
-  description: string;
+  level: "Nasional" | "Internasional";
+  lembaga: string;
+  negara: string;
+  website: string;
+  email: string;
+  noTelp: string;
 }
 
-const tableData: Standard[] = [
+const tableData: LembagaAkre[] = [
   {
     id: 1,
-    number: "(nama sumber standar)",
-    year: "2022",
-    description: "deskripsi",
+    level: "Nasional",
+    lembaga: "BAN-PT",
+    negara: "Indonesia",
+    website: "www.banpt.or.id",
+    email: "sekretariat@banpt.or.id",
+    noTelp: "02157946110",
   },
   {
     id: 2,
-    number: "(nama sumber standar)",
-    year: "2021",
-    description: "deskripsi",
+    level: "Nasional",
+    lembaga: "LAM INFOKOM",
+    negara: "Indonesia",
+    website: "www.laminfokom.or.id",
+    email: "sekretariat@laminfokom.or.id",
+    noTelp: "02178839502",
   },
   {
     id: 3,
-    number: "(nama sumber standar)",
-    year: "2020",
-    description: "deskripsi",
+    level: "Nasional",
+    lembaga: "LAM-PTKes",
+    negara: "Indonesia",
+    website: "www.lamptkes.org",
+    email: "sekretariat@lamptkes.org",
+    noTelp: "02127653495",
+  },
+  {
+    id: 4,
+    level: "Nasional",
+    lembaga: "LAM Teknik",
+    negara: "Indonesia",
+    website: "www.lamteknik.or.id",
+    email: "info@lamteknik.or.id",
+    noTelp: "085783810387",
   },
 ];
 
@@ -48,25 +68,41 @@ export default function BasicTableOne() {
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Sumber Standar
+                  Level
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Tahun
+                  Lembaga
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Deskripsi
+                  Negara
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
-                File
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Website
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
               </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Email
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+              <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer">
+                  No.Telp
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>
+
               <TableCell isHeader className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400">
                 Aksi
               </TableCell>
@@ -80,17 +116,24 @@ export default function BasicTableOne() {
                   {index + 1}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.number}
+                  {item.level}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.year}
+                  {item.lembaga}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {item.description}
+                  {item.negara}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <span className="text-blue-600 hover:underline cursor-pointer">Lihat</span>
+                  {item.website}
                 </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.email}
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {item.noTelp}
+                </TableCell>
+
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     <div
