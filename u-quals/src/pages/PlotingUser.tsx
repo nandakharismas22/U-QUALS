@@ -17,7 +17,7 @@ interface Pegawai {
   id_pegawai: number;
   nama_pegawai: string;
   email: string;
-  role: string;        
+  role: string | null;        
   prodi: string;
   terakhir_login: string;
   status: "Aktif" | "Nonaktif";
@@ -34,14 +34,24 @@ export default function TablesPengguna() {
   const [pegawais, setPegawais] = useState<Pegawai[]>([]);
   const [selectedPegawai, setSelectedPegawai] = React.useState<Pegawai | null>(null);
   const [roles, setRoles] = React.useState<{ id: number; nama_role: string }[]>([]);
-  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
-  const [listRole, setListRole] = useState([]);
+  const [selectedRoleId, setSelectedRoleId] = useState<string>("");
+  const [listRole, setListRole] = useState<{id_role: number; nama_role: string}[]>([]);
   const [selectedRole, setSelectedRole] = useState("");
+  const [listPegawai, setListPegawai] = useState<{id_pegawai: number; nama_pegawai: string}[]>([]);
+  const [totalPegawai, setTotalPegawai] = useState<number>(0);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ambil data pegawai dari endpoint khusus pegawais-nama
+        // Ambil data utama pegawais (untuk total count)
+        const pegawaiDataRes = await axios.get("http://localhost:5000/pegawais", {
+          withCredentials: true,
+        });
+        
+        setListPegawai(pegawaiDataRes.data);
+        setTotalPegawai(pegawaiDataRes.data.length); // Simpan jumlah total pegawai
+        
+        // Ambil data tambahan dari pegawais-data (untuk table)
         const pegawaiRes = await axios.get("http://localhost:5000/pegawais-data", {
           withCredentials: true,
         });
@@ -57,11 +67,9 @@ export default function TablesPengguna() {
           role: null,
           id_role_pegawai: null,
         }));
-  
+
         setTableData(mappedPegawai);
         setPegawais(mappedPegawai);
-        console.log("📦 Data pegawais:", mappedPegawai);
-  
         // Ambil data role
         const roleRes = await axios.get("http://localhost:5000/roles", {
           withCredentials: true,
@@ -91,7 +99,7 @@ export default function TablesPengguna() {
   
       console.log("Berhasil menambahkan role pegawai:", res.data);
       alert("Role berhasil ditambahkan!");
-  
+ 
       closeModal();
     } catch (error: any) {
       if (error.response?.status === 409) {
@@ -127,7 +135,7 @@ export default function TablesPengguna() {
         <ComponentCard
           title = { <div className="flex items-center justify-between w-full">
             <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Pengguna :  {tableData.length}
+              Semua Data: {totalPegawai}
             </span>
             <button
                 onClick={openModal}
@@ -173,23 +181,24 @@ export default function TablesPengguna() {
 
               {/* Dropdown Peran */}
               <div className="relative">
-                <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                      value={selectedPegawai?.role || ""}
-                      onChange={(e) =>
-                        selectedPegawai &&
-                        setSelectedPegawai({
-                          ...selectedPegawai,
-                          role: e.target.value, // id, bukan nama
-                        })
-                      }
-                    >
-                      <option value="">Pilih Peran</option>
-                      {roles.map((role) => (
-                        <option key={role.id} value={role.id}>
-                          {role.nama_role}
-                        </option>
-                      ))}
-                    </select>      
+              <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+                  value={selectedPegawai?.role || ""}
+                  onChange={(e) =>
+                    selectedPegawai &&
+                    setSelectedPegawai({
+                      ...selectedPegawai,
+                      role: e.target.value, // id, bukan nama
+                    })
+                  }
+                >
+                  <option value="">Pilih Peran</option>
+                  {listRole.map((role) => (
+                    <option key={role.id_role} value={role.id_role}>
+                      {role.nama_role}
+                    </option>
+                  ))}
+                </select>      
+
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -249,11 +258,12 @@ export default function TablesPengguna() {
                   <Label>Peran</Label>
                     <select
                       className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                      value={selectedRoleId !== null ? String(selectedRoleId) : ""}
+
+                      value={selectedRoleId}
                       onChange={(e) => {
                         const value = e.target.value;
                         console.log("Selected role from select:", value); // Tambahkan ini untuk debug
-                        setSelectedRoleId(value ? parseInt(value) : null);
+                        setSelectedRoleId(value);
                       }}
                     >
                       <option value="">Pilih Peran</option>

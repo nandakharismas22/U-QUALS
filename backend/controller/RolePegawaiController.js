@@ -128,4 +128,46 @@ export const getRoleByPegawai = async (req, res) => {
       res.status(500).json({ msg: "Gagal menghapus role pegawai", error: error.message });
     }
   };
+
+  export const changeRolePegawai = async (req, res) => {
+    try {
+      const { role_id } = req.body;
+      const { id } = req.user; // ID dari middleware auth
   
+      // 1. Verifikasi role milik user
+      const userRole = await UserRole.findOne({
+        where: {
+          user_id: id,
+          role_id
+        },
+        include: [Roles]
+      });
+  
+      if (!userRole) {
+        return res.status(403).json({ message: 'Forbidden - Role tidak valid' });
+      }
+  
+      // 2. Generate token baru
+      const newToken = jwt.sign({
+        ...req.user,
+        currentRole: {
+          id_role: userRole.Role.id,
+          nama_role: userRole.Role.name
+        }
+      }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+      // 3. Set cookie (jika menggunakan cookie)
+      res.cookie('token', newToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production'
+      });
+  
+      res.json({ 
+        accessToken: newToken,
+        role: userRole.Role.name
+      });
+    } catch (error) {
+      console.error('Change role error:', error);
+      res.status(500).json({ message: error.message });
+    }
+  };

@@ -5,14 +5,12 @@ import BasicTableOne from "../../components/Akreditasi/prodi/AkreProdi"
 import { useModal } from "../../hooks/useModal"; 
 import { Modal } from "../../components/ui/modal"
 import { Plus } from "lucide-react";
-import PaginationWithText from "../../components/ui/pagination/page";
 import Button from "../../components/ui/button/Button";
 import Input from "../../components/form/input/InputField";
 import Label from "../../components/form/Label";
 import React, { useState } from 'react';
 import { useAuth } from "../../components/auth/AuthContext";
-import { Calendar } from "lucide-react"
-
+import PaginationWithText from "../../components/ui/pagination/page";
 
 
 interface Pegawai {
@@ -41,16 +39,16 @@ const { isOpen, openModal, closeModal } = useModal();
   return (
     <>
       <PageMeta
-        title="U-Quals - Pengguna"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="U-Quals - Akreditasi Program Studi"
+        description=""
       />
-      <PageBreadcrumb pageTitle="Akreditasi Prodi" />
+      <PageBreadcrumb pageTitle="Akreditasi Program Studi" />
       
       <div className="space-y-6">
         <ComponentCard
           title = { <div className="flex items-center justify-between w-full">
             <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Akreditasi Prodi: 5
+                Semua Akreditasi Prodi : 4
             </span>
             <button
                 onClick={openModal}
@@ -94,17 +92,15 @@ const { isOpen, openModal, closeModal } = useModal();
                 </div>
               </form>
 
-              {/* Dropdown */}
+              {/* Dropdown Peran */}
               <div className="relative">
                 <select
                   className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
                 >
-                  <option>Semua Fakultas</option>
-                  <option>Ilmu Komputer</option>
-                  <option>Teknik</option>
-                  <option>FISIB</option>
-                  <option>DLL..</option>
-                  <option>DLL..</option>
+                  <option>Semua level</option>
+                  <option>Nasional</option>
+                  <option>Internasional</option>
+
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -147,71 +143,30 @@ const { isOpen, openModal, closeModal } = useModal();
         </ComponentCard>
       </div>
 
-      {/* Modal for adding */}
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[600px] m-2">
-        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-5">
+      {/* Modal for adding new user */}
+      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Tambah Akreditasi Prodi Baru
+              Tambah Lembaga Akreditasi Baru
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Masukkan detail akreditasi prodi baru.
+              Masukkan detail lembaga akreditasi baru.
             </p>
           </div>
           <form className="flex flex-col">
             <div className="px-2 overflow-y-auto custom-scrollbar">
               <div className="grid grid-cols-1 gap-y-5">
                 
-                {/* Baris 1: fakultas (Dropdown) */}
+                {/* Baris 3: Peran (Dropdown) */}
                 <div className="relative">
-                  <Label>Fakultas</Label>
+                  <Label>Peran</Label>
                   <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Fakultas</option>
-                    <option>Fakultas Ilmu Komputer</option>
-                    <option>Fakultas Hukum</option>
-                    <option>Fakultas Ekonomi dan Bisnis</option>
-                    <option>Fakultas Arsitektur dan Desain</option>
-                    <option>Fakultas Pertanian</option>
-                    <option>Fakultas Teknik</option>
-                    <option>Fakultas Kedokteran</option>
-                    <option>Fakultas Ilmu Sosial dan Ilmu Politik</option>
-                  </select>
-                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Baris 2: prodi (Dropdown) */}
-                <div className="relative">
-                  <Label>Prodi</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Prodi</option>
-                    <option>Sistem Informasi</option>
-                    <option>Teknik Informatika</option>
-                    <option>Sains Data</option>
-                    <option>Bisnis Digital</option>
-                    <option>Ilmu Hukum</option>
-                    <option>Ekonomi Pembangunan</option>
-                    <option>Manajemen</option>
-                    <option>Akuntansi</option>
-                    <option>Kewirausahaan</option>
-                    <option>Arsitektur</option>
-                    <option>Desain Komunikasi Visual</option>
-                    <option>Desain Interior</option>
-                    <option>Fakultas Agroteknologi</option>
-                    <option>Fakultas Agribisnis</option>
-                    <option>Teknik Industri</option>
-                    <option>Teknik Kimia</option>
-                    <option>Teknologi Pangan</option>
-                    <option>Teknik Sipil</option>
-                    <option>Teknik Lingkungan</option>
-                    <option>Teknik Mesin</option>
-                    <option>Fisika</option>
-                    <option>Pendidikan Dokter</option>
-                    <option>Profesi Dokter</option>
-                   
+                    <option value="">Semua Peran</option>
+                    <option>Admin LPMPP</option>
+                    <option>Auditor LPM</option>
+                    <option>Koprodi</option>
+                    <option>Tim Penjaminan Mutu Prodi</option>
                   </select>
                 <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -220,13 +175,33 @@ const { isOpen, openModal, closeModal } = useModal();
                   </div>
                 </div>
                 
-                {/* Baris 3: Level (Dropdown) */}
+                {/* Baris 1: Nama */}
+                <div>
+                  <Label>Nama</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="Masukkan nama lengkap" 
+                    className="w-full"
+                  />
+                </div>
+                
+                {/* Baris 2: Email */}
+                <div>
+                  <Label>Email</Label>
+                  <Input 
+                    type="email" 
+                    placeholder="Masukkan email" 
+                    className="w-full"
+                  />
+                </div>
+                
+               {/* Baris 4: Status (Dropdown) */}
                 <div className="relative">
-                  <Label>Level</Label>
+                  <Label>Status Pengguna</Label>
                   <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Level</option>
-                    <option>Nasional</option>
-                    <option>Internasional</option>
+                    <option value="">Pilih Status</option>
+                    <option>Aktif</option>
+                    <option>Nonaktif</option>
                   </select>
                 <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -234,83 +209,10 @@ const { isOpen, openModal, closeModal } = useModal();
                     </svg>
                   </div>
                 </div>
-                
-                <div className="flex gap-4">
-                {/* Dropdown Lembaga */}
-                <div className="relative w-1/2">
-                  <Label>Lembaga</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Lembaga</option>
-                    <option>BAN-PT</option>
-                    <option>KAN</option>
-                    <option>IABEE</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Dropdown Nilai */}
-                <div className="relative w-1/2">
-                  <Label>Nilai</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Nilai</option>
-                    <option>A</option>
-                    <option>B</option>
-                    <option>Unggul</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                {/* Input Tanggal Mulai */}
-                <div className="relative w-1/2">
-                  <Label>Tanggal Mulai</Label>
-                  <input
-                    type="date"
-                    className="w-full pr-10 dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                  />
-                  <div className="pointer-events-none absolute right-3 top-10 text-gray-500 dark:text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                  </div>
-                </div>
-
-                {/* Input Tanggal Berakhir */}
-                <div className="relative w-1/2">
-                  <Label>Tanggal Berakhir</Label>
-                  <input
-                    type="date"
-                    className="w-full pr-10 dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                  />
-                  <div className="pointer-events-none absolute  right-3 top-10 text-gray-500 dark:text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-white">Sertifikat</label>
-                <div className="flex items-center justify-between w-full h-14 px-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-white/[0.03]">
-                  <span className="text-sm text-gray-400">Seret file di sini untuk mulai mengunggah</span>
-                  <button
-                    type="button"
-                    className="px-2 py-1 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:text-white dark:bg-white/[0.06] dark:border-gray-600"
-                  >
-                    Unggah file
-                  </button>
-                </div>
-              </div>
-
+ 
               </div>
             </div>
-            <div className="flex items-center gap-3 px-2 mt-6 justify-end">
+            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
               <Button size="sm" variant="outline" onClick={closeModal}>
                 Batal
               </Button>

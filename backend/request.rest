@@ -20,6 +20,9 @@ GET http://localhost:5000/jenis-audit
 ### Get All Role Pegawai
 GET http://localhost:5000/role-pegawai
 
+### Get All Role Pegawai
+GET http://localhost:5000/pegawais-data
+
 ### Get Role Pegawai By Id
 GET http://localhost:5000/role-pegawai/1
 
@@ -86,16 +89,47 @@ Content-Type: application/json
 }
 
 ###
-# Update Pegawai
-PATCH http://localhost:5000/pegawais/6
+# Create Role Pegawai
+POST http://localhost:5000/role-pegawai
 Content-Type: application/json
 
 {
-  "nama_pegawai": "Linda",
-  "email": "linda2@gmail.com",
-  "prodi": "Teknik Kimia",
+  "id_pegawai": 2,
+  "id_role": 2
+}
+
+###
+# Update Role Pegawai
+PATCH http://localhost:5000/role-pegawai/2
+Content-Type: application/json
+
+{
+  "id_role": 4
+}
+
+
+###
+# Update Pegawai
+PATCH http://localhost:5000/pegawais/1
+Content-Type: application/json
+
+{
+  "nama_pegawai": "Talia",
+  "email": "taliaaa@gmail.com",
+  "prodi": "Sistem Informasi",
   "status": "Aktif"
 }
+
+###
+# Update Profile Pegawai
+PATCH http://localhost:5000/profile/2
+Content-Type: application/json
+
+{
+  "nama_pegawai": "Nanda Kharisma",
+  "email": "nandaaa@gmail.com"
+}
+
 
 ###
 # Delete Pegawai
