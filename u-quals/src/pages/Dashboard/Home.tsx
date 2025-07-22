@@ -30,6 +30,7 @@ export default function Home() {
     const [expire, setExpire] = useState('');
     const [pegawais, setPegawais] = useState([]);
     const navigate = useNavigate();
+    const { pegawai } = useAuth();
 
     useEffect(() => {
       const refreshToken = async () => {
@@ -46,6 +47,7 @@ export default function Home() {
           console.log("Pegawai login:", decoded.nama_pegawai);
           console.log("Email:", decoded.email);
           console.log("exp:", decoded.exp);
+          console.log("pegawai:", pegawai); // Debugging
         } catch (error) {
           navigate("/signin"); // Redirect ke login jika gagal
         }
@@ -54,7 +56,7 @@ export default function Home() {
       if (!token) {
         refreshToken(); // ambil token jika belum ada
       }
-    }, [token, setToken, navigate]);
+    }, [token, setToken, navigate, pegawai]);
 
   return (
     <>

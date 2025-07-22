@@ -1,84 +1,84 @@
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-
-import { ArrowUpDown, Circle, Edit, Trash2, FileText } from "lucide-react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
-import React from "react";
-
-interface ViewMonitoring {
-  id: number;
-  periode: string;
-  prodi: string;
-  auditor: string;
-  status: string;
-  nilai: string;
-  tgl_mulai: string;
-  tgl_selesai: string;
-}
-
-const tableData: ViewMonitoring[] = [
-  {
-    id: 1,
-    periode: "Periode 2025/2026",
-    prodi: "Sistem Informasi",
-    auditor: "Tim Penjaminan Mutu Prodi",
-    status: "Selesai",
-    nilai: "100",
-    tgl_mulai: "12 Mei 2025",
-    tgl_selesai: "12 Mei 2025",
-  },
-  {
-    id: 2,
-    periode: "Periode 2024/2025",
-    prodi: "Teknik Informatika",
-    auditor: "Tim Penjaminan Mutu Prodi",
-    status: "Selesai",
-    nilai: "100",
-    tgl_mulai: "15 Mei 2024",
-    tgl_selesai: "15 Mei 2024",
-  },
-  {
-    id: 3,
-    periode: "Periode 2023/2024",
-    prodi: "Teknik Informatika",
-    auditor: "Tim Penjaminan Mutu Prodi",
-    status: "Selesai",
-    nilai: "100",
-    tgl_mulai: "15 Mei 2024",
-    tgl_selesai: "15 Mei 2024",
-  },
-  {
-    id: 3,
-    periode: "Periode 2022/2023",
-    prodi: "Teknik Informatika",
-    auditor: "Tim Penjaminan Mutu Prodi",
-    status: "Selesai",
-    nilai: "100",
-    tgl_mulai: "15 Mei 2024",
-    tgl_selesai: "15 Mei 2024",
-  },
-];
-
-export default function MonitoringTables() {
-  const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
-    const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
-    const [selectedRiwayat, setSelectedRiwayat] = React.useState<ViewMonitoring | null>(null);
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableRow,
+  } from "../ui/table";
   
-    const handleEditClick = (riwayat: ViewMonitoring) => {
+  import { ArrowUpDown, Circle, Edit, Trash2, FileText } from "lucide-react";
+  import { useModal } from "../../hooks/useModal";
+  import { Modal } from "../ui/modal";
+  import Button from "../ui/button/Button";
+  import Input from "../form/input/InputField";
+  import Label from "../form/Label";
+  import React from "react";
+  
+  interface RiwayatMonitoring {
+    id: number;
+    periode: string;
+    prodi: string;
+    auditor: string;
+    status: string;
+    nilai: string;
+    tgl_mulai: string;
+    tgl_selesai: string;
+  }
+  
+  const tableData: RiwayatMonitoring[] = [
+    {
+      id: 1,
+      periode: "Periode 2025/2026",
+      prodi: "Sistem Informasi",
+      auditor: "Tim Penjaminan Mutu Prodi",
+      status: "Selesai",
+      nilai: "100",
+      tgl_mulai: "12 Mei 2025",
+      tgl_selesai: "12 Mei 2025",
+    },
+    {
+      id: 2,
+      periode: "Periode 2024/2025",
+      prodi: "Teknik Informatika",
+      auditor: "Tim Penjaminan Mutu Prodi",
+      status: "Diproses",
+      nilai: "",
+      tgl_mulai: "15 Mei 2024",
+      tgl_selesai: "15 Mei 2024",
+    },
+    {
+      id: 3,
+      periode: "Periode 2023/2024",
+      prodi: "Teknik Informatika",
+      auditor: "Tim Penjaminan Mutu Prodi",
+      status: "Diajukan",
+      nilai: "90",
+      tgl_mulai: "15 Mei 2024",
+      tgl_selesai: "15 Mei 2024",
+    },
+    {
+      id: 3,
+      periode: "Periode 2022/2023",
+      prodi: "Teknik Informatika",
+      auditor: "Tim Penjaminan Mutu Prodi",
+      status: "Draf",
+      nilai: "",
+      tgl_mulai: "15 Mei 2024",
+      tgl_selesai: "15 Mei 2024",
+    },
+  ];
+  
+  export default function RiwayatAuditTables() {
+    const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal();
+    const { isOpen: isDeleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
+    const [selectedRiwayat, setSelectedRiwayat] = React.useState<RiwayatMonitoring | null>(null);
+  
+    const handleEditClick = (riwayat: RiwayatMonitoring) => {
       setSelectedRiwayat(riwayat);
       openEditModal();
     };
   
-    const handleDeleteClick = (riwayat: ViewMonitoring) => {
+    const handleDeleteClick = (riwayat: RiwayatMonitoring) => {
       setSelectedRiwayat(riwayat);
       openDeleteModal();
     };
@@ -113,10 +113,10 @@ export default function MonitoringTables() {
           return `${baseStyle} bg-gray-100 text-gray-600`; 
       }
     };
-
-  return (
-    <>
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+  
+    return (
+      <>
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="max-w-full overflow-x-auto">
             <Table>
               {/* Table Header */}
@@ -281,6 +281,6 @@ export default function MonitoringTables() {
             </div>
           </div>
         </Modal>
-    </>
-  );
-}
+      </>
+    );
+  }

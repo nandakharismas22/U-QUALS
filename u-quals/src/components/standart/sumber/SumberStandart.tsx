@@ -5,7 +5,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../../components/ui/table/index";
-
 import { ArrowUpDown, Edit, Trash2 } from "lucide-react";
 
 interface Standard {

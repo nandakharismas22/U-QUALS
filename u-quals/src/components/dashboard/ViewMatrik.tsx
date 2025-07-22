@@ -1,4 +1,3 @@
-
 import { UsersIcon, AcademicCapIcon, BuildingLibraryIcon } from '@heroicons/react/24/solid'
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
@@ -21,6 +20,7 @@ export default function ViewMatrics() {
   const [expire, setExpire] = useState('');
   const [pegawais, setPegawais] = useState([]);
   const navigate = useNavigate();
+  const [roles, setRoles] = useState<{ nama_role: string }[]>([]);
 
   useEffect(() => {
     const refreshToken = async () => {
@@ -30,18 +30,30 @@ export default function ViewMatrics() {
         });
         const newToken = res.data.accessToken;
         setToken(newToken);
-
+  
+        const decoded = jwtDecode<MyToken>(newToken);
+  
+        // Set pegawai context
         setPegawai({
           id_pegawai: decoded.id_pegawai,
           nama_pegawai: decoded.nama_pegawai,
           email: decoded.email,
           status: decoded.status,
         });
+  
+        // Fetch role berdasarkan id_pegawai
+        if (decoded?.id_pegawai) {
+          const roleRes = await axios.get(`http://localhost:5000/role-pegawai/${decoded.id_pegawai}`, {
+            withCredentials: true,
+          });
+          setRoles(roleRes.data); // jika pakai context atau local state
+        }
+  
       } catch (error) {
         navigate("/signin");
       }
     };
-
+  
     if (!token) {
       refreshToken();
     }
@@ -54,7 +66,7 @@ export default function ViewMatrics() {
         Selamat Datang di U-Quals
       </h1>
       <p className="text-gray-600 dark:text-gray-400 mb-6">
-
+        Halo,  {pegawai?.nama_pegawai ?? "Memuat..."}! Saat ini Anda login sebagai {roles[0]?.nama_role ?? "Tidak Ada Role"}
       </p>
     </div>
 

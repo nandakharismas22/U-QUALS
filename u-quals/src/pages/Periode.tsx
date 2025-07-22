@@ -51,7 +51,7 @@ export default function TablesPeriode() {
     <>
       <PageMeta
         title="U-Quals - Periode"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        description=""
       />
       <PageBreadcrumb pageTitle="Periode" />
       <div className="space-y-6">
@@ -106,27 +106,24 @@ export default function TablesPeriode() {
 
               {/* Dropdown Max Data */}
               <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Menampilkan</span>
-              
-              <div className="relative w-25">
-                <select className="appearance-none border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>30</option>
-                  <option>40</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Menampilkan</span>
+                
+                <div className="relative w-25">
+                  <select className="appearance-none border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                    <option>40</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
                 </div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">data</span>
               </div>
-
-              <span className="text-sm text-gray-600 dark:text-gray-400">data</span>
             </div>
-
-
-             </div>
           </div>
           
           <PeriodeTable />
