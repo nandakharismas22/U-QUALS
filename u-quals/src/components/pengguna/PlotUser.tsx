@@ -69,9 +69,7 @@ export default function PenggunaTables() {
         role: item.role || "Belum ditentukan", 
         id_role: item.id_role, 
         id_role_pegawai: item.id_role_pegawai,
-      })); 
-      
-      console.log("📦 Data :", mappedPegawai);
+      }));
   
       setTableData(mappedPegawai);
     } catch (error) {

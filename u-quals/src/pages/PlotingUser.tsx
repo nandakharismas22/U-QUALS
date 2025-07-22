@@ -55,7 +55,7 @@ export default function TablesPengguna() {
         const pegawaiRes = await axios.get("http://localhost:5000/pegawais-data", {
           withCredentials: true,
         });
-
+  
         const mappedPegawai = pegawaiRes.data.map((item: any) => ({
           id_pegawai: item.id_pegawai,
           nama_pegawai: item.nama_pegawai,
@@ -70,7 +70,6 @@ export default function TablesPengguna() {
 
         setTableData(mappedPegawai);
         setPegawais(mappedPegawai);
-        
         // Ambil data role
         const roleRes = await axios.get("http://localhost:5000/roles", {
           withCredentials: true,
@@ -80,7 +79,7 @@ export default function TablesPengguna() {
         console.error("Gagal fetch data:", error);
       }
     };
-
+  
     fetchData();
   }, [token]);
 
@@ -100,7 +99,7 @@ export default function TablesPengguna() {
   
       console.log("Berhasil menambahkan role pegawai:", res.data);
       alert("Role berhasil ditambahkan!");
-  
+ 
       closeModal();
     } catch (error: any) {
       if (error.response?.status === 409) {
@@ -199,6 +198,7 @@ export default function TablesPengguna() {
                     </option>
                   ))}
                 </select>      
+
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -258,6 +258,7 @@ export default function TablesPengguna() {
                   <Label>Peran</Label>
                     <select
                       className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
+
                       value={selectedRoleId}
                       onChange={(e) => {
                         const value = e.target.value;

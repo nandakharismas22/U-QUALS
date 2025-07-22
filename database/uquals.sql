@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 20 Jun 2025 pada 02.11
+-- Waktu pembuatan: 07 Jul 2025 pada 07.14
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.0.30
 
@@ -130,6 +130,14 @@ CREATE TABLE `jenis_audit` (
   `modified_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `jenis_audit`
+--
+
+INSERT INTO `jenis_audit` (`id_jenis_audit`, `nama_jenis`, `created_by`, `created_at`, `modified_by`, `modified_at`) VALUES
+(1, 'Tahunan', 1, '2025-06-26 05:06:27', NULL, '2025-06-26 23:16:52'),
+(2, 'TW1', 1, '2025-06-26 16:16:38', NULL, '2025-06-26 16:16:38');
+
 -- --------------------------------------------------------
 
 --
@@ -188,11 +196,9 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `email`, `password`, `prodi`, `terakhir_login`, `status`, `refresh_token`, `created_by`, `created_at`, `modified_by`, `modified_at`) VALUES
-(1, 'Talia', 'talia@gmail.com', '123', 'Sistem Informasi', '2025-06-16 00:41:05', 'Aktif', NULL, NULL, '2025-06-16 00:41:05', NULL, '2025-06-16 12:35:12'),
-(2, 'Nanda', 'nanda@gmail.com', '123', 'Sistem Informasi', '2025-06-16 00:46:59', 'Aktif', NULL, NULL, '2025-06-16 00:46:59', NULL, '2025-06-16 12:35:15'),
-(3, 'Linda', 'linda@gmail.com', '123', 'Akutansi', '2025-06-16 01:32:24', 'Nonaktif', NULL, NULL, '2025-06-16 01:31:42', NULL, '2025-06-16 12:35:33'),
-(4, 'Kania', 'kania@gmail.com', '$2b$10$BsijXhpPOW8NaladA.TAJ.ddVDJJcBe9K3fcvcEsyTn7FjeGbwp.C', 'Teknik Informatika', '2025-06-19 14:16:00', 'Aktif', NULL, NULL, '2025-06-16 05:44:14', NULL, '2025-06-19 14:16:15'),
-(5, 'Hilwa', 'hilwa@gmail.com', '$2b$10$kQbBI9zzs7quFrSOkXLnKePv6wiDmG2vnUdD/yAp6Vb/1Pb3XCIEi', 'Teknik Industri', '2025-06-20 00:01:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjo1LCJuYW1hX3BlZ2F3YWkiOiJIaWx3YSIsImVtYWlsIjoiaGlsd2FAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5kdXN0cmkiLCJzdGF0dXMiOiJBa3RpZiIsImlhdCI6MTc1MDM3NzY2MCwiZXhwIjoxNzUwNDY0MDYwfQ.24tXnjq0BdpqPWAw6Qpf4ILkkswr-iu6f2DibCbymm8', NULL, '2025-06-16 07:02:43', NULL, '2025-06-20 00:01:00');
+(1, 'Talia', 'talia@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'Sistem Informasi', '2025-06-29 08:46:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjoxLCJuYW1hX3BlZ2F3YWkiOiJUYWxpYSIsImVtYWlsIjoidGFsaWFAZ21haWwuY29tIiwicHJvZGkiOiJUZWtuaWsgSW5kdXN0cmkiLCJzdGF0dXMiOiJBa3RpZiIsInJvbGUiOiJBZG1pbiBMUE1QUCIsImlhdCI6MTc1MTE4Njc5MSwiZXhwIjoxNzUxMjczMTkxfQ.LYxokDuP0tOT30Trpp6EZHpmSgLuBaCB9e5zLfSO-Ng', NULL, '2025-06-16 00:41:05', NULL, '2025-07-06 14:27:17'),
+(2, 'Nanda', 'nanda2@gmail.com', '$2b$10$yBICwkXPlj2ygb.lTeSRBepRIBG3DGb8GZg9577X9/HMlVd49b4YO', 'SIstem Informasi', '2025-07-07 02:32:00', 'Aktif', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9wZWdhd2FpIjoyLCJuYW1hX3BlZ2F3YWkiOiJOYW5kYSIsImVtYWlsIjoibmFuZGEyQGdtYWlsLmNvbSIsInByb2RpIjoiU0lzdGVtIEluZm9ybWFzaSIsInN0YXR1cyI6IkFrdGlmIiwicm9sZSI6bnVsbCwiaWF0IjoxNzUxODU1NTQwLCJleHAiOjE3NTE5NDE5NDB9.kvImQ1ySrtzb7f1UnZ68kPY6Em3I84YxATxvh_ftfiY', NULL, '2025-07-01 01:55:14', NULL, '2025-07-07 02:32:20'),
+(6, 'Linda', 'linda2@gmail.com', '$2b$10$.0JWbxVnvuvbEcBYyQoECOTtEIPt8JPqKTe0fHVcDfEKaAEP/IfnG', 'Teknik Kimia', '2025-07-06 20:08:00', 'Aktif', NULL, NULL, '2025-06-20 05:31:40', NULL, '2025-07-07 02:31:39');
 
 -- --------------------------------------------------------
 
@@ -203,15 +209,23 @@ INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `email`, `password`, `prodi
 CREATE TABLE `periode_audit` (
   `id_periode` int(11) NOT NULL,
   `id_jenis_audit` int(11) DEFAULT NULL,
-  `periode` varchar(100) DEFAULT NULL,
+  `periode` varchar(255) DEFAULT NULL,
   `tgl_mulai` date DEFAULT NULL,
   `tgl_selesai` date DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
+  `status` enum('Aktif','Selesai') DEFAULT 'Aktif',
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
   `modified_by` int(11) DEFAULT NULL,
-  `modified_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `modified_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `periode_audit`
+--
+
+INSERT INTO `periode_audit` (`id_periode`, `id_jenis_audit`, `periode`, `tgl_mulai`, `tgl_selesai`, `status`, `created_at`, `created_by`, `modified_by`, `modified_at`) VALUES
+(1, 1, 'Periode 2024/2025', '2025-06-01', '2025-07-31', 'Aktif', NULL, NULL, NULL, NULL),
+(2, 1, 'Periode 2023/2024', '2025-06-01', '2025-07-31', 'Aktif', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -302,7 +316,10 @@ CREATE TABLE `role_pegawai` (
 --
 
 INSERT INTO `role_pegawai` (`id_role_pegawai`, `id_pegawai`, `id_role`, `created_by`, `created_at`, `modified_by`, `modified_at`) VALUES
-(1, 1, 1, NULL, '2025-06-16 00:46:24', NULL, '2025-06-16 00:46:24');
+(1, 1, 1, NULL, '2025-07-06 21:27:59', NULL, '2025-07-06 21:27:59'),
+(2, 6, 4, NULL, '2025-06-25 19:22:38', NULL, '2025-07-06 21:34:31'),
+(3, 2, 2, NULL, '2025-07-07 11:14:12', NULL, '2025-07-07 11:14:12'),
+(4, 2, 4, NULL, '2025-07-07 11:06:38', NULL, '2025-07-07 11:06:38');
 
 -- --------------------------------------------------------
 
@@ -430,9 +447,7 @@ ALTER TABLE `pegawai`
 --
 ALTER TABLE `periode_audit`
   ADD PRIMARY KEY (`id_periode`),
-  ADD KEY `id_jenis_audit` (`id_jenis_audit`),
-  ADD KEY `created_by` (`created_by`),
-  ADD KEY `modified_by` (`modified_by`);
+  ADD KEY `id_jenis_audit` (`id_jenis_audit`);
 
 --
 -- Indeks untuk tabel `plot_standar`
@@ -526,7 +541,7 @@ ALTER TABLE `fakultas`
 -- AUTO_INCREMENT untuk tabel `jenis_audit`
 --
 ALTER TABLE `jenis_audit`
-  MODIFY `id_jenis_audit` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jenis_audit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `komponen_standar`
@@ -544,13 +559,13 @@ ALTER TABLE `laporan_audit_prodi`
 -- AUTO_INCREMENT untuk tabel `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `id_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `periode_audit`
 --
 ALTER TABLE `periode_audit`
-  MODIFY `id_periode` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_periode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `plot_standar`
@@ -574,7 +589,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT untuk tabel `role_pegawai`
 --
 ALTER TABLE `role_pegawai`
-  MODIFY `id_role_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_role_pegawai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `standar`
@@ -662,9 +677,7 @@ ALTER TABLE `laporan_audit_prodi`
 -- Ketidakleluasaan untuk tabel `periode_audit`
 --
 ALTER TABLE `periode_audit`
-  ADD CONSTRAINT `periode_audit_ibfk_1` FOREIGN KEY (`id_jenis_audit`) REFERENCES `jenis_audit` (`id_jenis_audit`),
-  ADD CONSTRAINT `periode_audit_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `pegawai` (`id_pegawai`),
-  ADD CONSTRAINT `periode_audit_ibfk_3` FOREIGN KEY (`modified_by`) REFERENCES `pegawai` (`id_pegawai`);
+  ADD CONSTRAINT `periode_audit_ibfk_1` FOREIGN KEY (`id_jenis_audit`) REFERENCES `jenis_audit` (`id_jenis_audit`);
 
 --
 -- Ketidakleluasaan untuk tabel `plot_standar`
