@@ -153,7 +153,6 @@ export default function UserDropdown() {
             {pegawai?.nama_pegawai ?? "Memuat..."}
           </span>
           <span className="text-theme-xs text-gray-500 dark:text-gray-400">
-            {currentRole?.nama_role ?? "Tidak Ada Role"}
           </span>
         </div>
         

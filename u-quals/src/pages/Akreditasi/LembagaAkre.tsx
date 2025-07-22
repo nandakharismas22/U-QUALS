@@ -40,7 +40,7 @@ const { isOpen, openModal, closeModal } = useModal();
     <>
       <PageMeta
         title="U-Quals - Lembaga Akreditasi"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        description=""
       />
       <PageBreadcrumb pageTitle="Lembaga Akreditasi" />
       

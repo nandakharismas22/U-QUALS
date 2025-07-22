@@ -39,6 +39,7 @@ const { isOpen, openModal, closeModal } = useModal();
   return (
     <>
       <PageMeta
+
         title="U-Quals - Akreditasi Institusi"
         description=""
       />

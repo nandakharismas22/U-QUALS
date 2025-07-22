@@ -168,6 +168,7 @@ export const createPegawai = async(req, res) => {
     }
 }
 
+
 export const updatePegawai = async (req, res) => {
   const idPegawai = req.params.id;
   const {
