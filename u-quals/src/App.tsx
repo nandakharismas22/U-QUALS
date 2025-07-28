@@ -26,7 +26,12 @@ import TabelsAuditor from "./pages/PlotingAuditor";
 import TabelsStandart from "./pages/Standar/SumberStandar";
 import TabelsDaftarStandar from "./pages/Standar/DaftarStandar";
 import TabelsMonitoring from "./pages/MonitoringSet";
+import TabelsAkreLab from "./pages/Akreditasi/LabAkre";
+import TabelsAkreProdi from "./pages/Akreditasi/AkreProdi";
+import TabelsInstitusi from "./pages/Akreditasi/InstitusiAkre";
+import TabelsLembaga from "./pages/Akreditasi/LembagaAkre";
 import TablesAudit from "./pages/JenisAudit";
+import TablesLaporanAudit from "./pages/Laporan";
 
 export default function App() {
   return (
@@ -59,6 +64,14 @@ export default function App() {
             <Route path="/sumber" element={<TabelsStandart />} />
             <Route path="/listdaftar" element={<TabelsDaftarStandar />} />
 
+            {/* Akreditasi */}
+            <Route path="/lembaga" element={<TabelsLembaga />} />
+            <Route path="/institusi" element={<TabelsInstitusi />} />
+            <Route path="/prodi" element={<TabelsAkreProdi />} />
+            <Route path="/lab" element={<TabelsAkreLab />} />
+            
+            {/* Laporan Audit */}
+            <Route path="/laporan" element={<TablesLaporanAudit />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
