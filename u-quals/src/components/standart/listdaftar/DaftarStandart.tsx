@@ -12,41 +12,36 @@ import { ArrowUpDown, Circle, FileText, Calendar,  Edit, Trash2 } from "lucide-r
 
 interface Project {
   id: number;
-  periode: string;
-  startDate: string;
-  endDate: string;
-  status: "Aktif" | "Selesai";
+  nama_standar: string;
+  versi: string;
+  thn_rilis: string;
 }
 
 // Define the table data
 const tableData: Project[] = [
   {
     id: 1,
-    periode: "Periode 2024/2025",
-    startDate: "25 Februari 2025",
-    endDate: "22 Maret 2025",
-    status: "Aktif",
+    nama_standar: "SPT 2025",
+    versi: "1.0",
+    thn_rilis: "2025",
   },
   {
     id: 2,
-    periode: "Periode 2023/2024",
-    startDate: "15 Januari 2024",
-    endDate: "10 Februari 2024",
-    status: "Selesai",
+    nama_standar: "SPT 2024",
+    versi: "1.0",
+    thn_rilis: "2025",
   },
   {
     id: 3,
-    periode: "Periode 2024/2025",
-    startDate: "10 Maret 2025",
-    endDate: "5 April 2025",
-    status: "Selesai",
+    nama_standar: "SPT 2023",
+    versi: "1.0",
+    thn_rilis: "2025",
   },
   {
     id: 4,
-    periode: "Periode 2022/2023",
-    startDate: "1 Desember 2022",
-    endDate: "20 Januari 2023",
-    status: "Selesai",
+    nama_standar: "SPT 2022",
+    versi: "1.0",
+    thn_rilis: "2025",
   },
 ];
 
@@ -69,7 +64,16 @@ export default function BasicTableOne() {
                 className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
               >
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Periode
+                  Standar Mutu
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableCell>              
+              <TableCell
+                isHeader
+                className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
+              >
+                <div className="flex items-center gap-1 cursor-pointer">
+                  Versi
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
@@ -78,7 +82,7 @@ export default function BasicTableOne() {
                 className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
               >
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Tanggal Mulai dan Tanggal Selesai
+                  Tahun Rilis
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
@@ -87,7 +91,7 @@ export default function BasicTableOne() {
                 className="px-4 py-3 font-medium text-gray-600 text-start text-theme-sm dark:text-gray-400"
               >
                 <div className="flex items-center gap-1 cursor-pointer">
-                  Status
+                  File
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </TableCell>
@@ -109,23 +113,30 @@ export default function BasicTableOne() {
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
-                    {project.periode}
+                    {project.nama_standar}
                   </div>
-                </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  {project.startDate} - {project.endDate}
                 </TableCell>
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
-                    <Circle 
-                      className={`w-3 h-3 ${project.status === "Aktif" ? "text-green-500" : "text-gray-400"}`} 
-                      fill={project.status === "Aktif" ? "currentColor" : "none"}
-                    />
-                    {project.status}
+                    {project.versi}
                   </div>
                 </TableCell>
-               <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    {project.thn_rilis}
+                  </div>
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <button className="h-11 px-4 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
+                      <svg className="inline-block w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 4v12m0 0l4-4m-4 4l-4-4m8 8H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      Download
+                    </button>
+                  </div>
+                </TableCell>
+                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     {/* Ikon FileText */}
                     <div 

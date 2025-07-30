@@ -111,9 +111,7 @@ const { isOpen, openModal, closeModal } = useModal();
                 </div>
               </div>
             </div>
-
-
-
+            
             {/* Dropdown Max Data */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">Menampilkan</span>

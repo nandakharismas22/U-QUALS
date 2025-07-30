@@ -157,8 +157,8 @@ export default function PeriodeTable() {
                 <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     <Circle 
-                      className={`w-3 h-3 ${periode.status === "Aktif" ? "text-green-500" : "text-gray-400"}`} 
-                      fill={periode.status === "Aktif" ? "currentColor" : "none"}
+                      className={`w-3 h-3 ${periode.status === "Selesai" ? "text-green-500" : "text-gray-400"}`} 
+                      fill={periode.status === "Selesai" ? "currentColor" : "none"}
                     />
                     {periode.status}
                   </div>

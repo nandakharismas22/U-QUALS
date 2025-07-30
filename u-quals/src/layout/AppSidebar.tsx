@@ -5,7 +5,7 @@ import {
   HorizontaLDots,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import { UserCog, FolderSearch, Calendar, LayoutGrid, CircleUser, FileChartColumn, ClipboardList, FileCheck, BadgeCheck } from "lucide-react";
+import { UserCog, FolderSearch, Calendar, LayoutGrid, CircleUser, Clipboard, ClipboardList, FileCheck, BadgeCheck } from "lucide-react";
 import { useAuth } from "../components/auth/AuthContext";
 
 type NavItem = {
@@ -85,14 +85,9 @@ const AppSidebar: React.FC = () => {
         path: "/home",
       },
       {
-        name: "Akreditasi",
-        icon: <BadgeCheck />,
-        subItems: [
-          { name: "Lembaga Akreditasi", path: "/lembaga" },
-          { name: "Akreditasi Institusi", path: "/institusi" },
-          { name: "Akreditasi Prodi", path: "/prodi" },
-          { name: "Akreditasi Lab", path: "/lab" },
-        ],
+        name: "Laporan",
+        icon: <Clipboard />,        
+        path: "/laporan",
       }
     ],
     "Korprodi": [
@@ -102,10 +97,10 @@ const AppSidebar: React.FC = () => {
         path: "/home",
       },
       {
-        icon: <FolderSearch />,
-        name: "Asesmen Laporan",
-        path: "/monitoring",
-      },
+        name: "Laporan",
+        icon: <Clipboard />,        
+        path: "/laporan",
+      }
     ],
     "Auditor": [
       {
@@ -114,7 +109,7 @@ const AppSidebar: React.FC = () => {
         path: "/home",
       },
       {
-        icon: <FolderSearch />,
+        icon: <Clipboard />,
         name: "Asesmen Laporan",
         path: "/monitoring",
       },

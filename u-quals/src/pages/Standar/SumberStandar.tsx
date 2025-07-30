@@ -10,8 +10,8 @@ import Input from "../../components/form/input/InputField";
 import Label from "../../components/form/Label";
 import React, { useState } from 'react';
 import { useAuth } from "../../components/auth/AuthContext";
-
-
+import TextArea from "../../components/form/input/TextArea";
+import FileInput from "../../components/form/input/FileInput";
 
 interface Pegawai {
   id_pegawai: number;
@@ -39,29 +39,26 @@ const { isOpen, openModal, closeModal } = useModal();
   return (
     <>
       <PageMeta
-        title="U-Quals - Pengguna"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="U-Quals - Sumber Standar"
+        description=""
       />
-      <PageBreadcrumb pageTitle="Daftar Standar" />
+      <PageBreadcrumb pageTitle="Sumber Standar" />
       
       <div className="space-y-6">
-        <ComponentCard
-          title={
-            <div className="flex items-center justify-between w-full">
-              <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Sumber Standar :  {tableData.length}
-              </span>
-              <button
+      <ComponentCard
+          title = { <div className="flex items-center justify-between w-full">
+            <span className="text-base font-medium text-gray-800 dark:text-white/90">
+                Semua Sumber Standar : 5
+            </span>
+            <button
                 onClick={openModal}
-                className="ml-auto left-160 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
+                className="ml-auto relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Tambah Sumber Standar
-              </button>
-            </div> 
-            
-          }
-        >
+            </button>
+          </div> 
+          } >
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 
@@ -100,7 +97,7 @@ const { isOpen, openModal, closeModal } = useModal();
                 <select
                   className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
                 >
-                  <option>Semua standar mutu</option>
+                  <option>Semua Sumber Standar</option>
                   <option>Standar 1</option>
                   <option>Standar 2</option>
                   <option>Standar 3</option>
@@ -147,66 +144,51 @@ const { isOpen, openModal, closeModal } = useModal();
         <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Tambah Pengguna Baru
+              Tambah Sumber Standar Baru
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Masukkan detail pengguna baru.
+              Masukkan detail sumber standar baru.
             </p>
           </div>
           <form className="flex flex-col">
             <div className="px-2 overflow-y-auto custom-scrollbar">
               <div className="grid grid-cols-1 gap-y-5">
                 
-                {/* Baris 3: Peran (Dropdown) */}
-                <div className="relative">
-                  <Label>Peran</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Semua Peran</option>
-                    <option>Admin LPMPP</option>
-                    <option>Auditor LPM</option>
-                    <option>Koprodi</option>
-                    <option>Tim Penjaminan Mutu Prodi</option>
-                  </select>
-                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
+                {/* Baris 1: Sumber Standar */}
+                <div>
+                  <Label>Sumber Standar</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="Masukkan sumber standar"
+                    className="w-full"
+                  />
                 </div>
                 
                 {/* Baris 1: Nama */}
                 <div>
-                  <Label>Nama</Label>
+                  <Label>Tahun</Label>
                   <Input 
                     type="text" 
-                    placeholder="Masukkan nama lengkap" 
+                    placeholder="Masukkan tahun standar" 
                     className="w-full"
                   />
                 </div>
                 
                 {/* Baris 2: Email */}
                 <div>
-                  <Label>Email</Label>
-                  <Input 
-                    type="email" 
-                    placeholder="Masukkan email" 
+                  <Label>Deskripsi</Label>
+                  <TextArea  
+                    placeholder="Masukkan deskripsi" 
                     className="w-full"
                   />
                 </div>
                 
-               {/* Baris 4: Status (Dropdown) */}
-                <div className="relative">
-                  <Label>Status Pengguna</Label>
-                  <select className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none">
-                    <option value="">Pilih Status</option>
-                    <option>Aktif</option>
-                    <option>Nonaktif</option>
-                  </select>
-                <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
+               {/* Baris 4: File (Dropdown) */}
+                <div>
+                  <Label>File</Label>
+                  <FileInput  
+                    className="w-full"
+                  />
                 </div>
  
               </div>

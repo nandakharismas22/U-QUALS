@@ -191,7 +191,7 @@ export default function UserDropdown() {
           </span>
         </div>
 
-        <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        <ul className="flex flex-col gap-1 pt-2 pb-3 border-b border-gray-200 dark:border-gray-800">
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -218,14 +218,14 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
           <li>
-            <div className="px-3 py-2">
-              <label className="block text-theme-xs text-gray-500 dark:text-gray-400 mb-1">
-                Ganti Peran
-              </label>
+            <label className="block text-theme-xs text-gray-500 dark:text-gray-400 mb-1">
+              Ganti Peran
+            </label>            
+            <div className="relative">
               <select
                 value={currentRole?.id_role || ''}
                 onChange={(e) => handleChangeRole(Number(e.target.value))}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-2 text-sm dark:bg-gray-800 dark:text-white"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
               >
                 {availableRoles.map(role => (
                   <option key={role.id_role} value={role.id_role}>
@@ -233,6 +233,17 @@ export default function UserDropdown() {
                   </option>
                 ))}
               </select>
+
+              {/* Dropdown Arrow fix */}
+              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"                  
+                  viewBox="0 0 20 20"
+                >
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
             </div>
           </li>
         </ul>

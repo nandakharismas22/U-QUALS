@@ -100,23 +100,27 @@ export default function PenggunaTables() {
     fetchData();
   }, [token, selectedRoleId]);
 
-  const handleEditClick = (item: Pegawai & { id_role?: number; id_role_pegawai?: number }) => {
-    console.log("handleEditClick item.id_role:", item.id_role);
+  const handleEditClick = async (item: Pegawai & { id_role?: number; id_role_pegawai?: number }) => {
+    await fetchRoles(); // pastikan roles tersedia
+  
     setSelectedPegawai({
       id_pegawai: item.id_pegawai,
       nama_pegawai: item.nama_pegawai,
       email: item.email,
       status: item.status,
       prodi: item.prodi,
-      id_role: item.id_role,
+      id_role: item.id_role ?? undefined,
       id_role_pegawai: item.id_role_pegawai,
     });
-
-    const roleIdStr = item.id_role !== undefined && item.id_role !== null ? String(item.id_role) : "";
-    console.log("Setting selectedRoleId to:", roleIdStr);
-    setSelectedRoleId(roleIdStr); 
+  
     openEditModal();
-  };  
+    console.log("Edit Modal Pegawai:", selectedPegawai);
+    console.log("selectedPegawai", selectedPegawai);
+console.log("listRole", listRole);
+  };
+  
+  
+  
 
   const handleDeleteClick = async (id: number) => {
     try {
@@ -314,20 +318,20 @@ React.useEffect(() => {
                   <Label>Peran</Label>
                     <select
                       className="w-full dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 appearance-none"
-                      value={selectedRoleId !== null ? selectedRoleId : ""}
+                      value={selectedPegawai?.id_role?.toString() || ""}
                       onChange={(e) => {
-                        const value = e.target.value;
-                        console.log("Selected role from select:", value); // Tambahkan ini untuk debug
-                        setSelectedRoleId(value || null);
-                        setSelectedPegawai(prev => prev ? { ...prev, id_role: value ? parseInt(value) : undefined } : prev);
+                        const selected = parseInt(e.target.value);
+                        setSelectedPegawai((prev) =>
+                          prev ? { ...prev, id_role: selected } : null
+                        );
                       }}
                     >
                     <option value="">Pilih Peran</option>
                     {listRole.map((role) => (
-                        <option key={role.id_role} value={role.id_role}>
-                          {role.nama_role}
-                        </option>
-                      ))}
+                      <option key={role.id_role} value={String(role.id_role)}>
+                        {role.nama_role}
+                      </option>
+                    ))}
                   </select>
                     <div className="pointer-events-none absolute inset-y-12 right-3 flex items-center text-gray-500 dark:text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

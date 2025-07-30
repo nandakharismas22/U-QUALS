@@ -1,7 +1,7 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
 import PageMeta from "../../components/common/PageMeta";
-import BasicTableOne from "../../components/standart/sumber/SumberStandart"
+import BasicTableOne from "../../components/standart/listdaftar/DaftarStandart"
 import { useModal } from "../../hooks/useModal"; 
 import { Modal } from "../../components/ui/modal"
 import { Plus } from "lucide-react";
@@ -10,9 +10,6 @@ import Input from "../../components/form/input/InputField";
 import Label from "../../components/form/Label";
 import React, { useState } from 'react';
 import { useAuth } from "../../components/auth/AuthContext";
-
-
-
 
 interface Pegawai {
   id_pegawai: number;
@@ -36,33 +33,29 @@ const { isOpen, openModal, closeModal } = useModal();
     closeModal();
   };
 
-
   return (
     <>
       <PageMeta
-        title="U-Quals - Pengguna"
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="U-Quals - Standar Mutu"
+        description=""
       />
       <PageBreadcrumb pageTitle="Daftar Standar" />
       
       <div className="space-y-6">
-        <ComponentCard
-          title={
-            <div className="flex items-center justify-between w-full">
-              <span className="text-base font-medium text-gray-800 dark:text-white/90">
-                Semua Pengguna :  {tableData.length}
-              </span>
-              <button
+      <ComponentCard
+          title = { <div className="flex items-center justify-between w-full">
+            <span className="text-base font-medium text-gray-800 dark:text-white/90">
+                Semua Standar Mutu : 5
+            </span>
+            <button
                 onClick={openModal}
-                className="ml-auto left-182 relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
+                className="ml-auto relative w-auto bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition duration-200 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                Tambah Pengguna
-              </button>
-            </div> 
-            
-          }
-        >
+                Tambah Standar Mutu
+            </button>
+          </div> 
+          } >
           <div className="mb-4">
             <div className="flex items-center justify-between w-full gap-4">
 
@@ -90,7 +83,7 @@ const { isOpen, openModal, closeModal } = useModal();
                   </button>
                   <input
                     type="text"
-                    placeholder=" Cari Pengguna"
+                    placeholder=" Cari disini"
                     className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px]"
                   />
                 </div>
@@ -101,11 +94,11 @@ const { isOpen, openModal, closeModal } = useModal();
                 <select
                   className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[230px] appearance-none"
                 >
-                  <option>Semua Peran</option>
-                  <option>Admin LPMPP</option>
-                  <option>Auditor LPM</option>
-                  <option>Koprodi</option>
-                  <option>Tim Penjaminan Mutu Prodi</option>
+                  <option>Semua Standar Mutu</option>
+                  <option>SPT 2025</option>
+                  <option>SPT 2024</option>
+                  <option>SPT 2023</option>
+                  <option>SPT 2022</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
