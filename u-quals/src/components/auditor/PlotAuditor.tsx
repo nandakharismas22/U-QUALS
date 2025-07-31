@@ -138,11 +138,11 @@ export default function AuditorTables() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, id: number) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === 'Tab') {
       handleSave(id);
     }
   };
-
+  
   const handleOptionSelect = (option: string, id: number) => {
     setInputValue(option);
     setUsers(users.map(user => {
